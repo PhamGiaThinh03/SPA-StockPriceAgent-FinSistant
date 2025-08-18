@@ -1,0 +1,28 @@
+2025-08-04 12:34:23,375 - INFO - [2025-08-04 12:34:23] Starting training...
+2025-08-04 12:34:23,375 - INFO - Model: LSTM_GRU_missing10_window15.keras
+2025-08-04 12:34:23,375 - INFO - Dataset: D:/SPA/timeseries/fpt_stock_price.xlsx (Train=3859, Test=10)
+2025-08-04 12:34:23,375 - INFO - Hyperparams: {'lr': 0.001, 'batch_size': 8, 'optimizer': 'Adam', 'epochs': 20, 'seed': 34, 'window_size': 15}
+2025-08-04 12:34:31,143 - INFO - Epoch 1/20 - 7.5s - Train Loss: 0.204774
+2025-08-04 12:34:35,838 - INFO - Epoch 2/20 - 4.7s - Train Loss: 0.052393
+2025-08-04 12:34:40,692 - INFO - Epoch 3/20 - 4.9s - Train Loss: 0.026487
+2025-08-04 12:34:45,202 - INFO - Epoch 4/20 - 4.5s - Train Loss: 0.015044
+2025-08-04 12:34:49,497 - INFO - Epoch 5/20 - 4.3s - Train Loss: 0.009798
+2025-08-04 12:34:54,403 - INFO - Epoch 6/20 - 4.9s - Train Loss: 0.008236
+2025-08-04 12:34:59,092 - INFO - Epoch 7/20 - 4.7s - Train Loss: 0.007963
+2025-08-04 12:35:03,658 - INFO - Epoch 8/20 - 4.6s - Train Loss: 0.007493
+2025-08-04 12:35:08,228 - INFO - Epoch 9/20 - 4.6s - Train Loss: 0.007396
+2025-08-04 12:35:13,650 - INFO - Epoch 10/20 - 5.4s - Train Loss: 0.006654
+2025-08-04 12:35:19,026 - INFO - Epoch 11/20 - 5.4s - Train Loss: 0.005789
+2025-08-04 12:35:24,221 - INFO - Epoch 12/20 - 5.2s - Train Loss: 0.005883
+2025-08-04 12:35:29,384 - INFO - Epoch 13/20 - 5.2s - Train Loss: 0.006360
+2025-08-04 12:35:34,560 - INFO - Epoch 14/20 - 5.2s - Train Loss: 0.005710
+2025-08-04 12:35:39,641 - INFO - Epoch 15/20 - 5.1s - Train Loss: 0.005450
+2025-08-04 12:35:45,056 - INFO - Epoch 16/20 - 5.4s - Train Loss: 0.006783
+2025-08-04 12:35:48,994 - INFO - Epoch 17/20 - 3.9s - Train Loss: 0.004356
+2025-08-04 12:35:52,897 - INFO - Epoch 18/20 - 3.9s - Train Loss: 0.004876
+2025-08-04 12:35:56,851 - INFO - Epoch 19/20 - 4.0s - Train Loss: 0.003948
+2025-08-04 12:36:00,784 - INFO - Epoch 20/20 - 3.9s - Train Loss: 0.003841
+2025-08-04 12:36:02,425 - INFO - [2025-08-04 12:36:02] Training completed!
+2025-08-04 12:36:02,425 - INFO - Best Epoch: 20 (Train Loss=0.003841)
+2025-08-04 12:36:02,425 - INFO - Model saved at: LSTM_GRU_missing10_window15.keras
+2025-08-04 12:36:02,433 - INFO - Final Metrics on Test Set → [{'Dataset': 'D:/SPA/timeseries/fpt_stock_price.xlsx', 'Missing': 10, 'Similarity': 0.98, 'NMAE': 0.02, 'RMSE': 3537.05, 'R2': -0.67, 'FB': -0.02, 'FA2': 1.0, 'Type': 'Raw (VNĐ)'}, {'Dataset': 'FPT-scaled', 'Missing': 10, 'Similarity': 0.98, 'NMAE': 0.02, 'RMSE': 0.02, 'R2': -0.67, 'FB': -0.02, 'FA2': 1.0, 'Type': 'Scaled [0,1]'}]
