@@ -1,0 +1,90 @@
+2025-08-14 01:10:38,790 - INFO - [2025-08-14 01:10:38] Starting training...
+2025-08-14 01:10:38,790 - INFO - Model: CNN_LSTM_missing10_window7.keras
+2025-08-14 01:10:38,790 - INFO - Dataset: D:\timeseries_04082025\fpt_stock_price.xlsx (Train=3859, Test=10)
+2025-08-14 01:10:38,790 - INFO - Hyperparams: {'lr': 0.001, 'batch_size': 8, 'optimizer': 'Adam', 'epochs': 20, 'seed': 34, 'window_size': 7}
+2025-08-14 01:23:37,323 - INFO - [2025-08-14 01:23:37] Starting training...
+2025-08-14 01:23:37,323 - INFO - Model: CNN_LSTM_missing10_window7.keras
+2025-08-14 01:23:37,323 - INFO - Dataset: D:\timeseries_04082025\fpt_stock_price.xlsx (Train=3859, Test=10)
+2025-08-14 01:23:37,323 - INFO - Hyperparams: {'lr': 0.001, 'batch_size': 8, 'optimizer': 'Adam', 'epochs': 20, 'seed': 34, 'window_size': 7}
+2025-08-14 01:26:14,922 - INFO - Epoch 1/20 - 3.4s - Train Loss: 0.661532
+2025-08-14 01:26:16,692 - INFO - Epoch 2/20 - 1.8s - Train Loss: 0.124489
+2025-08-14 01:26:18,241 - INFO - Epoch 3/20 - 1.5s - Train Loss: 0.058073
+2025-08-14 01:26:19,869 - INFO - Epoch 4/20 - 1.6s - Train Loss: 0.039601
+2025-08-14 01:26:21,481 - INFO - Epoch 5/20 - 1.6s - Train Loss: 0.030268
+2025-08-14 01:26:23,109 - INFO - Epoch 6/20 - 1.6s - Train Loss: 0.023988
+2025-08-14 01:26:24,630 - INFO - Epoch 7/20 - 1.5s - Train Loss: 0.021959
+2025-08-14 01:26:26,223 - INFO - Epoch 8/20 - 1.6s - Train Loss: 0.021044
+2025-08-14 01:26:27,752 - INFO - Epoch 9/20 - 1.5s - Train Loss: 0.019904
+2025-08-14 01:26:29,364 - INFO - Epoch 10/20 - 1.6s - Train Loss: 0.018289
+2025-08-14 01:26:30,940 - INFO - Epoch 11/20 - 1.6s - Train Loss: 0.015700
+2025-08-14 01:26:32,498 - INFO - Epoch 12/20 - 1.6s - Train Loss: 0.012878
+2025-08-14 01:26:34,111 - INFO - Epoch 13/20 - 1.6s - Train Loss: 0.009229
+2025-08-14 01:26:35,666 - INFO - Epoch 14/20 - 1.6s - Train Loss: 0.007675
+2025-08-14 01:26:37,200 - INFO - Epoch 15/20 - 1.5s - Train Loss: 0.007008
+2025-08-14 01:26:38,799 - INFO - Epoch 16/20 - 1.6s - Train Loss: 0.006733
+2025-08-14 01:26:40,321 - INFO - Epoch 17/20 - 1.5s - Train Loss: 0.006001
+2025-08-14 01:26:41,911 - INFO - Epoch 18/20 - 1.6s - Train Loss: 0.005905
+2025-08-14 01:26:43,427 - INFO - Epoch 19/20 - 1.5s - Train Loss: 0.005791
+2025-08-14 01:26:44,991 - INFO - Epoch 20/20 - 1.6s - Train Loss: 0.005699
+2025-08-14 01:27:02,666 - INFO - Epoch 1/20 - 1.6s - Train Loss: 0.005776
+2025-08-14 01:27:04,263 - INFO - Epoch 2/20 - 1.6s - Train Loss: 0.005547
+2025-08-14 01:27:05,835 - INFO - Epoch 3/20 - 1.6s - Train Loss: 0.004916
+2025-08-14 01:27:07,445 - INFO - Epoch 4/20 - 1.6s - Train Loss: 0.005605
+2025-08-14 01:27:09,040 - INFO - Epoch 5/20 - 1.6s - Train Loss: 0.004790
+2025-08-14 01:27:10,660 - INFO - Epoch 6/20 - 1.6s - Train Loss: 0.004881
+2025-08-14 01:27:12,251 - INFO - Epoch 7/20 - 1.6s - Train Loss: 0.005226
+2025-08-14 01:27:13,819 - INFO - Epoch 8/20 - 1.6s - Train Loss: 0.004917
+2025-08-14 01:27:15,373 - INFO - Epoch 9/20 - 1.5s - Train Loss: 0.005046
+2025-08-14 01:27:16,995 - INFO - Epoch 10/20 - 1.6s - Train Loss: 0.004912
+2025-08-14 01:27:18,589 - INFO - Epoch 11/20 - 1.6s - Train Loss: 0.004131
+2025-08-14 01:27:20,140 - INFO - Epoch 12/20 - 1.6s - Train Loss: 0.003829
+2025-08-14 01:27:21,627 - INFO - Epoch 13/20 - 1.5s - Train Loss: 0.003954
+2025-08-14 01:27:23,262 - INFO - Epoch 14/20 - 1.6s - Train Loss: 0.003439
+2025-08-14 01:27:24,882 - INFO - Epoch 15/20 - 1.6s - Train Loss: 0.003503
+2025-08-14 01:27:26,540 - INFO - Epoch 16/20 - 1.7s - Train Loss: 0.003558
+2025-08-14 01:27:28,191 - INFO - Epoch 17/20 - 1.7s - Train Loss: 0.003372
+2025-08-14 01:27:29,795 - INFO - Epoch 18/20 - 1.6s - Train Loss: 0.003418
+2025-08-14 01:27:31,456 - INFO - Epoch 19/20 - 1.7s - Train Loss: 0.003320
+2025-08-14 01:27:33,071 - INFO - Epoch 20/20 - 1.6s - Train Loss: 0.003592
+2025-08-14 01:27:34,292 - INFO - [2025-08-14 01:27:34] Training completed!
+2025-08-14 01:27:34,292 - INFO - Best Epoch: 19 (Train Loss=0.003320)
+2025-08-14 01:27:34,294 - INFO - Model saved at: CNN_LSTM_missing10_window7.keras
+2025-08-14 01:27:34,298 - INFO - Final Metrics on Test Set → [{'Dataset': 'D:\\timeseries_04082025\\fpt_stock_price.xlsx', 'Missing': 10, 'Similarity': 0.98, 'NMAE': 0.02, 'RMSE': 2569.21, 'R2': 0.12, 'FB': -0.01, 'FA2': 1.0, 'Type': 'Raw (VNĐ)'}, {'Dataset': 'FPT-scaled', 'Missing': 10, 'Similarity': 0.99, 'NMAE': 0.01, 'RMSE': 0.02, 'R2': 0.12, 'FB': -0.01, 'FA2': 1.0, 'Type': 'Scaled [0,1]'}]
+2025-08-14 01:28:19,842 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:19,842 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:19,993 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:19,994 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,167 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,167 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,275 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,275 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,414 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,414 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-08-14 01:28:20,973 - INFO - [2025-08-14 01:28:20] Starting training...
+2025-08-14 01:28:20,973 - INFO - Model: CNN_LSTM_missing10_window15.keras
+2025-08-14 01:28:20,973 - INFO - Dataset: D:\timeseries_04082025\fpt_stock_price.xlsx (Train=3859, Test=10)
+2025-08-14 01:28:20,973 - INFO - Hyperparams: {'lr': 0.001, 'batch_size': 8, 'optimizer': 'Adam', 'epochs': 20, 'seed': 34, 'window_size': 15}
+2025-08-14 01:28:26,969 - INFO - Epoch 1/20 - 5.7s - Train Loss: 0.569898
+2025-08-14 01:28:29,619 - INFO - Epoch 2/20 - 2.6s - Train Loss: 0.111070
+2025-08-14 01:28:31,980 - INFO - Epoch 3/20 - 2.4s - Train Loss: 0.056996
+2025-08-14 01:28:34,302 - INFO - Epoch 4/20 - 2.3s - Train Loss: 0.037971
+2025-08-14 01:28:37,084 - INFO - Epoch 5/20 - 2.8s - Train Loss: 0.029912
+2025-08-14 01:28:39,348 - INFO - Epoch 6/20 - 2.3s - Train Loss: 0.023795
+2025-08-14 01:28:41,628 - INFO - Epoch 7/20 - 2.3s - Train Loss: 0.021744
+2025-08-14 01:28:43,912 - INFO - Epoch 8/20 - 2.3s - Train Loss: 0.020690
+2025-08-14 01:28:46,109 - INFO - Epoch 9/20 - 2.2s - Train Loss: 0.019411
+2025-08-14 01:28:48,384 - INFO - Epoch 10/20 - 2.3s - Train Loss: 0.017483
+2025-08-14 01:28:50,598 - INFO - Epoch 11/20 - 2.2s - Train Loss: 0.014390
+2025-08-14 01:28:52,765 - INFO - Epoch 12/20 - 2.2s - Train Loss: 0.010128
+2025-08-14 01:28:55,008 - INFO - Epoch 13/20 - 2.2s - Train Loss: 0.008405
+2025-08-14 01:28:57,363 - INFO - Epoch 14/20 - 2.4s - Train Loss: 0.006885
+2025-08-14 01:28:59,870 - INFO - Epoch 15/20 - 2.5s - Train Loss: 0.006612
+2025-08-14 01:29:02,637 - INFO - Epoch 16/20 - 2.8s - Train Loss: 0.006185
+2025-08-14 01:29:05,186 - INFO - Epoch 17/20 - 2.5s - Train Loss: 0.006392
+2025-08-14 01:29:07,663 - INFO - Epoch 18/20 - 2.5s - Train Loss: 0.005411
+2025-08-14 01:29:10,120 - INFO - Epoch 19/20 - 2.5s - Train Loss: 0.006111
+2025-08-14 01:29:12,644 - INFO - Epoch 20/20 - 2.5s - Train Loss: 0.005527
+2025-08-14 01:29:13,854 - INFO - [2025-08-14 01:29:13] Training completed!
+2025-08-14 01:29:13,854 - INFO - Best Epoch: 18 (Train Loss=0.005411)
+2025-08-14 01:29:13,854 - INFO - Model saved at: CNN_LSTM_missing10_window15.keras
+2025-08-14 01:29:13,854 - INFO - Final Metrics on Test Set → [{'Dataset': 'D:\\timeseries_04082025\\fpt_stock_price.xlsx', 'Missing': 10, 'Similarity': 0.69, 'NMAE': 0.31, 'RMSE': 38134.88, 'R2': -193.25, 'FB': -0.31, 'FA2': 1.0, 'Type': 'Raw (VNĐ)'}, {'Dataset': 'FPT-scaled', 'Missing': 10, 'Similarity': 0.75, 'NMAE': 0.25, 'RMSE': 0.26, 'R2': -193.25, 'FB': -0.33, 'FA2': 1.0, 'Type': 'Scaled [0,1]'}]
