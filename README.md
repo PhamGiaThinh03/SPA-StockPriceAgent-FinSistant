@@ -1,6 +1,9 @@
-# FinSistant — AI-Powered Financial News Analysis Agent
+<div align="center">
+  <img src="./docs/screenshots/logo.jpg" width="100" alt="Logo">
+  <h1>FinSistant: Building AI Agent for Summarizing Sector-wise Market News Impacting Stock Prices</h1>
+</div>
 
-**Vietnamese:** FinSistant: Xây dựng AI Agent Tóm tắt Tin tức Thị trường Theo Ngành Ảnh hưởng đến Giá Cổ phiếu  
+**Vietnamese:** FinSistant: Xây dựng AI Agent tóm tắt tin tức thị trường theo ngành ảnh hưởng đến giá cổ phiếu  
 **Abbreviation:** FinSistant (also referred to as **SPA – Stock Price Agent**)
 
 > An automated AI Agent that **collects → summarizes → classifies by sector → analyzes sentiment → forecasts short-term trends**. Results are displayed on an intuitive dashboard.
