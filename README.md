@@ -16,7 +16,7 @@
 2.  [Key Features](#2-key-features)
 3.  [System Architecture](#3-system-architecture)
 4.  [Data Pipeline](#4-data-pipeline)
-5.  [Training & Evaluation](#5-training--evaluation)
+5.  [Training ](#5-training)
 6.  [AI Models & Tasks](#6-ai-models--tasks)
 7.  [Installation & Deployment](#7-installation--deployment)
 8.  [Usage Guide](#8-usage-guide)
