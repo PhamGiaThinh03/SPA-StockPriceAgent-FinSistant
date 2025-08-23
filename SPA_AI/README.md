@@ -157,7 +157,7 @@ SPA_vip/
    
    **📥 DOWNLOAD MODELS FROM GOOGLE DRIVE:**
    
-   🔗 **Download Link**: https://drive.google.com/drive/folders/1RctDhes_yJkdLtzqnEIZoHERxW-eaFKS?usp=drive_link
+   🔗 **Download Link**: [https://drive.google.com/drive/folders/1RctDhes_yJkdLtzqnEIZoHERxW-eaFKS?usp=drive_link](https://drive.google.com/drive/folders/1Qzf2ZwtcBZEEmwzUaGV4gydIm-APgdT8?usp=drive_link)
    
    **Required structure after download:**
    ```
