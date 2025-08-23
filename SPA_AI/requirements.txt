@@ -1,0 +1,26 @@
+# SPA VIP - Complete requirements
+# Install with: pip install -r requirements.txt
+
+# Database requirements
+supabase==2.17.0
+python-dotenv==1.0.0
+
+# Crawling requirements  
+selenium==4.15.2
+beautifulsoup4==4.12.2
+requests==2.31.0
+python-dateutil==2.8.2
+
+# Summarization requirements
+torch>=2.0.0
+transformers>=4.30.0
+sentencepiece>=0.1.99
+tqdm>=4.65.0
+
+# Shared utilities
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Additional utilities that might be needed
+lxml>=4.9.0
+webdriver-manager>=4.0.0
