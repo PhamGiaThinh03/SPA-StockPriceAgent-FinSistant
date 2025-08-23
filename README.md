@@ -8,7 +8,7 @@
 
 > An automated AI Agent that **collects → summarizes → classifies by sector → analyzes sentiment → forecasts short-term trends**. Results are displayed on an intuitive dashboard.
 
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](#) [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)](#) [![Transformers](https://img.shields.io/badge/🤗%20Transformers-4.30+-FFD21E)](#) [![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=black)](#)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)](#) [![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)](#) [![Transformers](https://img.shields.io/badge/🤗%20Transformers-4.30+-FFD21E)](#) [![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=black)](#)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql&logoColor=white)](#) [![Redis](https://img.shields.io/badge/Redis-7.x-DC382D?logo=redis&logoColor=white)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](#license) [![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)](#)
 
 ---
@@ -129,7 +129,7 @@ The system is designed with a modular, cloud-ready architecture for scalability 
 -   **OS:** Windows 10+, Ubuntu 20.04+, or macOS
 -   **Backend:** Node.js v18+, npm v9+
 -   **Frontend:** React.js, npm/yarn
--   **AI Pipeline:** Python 3.9+
+-   **AI Pipeline:** Python +
 -   **Database:** Supabase account, Redis instance
 -   *(Optional)* **Docker:** Docker Desktop v4.0+
 
