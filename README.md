@@ -148,9 +148,7 @@ pip install -r requirements.txt
 python main.py
 
 
-### Docker Deployment
-```bash
-docker-compose up --build
+```
 ```
 
 ### Cloud Deployment (Current)
