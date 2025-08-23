@@ -5,14 +5,11 @@ from dotenv import load_dotenv
 from typing import Dict, Any
 from pathlib import Path
 
-# Thêm đường dẫn để import config từ thư mục crawl
-crawl_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'crawl')
-if crawl_path not in sys.path:
-    sys.path.insert(0, crawl_path)
+# Import centralized database config
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from database.config import DatabaseConfig
 
-# Constants - moved from shared_config.py
-DEFAULT_SUPABASE_URL = "https://baenxyqklayjtlbmubxe.supabase.co"
-DEFAULT_SUPABASE_KEY = "sb_secret_4Mj3OwBW9VlbhVU6bVrfLA_1olLCYpp"
+# Constants
 TABLE_NAMES = ['FPT_News', 'GAS_News', 'IMP_News', 'VCB_News', 'General_News']
 STOCK_CODES = ['FPT', 'GAS', 'IMP', 'VCB']
 
@@ -25,9 +22,9 @@ class Config:
     DEVICE = os.getenv("DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
     BATCH_SIZE = int(os.getenv("BATCH_SIZE", 5 if DEVICE == "cuda" else 2))
     
-    # Supabase - sử dụng config từ crawl folder
-    SUPABASE_URL = os.getenv("SUPABASE_URL", DEFAULT_SUPABASE_URL)
-    SUPABASE_KEY = os.getenv("SUPABASE_KEY", DEFAULT_SUPABASE_KEY)
+    # Supabase - Use centralized config
+    SUPABASE_URL = DatabaseConfig.SUPABASE_URL
+    SUPABASE_KEY = DatabaseConfig.SUPABASE_KEY
     
     # Model paths - absolute path to model_AI directory
     _current_dir = os.path.dirname(os.path.abspath(__file__))

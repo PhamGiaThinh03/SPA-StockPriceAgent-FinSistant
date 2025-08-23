@@ -12,9 +12,9 @@ load_dotenv()
 class DatabaseConfig:
     """Centralized database configuration"""
     
-    # Supabase Configuration
-    SUPABASE_URL = os.getenv("SUPABASE_URL", "https://baenxyqklayjtlbmubxe.supabase.co")
-    SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_secret_4Mj3OwBW9VlbhVU6bVrfLA_1olLCYpp")
+    # Supabase Configuration - Load from .env file only
+    SUPABASE_URL = os.getenv("SUPABASE_URL")
+    SUPABASE_KEY = os.getenv("SUPABASE_KEY")
     
     # Table Names - News Tables
     NEWS_TABLES = {

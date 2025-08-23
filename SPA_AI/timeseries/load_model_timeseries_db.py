@@ -27,8 +27,6 @@ except ImportError:
 
 
 class StockPredictor:
-    DEFAULT_SUPABASE_URL = "https://baenxyqklayjtlbmubxe.supabase.co"
-    DEFAULT_SUPABASE_KEY = "sb_secret_4Mj3OwBW9VlbhVU6bVrfLA_1olLCYpp"
 
     def __init__(self, model_path, supabase_config, use_centralized_db=True):
         self.model_path = model_path
@@ -66,11 +64,22 @@ class StockPredictor:
 
     @classmethod
     def create_default_supabase_config(cls, table_name):
-        return {
-            "url": cls.DEFAULT_SUPABASE_URL,
-            "key": cls.DEFAULT_SUPABASE_KEY,
-            "table_name": table_name,
-        }
+        if CENTRALIZED_DB_AVAILABLE:
+            return {
+                "url": DatabaseConfig.SUPABASE_URL,
+                "key": DatabaseConfig.SUPABASE_KEY,
+                "table_name": table_name,
+            }
+        else:
+            # Fallback - require .env file
+            import os
+            from dotenv import load_dotenv
+            load_dotenv()
+            return {
+                "url": os.getenv("SUPABASE_URL"),
+                "key": os.getenv("SUPABASE_KEY"),
+                "table_name": table_name,
+            }
 
     def load_model(self):
         try:

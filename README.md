@@ -134,19 +134,74 @@ The system is designed with a modular, cloud-ready architecture for scalability 
 -   *(Optional)* **Docker:** Docker Desktop v4.0+
 
 ### Manual Installation
+
+#### 1. Clone Repository & Install Dependencies
 ```bash
-# 1. Clone the repository
+# Clone the repository
 git clone https://github.com/thanhdanh17/SPA-StockPriceAgent.git
-cd SPA_AI
+cd SPA-StockPriceAgent/SPA_AI
 
-# 2. Install AI Pipeline dependencies
+# Install Python dependencies
 pip install -r requirements.txt
+```
 
-# 3. Run the applications
+#### 2. Setup Supabase Database
 
-# Start AI Pipeline 
+**Step 2.1: Create Supabase Project**
+1. Go to [https://supabase.com](https://supabase.com) and sign up/login
+2. Click **"New Project"**
+3. Choose your organization
+4. Enter project details:
+   - **Name**: `spa-stock-agent` (or your preferred name)
+   - **Database Password**: Create a strong password
+   - **Region**: Choose closest to your location
+5. Click **"Create new project"** (wait 2-3 minutes for setup)
+
+**Step 2.2: Get Database Credentials**
+1. In your Supabase dashboard, go to **Settings → API**
+2. Copy the following values:
+   - **Project URL** (starts with `https://xxxxx.supabase.co`)
+   - **Project API keys → anon public** (long string starting with `eyJ...`)
+
+**Step 2.3: Configure Environment Variables**
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env file with your Supabase credentials
+# Replace the placeholder values:
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_KEY=your_supabase_anon_key_here
+```
+
+#### 3. Download AI Models
+Download required AI models from: [Google Drive Link](https://drive.google.com/drive/folders/1Qzf2ZwtcBZEEmwzUaGV4gydIm-APgdT8?usp=drive_link)
+
+Extract to `model_AI/` folder with this structure:
+```
+model_AI/
+├── sentiment_model/
+├── summarization_model/
+├── timeseries_model/
+└── industry_model/
+```
+
+#### 4. Test Database Connection
+```bash
+# Test your Supabase connection
+python database/test_connection.py
+```
+
+#### 5. Run the System
+```bash
+# Start the full AI pipeline
 python main.py
 
+# Or run specific components:
+python main.py --status              # Check system status
+python main.py --crawl-only          # Only crawl news
+python main.py --summarize-only      # Only run summarization
+python main.py --sentiment-only      # Only run sentiment analysis
 ```
 
 ### Cloud Deployment (Current)
@@ -155,6 +210,40 @@ python main.py
 -   **AI Pipeline & Crawler:** Manually deployed on **DigitalOcean Droplets**.
 -   **Database:** **Supabase** (PostgreSQL).
 -   **Cache:** **Redis**.
+
+### Troubleshooting
+
+**Common Issues:**
+
+1. **Database Connection Error**
+   ```bash
+   # Check if your .env file is properly configured
+   cat .env
+   
+   # Test connection manually
+   python database/test_connection.py
+   ```
+
+2. **Missing AI Models**
+   ```bash
+   # Ensure model_AI/ folder structure is correct
+   ls -la model_AI/
+   
+   # Should show: sentiment_model, summarization_model, timeseries_model, industry_model
+   ```
+
+3. **Permission Issues (Windows)**
+   ```bash
+   # Run PowerShell as Administrator
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   ```
+
+4. **Python Dependencies**
+   ```bash
+   # Update pip and try again
+   python -m pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
 
 ---
 
