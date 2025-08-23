@@ -1,0 +1,45 @@
+
+=== Sample 1 ===
+
+Text: Hội thảo tại Phú Quốc bàn về phát triển BĐS du lịch nghỉ dưỡng gắn với APEC 2027. Giai đoạn 2019-2024, BĐS Phú Quốc trầm lắng do dư cung. APEC 2027 tạo động lực phục hồi, giao dịch tăng ở khu vực ven biển, sông, đại lộ. Phú Quốc cần điều chỉnh quy hoạch, nâng cấp hạ tầng đón APEC 2027. Địa phương tập trung phát triển hạ tầng đô thị, du lịch, triển khai nhiều dự án lớn.
+
+
+Predicted Sentiment: Positive (Confidence: 0.91)
+Probabilities: {'Negative': 0.002221547532826662, 'Neutral': 0.09234996140003204, 'Positive': 0.9054285287857056}
+Actual Sentiment: Positive
+
+=== Sample 2 ===
+
+Text: Phó thủ tướng Bùi Thanh Sơn chủ trì phiên họp về cao điểm chống buôn lậu, gian lận thương mại, hàng giả. Các bộ ngành được yêu cầu kiểm tra, xử lý nghiêm vi phạm khi có phản ánh từ người dân, tập trung vào dược phẩm, thực phẩm chức năng. Cục An toàn thực phẩm yêu cầu kiểm tra quảng cáo sản phẩm Nestlé Milo, sau phản ánh sử dụng thông tin Viện Dinh dưỡng không đúng. Sở Y tế TP.HCM và TP Huế tăng cường kiểm tra các cơ sở kinh doanh dược, bếp ăn tập thể, sữa, thực phẩm chức năng, thiết bị y tế, phát hiện nhiều vi phạm công bố. Công an Lâm Đồng phát hiện quán SKY vi phạm về ma túy và hàng hóa không rõ nguồn gốc, Cục Quản lý dược tăng cường kiểm tra đột xuất cơ sở sản xuất thuốc, mỹ phẩm, thu hồi sản phẩm vi phạm.
+
+
+Predicted Sentiment: Negative (Confidence: 0.99)
+Probabilities: {'Negative': 0.9852160215377808, 'Neutral': 0.01327318511903286, 'Positive': 0.0015108877560123801}
+Actual Sentiment: Negative
+
+=== Sample 3 ===
+
+Text: Trung Quốc từ chối đề xuất của Nga về việc tăng xuất khẩu khí đốt qua Kazakhstan do tuyến đường hiện tại đã quá tải và tốn kém để xây dựng đường ống mới. Bắc Kinh ưu tiên tuyến đường "Power of Siberia 2" qua Mông Cổ, mặc dù dự án này đang gặp khó khăn về tài chính và chính trị. Gazprom đang gặp khó khăn tài chính nghiêm trọng sau khi mất thị trường châu Âu, báo lỗ lớn và phải cắt giảm dự án. Các nước Trung Á cũng đang xem xét đa dạng hóa nguồn cung khí đốt thay vì phụ thuộc vào Nga. Nga và Gazprom đang đối mặt với thách thức trong việc duy trì vị thế trên thị trường năng lượng toàn cầu.
+
+
+Predicted Sentiment: Negative (Confidence: 0.98)
+Probabilities: {'Negative': 0.9767239093780518, 'Neutral': 0.021572614088654518, 'Positive': 0.0017034568591043353}
+Actual Sentiment: Negative
+
+=== Sample 4 ===
+
+Text: Dược Hậu Giang (DHG) đã thành công trong việc hợp tác với Taisho (Nhật Bản), nâng cao năng lực sản xuất và quản trị. DHG đã đầu tư hai dây chuyền sản xuất đạt chuẩn Japan GMP, nâng cao chất lượng sản phẩm và năng lực cạnh tranh. Đội ngũ kỹ thuật viên được đào tạo chuyên nghiệp, vận hành máy móc hiện đại theo tiêu chuẩn Nhật Bản. DHG áp dụng quy trình "Just in Time" trong phân phối và duy trì các tiêu chuẩn GSP, GLP. DHG kết hợp văn hóa doanh nghiệp Việt Nam và Nhật Bản, đồng thời tiếp tục các hoạt động cộng đồng.
+
+
+Predicted Sentiment: Positive (Confidence: 0.97)
+Probabilities: {'Negative': 0.002906182548031211, 'Neutral': 0.024384623393416405, 'Positive': 0.9727091789245605}
+Actual Sentiment: Positive
+
+=== Sample 5 ===
+
+Text: Long Châu liên tục mở rộng, dự kiến đạt 3000 cửa hàng vào 2028 với biên lợi nhuận ròng 4.5% năm 2030. Long Châu có lợi thế cạnh tranh nhờ mạng lưới mở rộng khi đối thủ thu hẹp và danh mục thuốc (đặc biệt ETC) đa dạng. BVSC dự phóng doanh thu Long Châu năm 2025 đạt 31.970 tỷ đồng, tăng 28%. FPT Shop dự kiến duy trì biên LNG trên 13% năm 2025 nhờ mở rộng sang điện máy, gia dụng. BVSC dự báo doanh thu FPT Retail năm 2025 tăng 18.6%, lợi nhuận sau thuế tăng 111.3%.
+
+
+Predicted Sentiment: Positive (Confidence: 0.96)
+Probabilities: {'Negative': 0.002420302713289857, 'Neutral': 0.03361455723643303, 'Positive': 0.9639651775360107}
+Actual Sentiment: Positive

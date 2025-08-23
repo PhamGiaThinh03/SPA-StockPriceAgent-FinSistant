@@ -1,0 +1,42 @@
+
+=== Sample 1 ===
+
+Text: Chủ tịch Hội đồng thành viên EVN tiếp và làm việc với lãnh đạo KEPCO về ứng dụng công nghệ thông minh và phát triển nguồn điện hạt nhân. Các bên muốn tăng cường hợp tác, chia sẻ kinh nghiệm để phát triển dự án điện. EVN đề xuất thành lập tổ công tác chuyên môn. KEPCO đang quản lý 83GW và tham gia đầu tư dự án BOT tại Việt Nam. Nhiều đối tác nước ngoài muốn hợp tác với Việt Nam trong dự án điện hạt nhân Ninh Thuận, bao gồm Mỹ, Hàn Quốc, Nga, Nhật, Trung Quốc, Pháp.
+
+Predicted Sentiment: Positive (Confidence: 0.87)
+Probabilities: {'Negative': 0.00490963738411665, 'Neutral': 0.12209127843379974, 'Positive': 0.8729991912841797}
+Actual Sentiment: Positive
+
+=== Sample 2 ===
+
+Text: Từ ngày 1/7, Việt Nam chỉ còn 34 tỉnh, thành phố sau khi sắp xếp lại hành chính từ 63 đơn vị trước đây. Việc này nhằm tạo điều kiện thuận lợi hơn cho các địa phương thu hút vốn đầu tư trực tiếp nước ngoài (FDI). Các “thủ phủ” mới đã được hình thành và hi vọng sẽ thu hút được nhiều vốn FDI hơn trong thời gian tới.
+
+Predicted Sentiment: Positive (Confidence: 0.91)
+Probabilities: {'Negative': 0.00754185626283288, 'Neutral': 0.0784013643860817, 'Positive': 0.9140567779541016}
+Actual Sentiment: Positive
+
+=== Sample 3 ===
+
+Text: Trong bối cảnh cần tái cấu trúc doanh nghiệp nhà nước tại TPHCM, các chuyên gia nhấn mạnh về việc định vị lại phạm vi hoạt động và nâng cao quản trị. Việc xác định vai trò của doanh nghiệp nhà nước trong kinh tế thành phố, cũng như tách biệt giữa vai trò nhà nước và chức năng thị trường, được đề xuất. Đồng thời, cần tạo điều kiện để thu hút nhân tài, khuyến khích đổi mới và đầu tư công nghệ. Việc thực hiện các giải pháp này cần sự hỗ trợ và quan tâm từ các chính sách và tổ chức chính trị.
+
+Predicted Sentiment: Neutral (Confidence: 0.90)
+Probabilities: {'Negative': 0.010248071514070034, 'Neutral': 0.901475191116333, 'Positive': 0.08827677369117737}
+Actual Sentiment: Neutral
+
+=== Sample 4 ===
+
+Text: Cá thu giàu dinh dưỡng, đặc biệt vitamin B12, selen và omega-3, cao gấp đôi cá hồi. Ăn cá thu giúp hạ đường huyết, bổ máu, chống ung thư nhờ Coenzyme Q10 và omega-3. Cá thu dễ tiêu hóa, tốt cho gan, thận, tim mạch do cân bằng cholesterol, giảm nguy cơ bệnh tim. Omega-3 trong cá thu cải thiện trí não, giảm nguy cơ bệnh tâm thần, vitamin B12 tăng cường miễn dịch. Vitamin D, đồng, selen trong cá thu giúp xương chắc khỏe.
+
+
+Predicted Sentiment: Positive (Confidence: 0.98)
+Probabilities: {'Negative': 0.0073427604511380196, 'Neutral': 0.017304109409451485, 'Positive': 0.9753531813621521}
+Actual Sentiment: Positive
+
+=== Sample 5 ===
+
+Text: Sacombank dự kiến mua công ty chứng khoán, đầu tư tối đa 1.500 tỷ đồng và sở hữu trên 50%. Ngân hàng cũng trình phương án tăng vốn điều lệ bằng phát hành cổ phiếu để trả cổ tức và thưởng cho nhân viên từ lợi nhuận giữ lại. Nếu được duyệt, đây là lần chia cổ tức đầu tiên sau 10 năm. Lợi nhuận chưa phân phối năm 2024 là 28.426 tỷ đồng, nợ xấu tăng lên 12.955 tỷ đồng. Sacombank đã nộp hơn 196 tỷ đồng tiền thuế và nghĩa vụ bổ sung cho giai đoạn 2019-2021.
+
+
+Predicted Sentiment: Positive (Confidence: 0.79)
+Probabilities: {'Negative': 0.006877118721604347, 'Neutral': 0.2027684450149536, 'Positive': 0.7903544306755066}
+Actual Sentiment: Positive

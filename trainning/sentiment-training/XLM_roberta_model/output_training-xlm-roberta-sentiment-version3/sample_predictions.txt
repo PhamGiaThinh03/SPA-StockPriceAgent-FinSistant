@@ -1,0 +1,41 @@
+
+=== Sample 1 ===
+
+Text: Đảng đối lập Thái Lan cáo buộc Thủ tướng Shinawatra thiếu năng lực và bị thao túng bởi ông Thaksin Shinawatra. Trong phiên điều trần, Đảng Nhân Dân khẳng định bà Shinawatra đang nhận chỉ thị từ ông Thaksin. Nhiều chỉ trích được đưa ra, nhưng bà Shinawatra không trực tiếp phản hồi. Dù có những chính sách kinh tế mới nhưng kết quả vẫn chưa đạt như mong đợi. Phiếu bỏ tín nhiệm dự kiến có thể không thành công. Ông Thaksin lên tiếng về chính sách kinh tế của Chính phủ và lo ngại ông vẫn ảnh hưởng đến quyết định.
+
+Predicted Sentiment: Negative (Confidence: 0.97)
+Probabilities: {'Negative': 0.9733138084411621, 'Neutral': 0.02532723918557167, 'Positive': 0.0013590147718787193}
+Actual Sentiment: Negative
+
+=== Sample 2 ===
+
+Text: Lãi suất ngân hàng ngày 22/5/2025 tiếp tục đạt mức cao kỷ lục với nhiều ưu đãi đặc biệt trên 7%/năm. Dẫn đầu là ABBank với lãi suất lên tới 9,65%/năm, PVcomBank và HDBank cũng cung cấp mức lãi suất hấp dẫn cho khách hàng có số tiền gửi lớn. Người gửi tiết kiệm cá nhân vẫn có thể tiếp cận mức lãi suất từ 6%/năm tại nhiều ngân hàng. Ngoài ra, các ngân hàng lớn nhóm Big4 vẫn duy trì mức lãi suất khá khiêm tốn trong khoảng 4,7% - 5%/năm.
+
+Predicted Sentiment: Positive (Confidence: 0.87)
+Probabilities: {'Negative': 0.003391635837033391, 'Neutral': 0.12616583704948425, 'Positive': 0.8704425692558289}
+Actual Sentiment: Positive
+
+=== Sample 3 ===
+
+Text: Ngân hàng BIDV áp dụng lãi suất huy động cao nhất lên tới 4,9%/năm cho tiền gửi trực tuyến vào cuối tháng 5/2025. Đối với tiền gửi tại quầy, lãi suất dao động từ 1,6% đến 4,8%/năm tuỳ kỳ hạn. Khách hàng cũng có thể gửi tiết kiệm trực tuyến thông qua ứng dụng Mobile Banking và Internet Banking, với lãi suất ưu đãi cao hơn. Để tính số tiền lãi nhận được, khách hàng có thể sử dụng công thức: Tiền lãi = Tiền gửi x Lãi suất tiền gửi %/12 x Số tháng gửi. Thông tin lãi suất có thể thay đổi theo từng thời kỳ.
+
+Predicted Sentiment: Neutral (Confidence: 0.79)
+Probabilities: {'Negative': 0.021978605538606644, 'Neutral': 0.7861695289611816, 'Positive': 0.1918518841266632}
+Actual Sentiment: Neutral
+
+=== Sample 4 ===
+
+Text: DSC niêm yết trên HOSE, khẳng định cam kết với thị trường tài chính. Quý III/2024, DSC đạt doanh thu 147 tỷ đồng (tăng 19%) và lợi nhuận trước thuế 89,6 tỷ đồng (tăng 83%). Lợi nhuận từ tự doanh đóng góp chính (58%), đạt 52 tỷ đồng. Môi giới chứng khoán ghi nhận 34 tỷ đồng lợi nhuận trước thuế, nâng tổng 9 tháng lên 103 tỷ đồng. Tổng giá trị cho vay đạt 1.830 tỷ đồng (tăng 40%).
+
+
+Predicted Sentiment: Positive (Confidence: 0.98)
+Probabilities: {'Negative': 0.0009224106906913221, 'Neutral': 0.014303461648523808, 'Positive': 0.984774112701416}
+Actual Sentiment: Positive
+
+=== Sample 5 ===
+
+Text: Sáng nay, UBND TP.HCM tổ chức phiên họp kinh tế - xã hội tháng 5 dưới sự chủ trì của Chủ tịch UBND TP.HCM, ông Nguyễn Văn Được. Ông Được đánh giá TP.HCM có nhiều yếu tố đan xen giữa thuận lợi và khó khăn. TP.HCM thu hút nhiều dự án đầu tư nước ngoài và có tín hiệu tích cực về công nghiệp, thương mại, dịch vụ, du lịch. UBND TP.HCM sẽ trình Quốc hội chính sách để hình thành bộ khung cho trung tâm tài chính quốc tế. Tuy nhiên, vẫn còn hạn chế cần vượt qua.
+
+Predicted Sentiment: Neutral (Confidence: 0.54)
+Probabilities: {'Negative': 0.007433129474520683, 'Neutral': 0.5396395921707153, 'Positive': 0.45292720198631287}
+Actual Sentiment: Neutral

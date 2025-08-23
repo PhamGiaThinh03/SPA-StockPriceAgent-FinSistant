@@ -1,0 +1,7 @@
+Total samples: 5179
+
+Class distribution:
+sentiment
+Positive    2615
+Neutral     1320
+Negative    1243

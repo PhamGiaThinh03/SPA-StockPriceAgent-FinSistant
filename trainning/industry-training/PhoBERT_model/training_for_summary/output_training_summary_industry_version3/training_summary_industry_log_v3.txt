@@ -1,0 +1,188 @@
+2025-07-21 16:41:26,193 - INFO - Logging initialized successfully
+2025-07-21 16:41:31,374 - INFO - Original data loaded with shape: (12007, 9)
+2025-07-21 16:41:35,346 - INFO - Removed 79 duplicate summaries
+2025-07-21 16:41:35,351 - INFO - Removed 79 summaries shorter than 5 characters
+2025-07-21 16:41:35,353 - INFO - Industry labels checked and stripped
+2025-07-21 16:41:35,362 - INFO - Class distribution: {0: 4441, 1: 1348, 2: 757, 3: 1662, 4: 3720}
+2025-07-21 16:41:35,362 - WARNING - Significant class imbalance detected!
+2025-07-21 16:41:47,337 - INFO - Tokenization completed with max_length=256
+2025-07-21 16:41:52,574 - INFO - Saved processed data with shape: (11928, 4)
+2025-07-21 16:41:52,582 - INFO - Summary length stats: Min=98, Max=966, Mean=502.69
+2025-07-21 16:41:52,583 - INFO - Token length stats: Min=256, Max=256, Mean=256.00
+2025-07-21 16:41:52,584 - INFO - Processing config: max_len=256, n_splits=3
+2025-07-21 16:41:52,592 - INFO - Data split: Train+Val=9542, Test=2386
+2025-07-21 16:41:52,595 - INFO - Trial 0: lr=0.000011, batch_size=32, dropout_rate=0.21, epochs=11
+2025-07-21 16:47:13,264 - INFO - Trial 0, Fold 1, Epoch 1/11 - Train Loss: 1.1128, Train Acc: 0.6315, Val Loss: 0.5859, Val Acc: 0.7875
+2025-07-21 16:52:24,758 - INFO - Trial 0, Fold 1, Epoch 2/11 - Train Loss: 0.5199, Train Acc: 0.8110, Val Loss: 0.5188, Val Acc: 0.8070
+2025-07-21 16:57:38,145 - INFO - Trial 0, Fold 1, Epoch 3/11 - Train Loss: 0.4087, Train Acc: 0.8370, Val Loss: 0.4893, Val Acc: 0.8148
+2025-07-21 17:02:51,368 - INFO - Trial 0, Fold 1, Epoch 4/11 - Train Loss: 0.3485, Train Acc: 0.8606, Val Loss: 0.4718, Val Acc: 0.8123
+2025-07-21 17:08:05,282 - INFO - Trial 0, Fold 1, Epoch 5/11 - Train Loss: 0.2963, Train Acc: 0.8766, Val Loss: 0.4885, Val Acc: 0.8133
+2025-07-21 17:13:16,101 - INFO - Trial 0, Fold 1, Epoch 6/11 - Train Loss: 0.2559, Train Acc: 0.8973, Val Loss: 0.4920, Val Acc: 0.8161
+2025-07-21 17:18:26,012 - INFO - Trial 0, Fold 1, Epoch 7/11 - Train Loss: 0.2229, Train Acc: 0.9118, Val Loss: 0.5211, Val Acc: 0.8170
+2025-07-21 17:23:35,875 - INFO - Trial 0, Fold 1, Epoch 8/11 - Train Loss: 0.1963, Train Acc: 0.9194, Val Loss: 0.5487, Val Acc: 0.8177
+2025-07-21 17:28:45,662 - INFO - Trial 0, Fold 1, Epoch 9/11 - Train Loss: 0.1762, Train Acc: 0.9307, Val Loss: 0.5498, Val Acc: 0.8167
+2025-07-21 17:33:55,787 - INFO - Trial 0, Fold 1, Epoch 10/11 - Train Loss: 0.1614, Train Acc: 0.9398, Val Loss: 0.5656, Val Acc: 0.8145
+2025-07-21 17:39:05,902 - INFO - Trial 0, Fold 1, Epoch 11/11 - Train Loss: 0.1509, Train Acc: 0.9442, Val Loss: 0.5670, Val Acc: 0.8174
+2025-07-21 17:39:05,904 - INFO - Early stopping triggered at epoch 11 for fold 1
+2025-07-21 17:44:17,283 - INFO - Trial 0, Fold 2, Epoch 1/11 - Train Loss: 1.1096, Train Acc: 0.6469, Val Loss: 0.5870, Val Acc: 0.7818
+2025-07-21 17:49:27,646 - INFO - Trial 0, Fold 2, Epoch 2/11 - Train Loss: 0.5228, Train Acc: 0.8109, Val Loss: 0.4857, Val Acc: 0.7947
+2025-07-21 17:54:41,878 - INFO - Trial 0, Fold 2, Epoch 3/11 - Train Loss: 0.4119, Train Acc: 0.8407, Val Loss: 0.4786, Val Acc: 0.8032
+2025-07-21 17:59:55,736 - INFO - Trial 0, Fold 2, Epoch 4/11 - Train Loss: 0.3512, Train Acc: 0.8621, Val Loss: 0.4953, Val Acc: 0.8070
+2025-07-21 18:05:10,019 - INFO - Trial 0, Fold 2, Epoch 5/11 - Train Loss: 0.2980, Train Acc: 0.8813, Val Loss: 0.5144, Val Acc: 0.8054
+2025-07-21 18:10:22,674 - INFO - Trial 0, Fold 2, Epoch 6/11 - Train Loss: 0.2601, Train Acc: 0.8970, Val Loss: 0.5318, Val Acc: 0.8007
+2025-07-21 18:15:33,009 - INFO - Trial 0, Fold 2, Epoch 7/11 - Train Loss: 0.2259, Train Acc: 0.9127, Val Loss: 0.5479, Val Acc: 0.8054
+2025-07-21 18:15:33,011 - INFO - Early stopping triggered at epoch 7 for fold 2
+2025-07-21 18:20:44,306 - INFO - Trial 0, Fold 3, Epoch 1/11 - Train Loss: 1.1643, Train Acc: 0.5373, Val Loss: 0.6170, Val Acc: 0.7840
+2025-07-21 18:25:54,777 - INFO - Trial 0, Fold 3, Epoch 2/11 - Train Loss: 0.5701, Train Acc: 0.7964, Val Loss: 0.4573, Val Acc: 0.8164
+2025-07-21 18:31:04,772 - INFO - Trial 0, Fold 3, Epoch 3/11 - Train Loss: 0.4461, Train Acc: 0.8230, Val Loss: 0.4411, Val Acc: 0.8302
+2025-07-21 18:36:15,400 - INFO - Trial 0, Fold 3, Epoch 4/11 - Train Loss: 0.3738, Train Acc: 0.8494, Val Loss: 0.4478, Val Acc: 0.8346
+2025-07-21 18:41:25,539 - INFO - Trial 0, Fold 3, Epoch 5/11 - Train Loss: 0.3225, Train Acc: 0.8710, Val Loss: 0.4633, Val Acc: 0.8330
+2025-07-21 18:46:35,823 - INFO - Trial 0, Fold 3, Epoch 6/11 - Train Loss: 0.2844, Train Acc: 0.8829, Val Loss: 0.4590, Val Acc: 0.8220
+2025-07-21 18:51:47,734 - INFO - Trial 0, Fold 3, Epoch 7/11 - Train Loss: 0.2428, Train Acc: 0.9003, Val Loss: 0.4662, Val Acc: 0.8355
+2025-07-21 18:57:01,177 - INFO - Trial 0, Fold 3, Epoch 8/11 - Train Loss: 0.2152, Train Acc: 0.9151, Val Loss: 0.4773, Val Acc: 0.8292
+2025-07-21 19:02:15,040 - INFO - Trial 0, Fold 3, Epoch 9/11 - Train Loss: 0.1927, Train Acc: 0.9231, Val Loss: 0.4998, Val Acc: 0.8346
+2025-07-21 19:07:28,523 - INFO - Trial 0, Fold 3, Epoch 10/11 - Train Loss: 0.1819, Train Acc: 0.9290, Val Loss: 0.5044, Val Acc: 0.8305
+2025-07-21 19:07:28,524 - INFO - Early stopping triggered at epoch 10 for fold 3
+2025-07-21 19:07:28,525 - INFO - Trial 0 completed with average validation accuracy: 0.8201
+2025-07-21 19:07:28,574 - INFO - Trial 1: lr=0.000024, batch_size=16, dropout_rate=0.33, epochs=15
+2025-07-21 19:12:46,122 - INFO - Trial 1, Fold 1, Epoch 1/15 - Train Loss: 0.8068, Train Acc: 0.6782, Val Loss: 0.5227, Val Acc: 0.8019
+2025-07-21 19:18:01,821 - INFO - Trial 1, Fold 1, Epoch 2/15 - Train Loss: 0.4260, Train Acc: 0.8390, Val Loss: 0.5445, Val Acc: 0.8114
+2025-07-21 19:23:16,989 - INFO - Trial 1, Fold 1, Epoch 3/15 - Train Loss: 0.3281, Train Acc: 0.8771, Val Loss: 0.5631, Val Acc: 0.8133
+2025-07-21 19:28:32,400 - INFO - Trial 1, Fold 1, Epoch 4/15 - Train Loss: 0.2441, Train Acc: 0.9118, Val Loss: 0.6606, Val Acc: 0.8079
+2025-07-21 19:33:48,113 - INFO - Trial 1, Fold 1, Epoch 5/15 - Train Loss: 0.1741, Train Acc: 0.9351, Val Loss: 0.7989, Val Acc: 0.8079
+2025-07-21 19:39:03,788 - INFO - Trial 1, Fold 1, Epoch 6/15 - Train Loss: 0.1268, Train Acc: 0.9572, Val Loss: 0.8733, Val Acc: 0.8082
+2025-07-21 19:39:03,789 - INFO - Early stopping triggered at epoch 6 for fold 1
+2025-07-21 19:44:20,697 - INFO - Trial 1, Fold 2, Epoch 1/15 - Train Loss: 0.7627, Train Acc: 0.7299, Val Loss: 0.4957, Val Acc: 0.8013
+2025-07-21 19:49:36,607 - INFO - Trial 1, Fold 2, Epoch 2/15 - Train Loss: 0.4350, Train Acc: 0.8406, Val Loss: 0.5321, Val Acc: 0.7897
+2025-07-21 19:54:54,940 - INFO - Trial 1, Fold 2, Epoch 3/15 - Train Loss: 0.3338, Train Acc: 0.8736, Val Loss: 0.5290, Val Acc: 0.8104
+2025-07-21 20:00:13,165 - INFO - Trial 1, Fold 2, Epoch 4/15 - Train Loss: 0.2479, Train Acc: 0.9036, Val Loss: 0.6793, Val Acc: 0.8104
+2025-07-21 20:05:31,606 - INFO - Trial 1, Fold 2, Epoch 5/15 - Train Loss: 0.1871, Train Acc: 0.9357, Val Loss: 0.7490, Val Acc: 0.8111
+2025-07-21 20:10:48,921 - INFO - Trial 1, Fold 2, Epoch 6/15 - Train Loss: 0.1328, Train Acc: 0.9538, Val Loss: 0.8818, Val Acc: 0.7928
+2025-07-21 20:16:04,763 - INFO - Trial 1, Fold 2, Epoch 7/15 - Train Loss: 0.0912, Train Acc: 0.9712, Val Loss: 0.9764, Val Acc: 0.8026
+2025-07-21 20:21:20,445 - INFO - Trial 1, Fold 2, Epoch 8/15 - Train Loss: 0.0699, Train Acc: 0.9780, Val Loss: 1.0301, Val Acc: 0.7966
+2025-07-21 20:21:20,446 - INFO - Early stopping triggered at epoch 8 for fold 2
+2025-07-21 20:26:36,783 - INFO - Trial 1, Fold 3, Epoch 1/15 - Train Loss: 0.7721, Train Acc: 0.7252, Val Loss: 0.4588, Val Acc: 0.8189
+2025-07-21 20:31:52,444 - INFO - Trial 1, Fold 3, Epoch 2/15 - Train Loss: 0.4602, Train Acc: 0.8282, Val Loss: 0.4764, Val Acc: 0.8302
+2025-07-21 20:37:08,395 - INFO - Trial 1, Fold 3, Epoch 3/15 - Train Loss: 0.3540, Train Acc: 0.8645, Val Loss: 0.4632, Val Acc: 0.8261
+2025-07-21 20:42:24,138 - INFO - Trial 1, Fold 3, Epoch 4/15 - Train Loss: 0.2671, Train Acc: 0.8945, Val Loss: 0.5535, Val Acc: 0.8192
+2025-07-21 20:47:40,387 - INFO - Trial 1, Fold 3, Epoch 5/15 - Train Loss: 0.2024, Train Acc: 0.9257, Val Loss: 0.5700, Val Acc: 0.8226
+2025-07-21 20:47:40,388 - INFO - Early stopping triggered at epoch 5 for fold 3
+2025-07-21 20:47:40,388 - INFO - Trial 1 completed with average validation accuracy: 0.8182
+2025-07-21 20:47:40,410 - INFO - Trial 2: lr=0.000015, batch_size=32, dropout_rate=0.38, epochs=9
+2025-07-21 20:52:53,731 - INFO - Trial 2, Fold 1, Epoch 1/9 - Train Loss: 1.2210, Train Acc: 0.6108, Val Loss: 0.6224, Val Acc: 0.7859
+2025-07-21 20:58:06,620 - INFO - Trial 2, Fold 1, Epoch 2/9 - Train Loss: 0.5428, Train Acc: 0.8063, Val Loss: 0.5509, Val Acc: 0.8139
+2025-07-21 21:03:19,579 - INFO - Trial 2, Fold 1, Epoch 3/9 - Train Loss: 0.4106, Train Acc: 0.8450, Val Loss: 0.5048, Val Acc: 0.8007
+2025-07-21 21:08:32,492 - INFO - Trial 2, Fold 1, Epoch 4/9 - Train Loss: 0.3343, Train Acc: 0.8709, Val Loss: 0.5410, Val Acc: 0.8142
+2025-07-21 21:13:42,940 - INFO - Trial 2, Fold 1, Epoch 5/9 - Train Loss: 0.2790, Train Acc: 0.8862, Val Loss: 0.5453, Val Acc: 0.8098
+2025-07-21 21:18:53,274 - INFO - Trial 2, Fold 1, Epoch 6/9 - Train Loss: 0.2344, Train Acc: 0.9054, Val Loss: 0.5610, Val Acc: 0.8152
+2025-07-21 21:24:03,677 - INFO - Trial 2, Fold 1, Epoch 7/9 - Train Loss: 0.2040, Train Acc: 0.9222, Val Loss: 0.5958, Val Acc: 0.8174
+2025-07-21 21:29:13,769 - INFO - Trial 2, Fold 1, Epoch 8/9 - Train Loss: 0.1746, Train Acc: 0.9344, Val Loss: 0.5945, Val Acc: 0.8123
+2025-07-21 21:34:23,599 - INFO - Trial 2, Fold 1, Epoch 9/9 - Train Loss: 0.1577, Train Acc: 0.9418, Val Loss: 0.6176, Val Acc: 0.8174
+2025-07-21 21:39:34,804 - INFO - Trial 2, Fold 2, Epoch 1/9 - Train Loss: 1.0419, Train Acc: 0.6084, Val Loss: 0.5697, Val Acc: 0.7825
+2025-07-21 21:44:45,239 - INFO - Trial 2, Fold 2, Epoch 2/9 - Train Loss: 0.4870, Train Acc: 0.8225, Val Loss: 0.5019, Val Acc: 0.7982
+2025-07-21 21:49:56,377 - INFO - Trial 2, Fold 2, Epoch 3/9 - Train Loss: 0.3730, Train Acc: 0.8533, Val Loss: 0.5165, Val Acc: 0.8136
+2025-07-21 21:55:10,020 - INFO - Trial 2, Fold 2, Epoch 4/9 - Train Loss: 0.3182, Train Acc: 0.8767, Val Loss: 0.5080, Val Acc: 0.8086
+2025-07-21 22:00:23,466 - INFO - Trial 2, Fold 2, Epoch 5/9 - Train Loss: 0.2564, Train Acc: 0.8992, Val Loss: 0.5095, Val Acc: 0.8120
+2025-07-21 22:05:37,179 - INFO - Trial 2, Fold 2, Epoch 6/9 - Train Loss: 0.2161, Train Acc: 0.9139, Val Loss: 0.5449, Val Acc: 0.8123
+2025-07-21 22:05:37,181 - INFO - Early stopping triggered at epoch 6 for fold 2
+2025-07-21 22:10:49,998 - INFO - Trial 2, Fold 3, Epoch 1/9 - Train Loss: 1.0423, Train Acc: 0.6674, Val Loss: 0.5292, Val Acc: 0.8088
+2025-07-21 22:16:00,346 - INFO - Trial 2, Fold 3, Epoch 2/9 - Train Loss: 0.5281, Train Acc: 0.8079, Val Loss: 0.4488, Val Acc: 0.8110
+2025-07-21 22:21:10,603 - INFO - Trial 2, Fold 3, Epoch 3/9 - Train Loss: 0.4089, Train Acc: 0.8395, Val Loss: 0.4436, Val Acc: 0.8044
+2025-07-21 22:26:21,155 - INFO - Trial 2, Fold 3, Epoch 4/9 - Train Loss: 0.3393, Train Acc: 0.8577, Val Loss: 0.4523, Val Acc: 0.8355
+2025-07-21 22:31:31,164 - INFO - Trial 2, Fold 3, Epoch 5/9 - Train Loss: 0.2851, Train Acc: 0.8783, Val Loss: 0.4802, Val Acc: 0.8390
+2025-07-21 22:36:41,514 - INFO - Trial 2, Fold 3, Epoch 6/9 - Train Loss: 0.2320, Train Acc: 0.9051, Val Loss: 0.4814, Val Acc: 0.8321
+2025-07-21 22:41:51,633 - INFO - Trial 2, Fold 3, Epoch 7/9 - Train Loss: 0.2032, Train Acc: 0.9161, Val Loss: 0.4964, Val Acc: 0.8352
+2025-07-21 22:47:02,009 - INFO - Trial 2, Fold 3, Epoch 8/9 - Train Loss: 0.1829, Train Acc: 0.9264, Val Loss: 0.5207, Val Acc: 0.8308
+2025-07-21 22:47:02,010 - INFO - Early stopping triggered at epoch 8 for fold 3
+2025-07-21 22:47:02,011 - INFO - Trial 2 completed with average validation accuracy: 0.8233
+2025-07-21 22:47:02,059 - INFO - Best trial: 2
+2025-07-21 22:47:02,059 - INFO - Best validation accuracy: 0.8233
+2025-07-21 22:47:02,059 - INFO - Best hyperparameters: {'learning_rate': 1.4859313793002847e-05, 'batch_size': 32, 'dropout_rate': 0.3810717941038525, 'n_epochs': 9}
+2025-07-21 22:47:02,059 - INFO - Training final model with best hyperparameters: lr=0.000015, batch_size=32, dropout_rate=0.38, epochs=9
+2025-07-21 22:52:15,065 - INFO - Final Training, Fold 1, Epoch 1/9 - Train Loss: 1.0279, Train Acc: 0.6068, Val Loss: 0.5692, Val Acc: 0.8041
+2025-07-21 22:52:15,906 - INFO - Saved best model at fold 1, epoch 1 with accuracy 0.8041
+2025-07-21 22:57:29,101 - INFO - Final Training, Fold 1, Epoch 2/9 - Train Loss: 0.4935, Train Acc: 0.8132, Val Loss: 0.4913, Val Acc: 0.8026
+2025-07-21 23:02:42,260 - INFO - Final Training, Fold 1, Epoch 3/9 - Train Loss: 0.3855, Train Acc: 0.8519, Val Loss: 0.4981, Val Acc: 0.8199
+2025-07-21 23:02:43,662 - INFO - Saved best model at fold 1, epoch 3 with accuracy 0.8199
+2025-07-21 23:07:56,839 - INFO - Final Training, Fold 1, Epoch 4/9 - Train Loss: 0.3162, Train Acc: 0.8736, Val Loss: 0.4996, Val Acc: 0.8211
+2025-07-21 23:07:58,282 - INFO - Saved best model at fold 1, epoch 4 with accuracy 0.8211
+2025-07-21 23:13:08,427 - INFO - Final Training, Fold 1, Epoch 5/9 - Train Loss: 0.2679, Train Acc: 0.8961, Val Loss: 0.5155, Val Acc: 0.8174
+2025-07-21 23:18:18,036 - INFO - Final Training, Fold 1, Epoch 6/9 - Train Loss: 0.2246, Train Acc: 0.9127, Val Loss: 0.5178, Val Acc: 0.8252
+2025-07-21 23:18:19,441 - INFO - Saved best model at fold 1, epoch 6 with accuracy 0.8252
+2025-07-21 23:23:28,398 - INFO - Final Training, Fold 1, Epoch 7/9 - Train Loss: 0.1886, Train Acc: 0.9242, Val Loss: 0.5321, Val Acc: 0.8152
+2025-07-21 23:28:38,151 - INFO - Final Training, Fold 1, Epoch 8/9 - Train Loss: 0.1630, Train Acc: 0.9401, Val Loss: 0.5717, Val Acc: 0.8192
+2025-07-21 23:33:47,980 - INFO - Final Training, Fold 1, Epoch 9/9 - Train Loss: 0.1466, Train Acc: 0.9492, Val Loss: 0.5685, Val Acc: 0.8192
+2025-07-21 23:33:47,982 - INFO - Early stopping triggered at epoch 9 for fold 1
+2025-07-21 23:38:58,572 - INFO - Final Training, Fold 2, Epoch 1/9 - Train Loss: 1.0398, Train Acc: 0.6265, Val Loss: 0.5838, Val Acc: 0.7702
+2025-07-21 23:44:08,406 - INFO - Final Training, Fold 2, Epoch 2/9 - Train Loss: 0.5072, Train Acc: 0.8158, Val Loss: 0.5079, Val Acc: 0.8019
+2025-07-21 23:49:18,420 - INFO - Final Training, Fold 2, Epoch 3/9 - Train Loss: 0.3937, Train Acc: 0.8450, Val Loss: 0.5139, Val Acc: 0.7991
+2025-07-21 23:54:32,045 - INFO - Final Training, Fold 2, Epoch 4/9 - Train Loss: 0.3232, Train Acc: 0.8736, Val Loss: 0.5089, Val Acc: 0.7960
+2025-07-21 23:59:44,971 - INFO - Final Training, Fold 2, Epoch 5/9 - Train Loss: 0.2776, Train Acc: 0.8933, Val Loss: 0.5261, Val Acc: 0.8067
+2025-07-22 00:04:58,869 - INFO - Final Training, Fold 2, Epoch 6/9 - Train Loss: 0.2361, Train Acc: 0.9094, Val Loss: 0.5681, Val Acc: 0.8016
+2025-07-22 00:10:11,002 - INFO - Final Training, Fold 2, Epoch 7/9 - Train Loss: 0.1985, Train Acc: 0.9267, Val Loss: 0.6157, Val Acc: 0.8089
+2025-07-22 00:15:20,860 - INFO - Final Training, Fold 2, Epoch 8/9 - Train Loss: 0.1848, Train Acc: 0.9330, Val Loss: 0.6204, Val Acc: 0.8038
+2025-07-22 00:20:30,495 - INFO - Final Training, Fold 2, Epoch 9/9 - Train Loss: 0.1650, Train Acc: 0.9428, Val Loss: 0.6147, Val Acc: 0.8051
+2025-07-22 00:25:41,455 - INFO - Final Training, Fold 3, Epoch 1/9 - Train Loss: 1.0507, Train Acc: 0.6218, Val Loss: 0.5279, Val Acc: 0.8145
+2025-07-22 00:30:51,553 - INFO - Final Training, Fold 3, Epoch 2/9 - Train Loss: 0.5195, Train Acc: 0.8101, Val Loss: 0.4577, Val Acc: 0.8022
+2025-07-22 00:36:01,564 - INFO - Final Training, Fold 3, Epoch 3/9 - Train Loss: 0.4039, Train Acc: 0.8392, Val Loss: 0.4352, Val Acc: 0.8349
+2025-07-22 00:36:02,956 - INFO - Saved best model at fold 3, epoch 3 with accuracy 0.8349
+2025-07-22 00:41:12,668 - INFO - Final Training, Fold 3, Epoch 4/9 - Train Loss: 0.3316, Train Acc: 0.8603, Val Loss: 0.4308, Val Acc: 0.8321
+2025-07-22 00:46:22,572 - INFO - Final Training, Fold 3, Epoch 5/9 - Train Loss: 0.2686, Train Acc: 0.8881, Val Loss: 0.4386, Val Acc: 0.8311
+2025-07-22 00:51:34,110 - INFO - Final Training, Fold 3, Epoch 6/9 - Train Loss: 0.2368, Train Acc: 0.9027, Val Loss: 0.4782, Val Acc: 0.8223
+2025-07-22 00:51:34,112 - INFO - Early stopping triggered at epoch 6 for fold 3
+2025-07-22 00:51:35,514 - INFO - Final best model saved as PhoBERT_industry_classification.bin with accuracy 0.8349
+2025-07-22 00:52:07,156 - INFO - 
+=== DETAILED PER-CLASS EVALUATION METRICS ===
+2025-07-22 00:52:07,157 - INFO - 
+Per-class metrics:
++------------+-------------+----------+------------+-----------+
+|            |   precision |   recall |   f1-score |   support |
++============+=============+==========+============+===========+
+| Finance    |      0.8514 |   0.9459 |     0.8962 |  333.0000 |
++------------+-------------+----------+------------+-----------+
+| Technology |      0.8704 |   0.8243 |     0.8467 |  888.0000 |
++------------+-------------+----------+------------+-----------+
+| Healthcare |      0.7955 |   0.9272 |     0.8563 |  151.0000 |
++------------+-------------+----------+------------+-----------+
+| Energy     |      0.7866 |   0.7728 |     0.7797 |  744.0000 |
++------------+-------------+----------+------------+-----------+
+| Other      |      0.8246 |   0.8185 |     0.8216 |  270.0000 |
++------------+-------------+----------+------------+-----------+
+2025-07-22 00:52:07,157 - INFO - 
+=== COMPREHENSIVE OVERALL EVALUATION METRICS ===
+2025-07-22 00:52:07,158 - INFO - 
+Overall metrics:
++--------------------+---------+
+|                    |   Value |
++====================+=========+
+| Accuracy           |  0.8311 |
++--------------------+---------+
+| Balanced Accuracy  |  0.8578 |
++--------------------+---------+
+| Macro F1           |  0.8401 |
++--------------------+---------+
+| Weighted F1        |  0.8305 |
++--------------------+---------+
+| Macro Precision    |  0.8257 |
++--------------------+---------+
+| Macro Recall       |  0.8578 |
++--------------------+---------+
+| Cohen Kappa        |  0.7700 |
++--------------------+---------+
+| Matthews Corr Coef |  0.7704 |
++--------------------+---------+
+| Log Loss           |  0.4848 |
++--------------------+---------+
+| Hamming Loss       |  0.1689 |
++--------------------+---------+
+| Jaccard Score      |  0.7120 |
++--------------------+---------+
+| ROC AUC            |  0.9651 |
++--------------------+---------+
+| PR AUC             |  0.9011 |
++--------------------+---------+
+| Top-2 Accuracy     |  0.9640 |
++--------------------+---------+
+| Top-3 Accuracy     |  0.9891 |
++--------------------+---------+
+2025-07-22 00:52:07,175 - INFO - Inference test: Text='Ngân hàng Techcombank công bố lợi nhuận quý 3 tăng trưởng 25% nhờ tăng trưởng tín dụng và thu nhập từ dịch vụ ngân hàng', Predicted='Finance'

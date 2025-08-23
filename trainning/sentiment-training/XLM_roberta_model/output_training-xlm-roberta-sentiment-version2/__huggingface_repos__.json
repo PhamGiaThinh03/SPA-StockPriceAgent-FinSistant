@@ -1,0 +1,1 @@
+{"repos": [{"repoId": "xlm-roberta-base", "repoType": "model", "commitHash": "e73636d4f797dec63c3081bb6ed5c7b0bb3f2089", "filePaths": ["tokenizer.json", "sentencepiece.bpe.model", "model.safetensors", "tokenizer_config.json", "config.json"]}]}
