@@ -1,0 +1,11 @@
+Flask==2.3.3
+Flask-Cors==4.0.0
+python-dotenv==1.0.0
+gunicorn==21.2.0
+psycopg2-binary==2.9.7
+redis==5.0.1
+supabase==1.2.0
+requests==2.31.0
+Werkzeug==2.3.7
+fastapi==0.95.2
+uvicorn[standard]==0.22.0

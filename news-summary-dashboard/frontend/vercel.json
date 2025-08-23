@@ -1,0 +1,38 @@
+{
+    "version": 2,
+    "builds": [
+        {
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config": {
+            "distDir": "build"
+        }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/static/(.*)",
+            "headers": {
+                "cache-control": "s-maxage=31536000,immutable"
+            }
+        },
+        {
+            "src": "/auth/callback",
+            "dest": "/index.html"
+        },
+        {
+            "src": "/auth",
+            "dest": "/index.html"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ],
+    "env": {
+        "REACT_APP_API_URL": "https://hviet-be-for-spa.hf.space",
+        "REACT_APP_SUPABASE_URL": "https://ebpnoasjxttbrdmiwesg.supabase.co",
+        "REACT_APP_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVicG5vYXNqeHR0YnJkbWl3ZXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MTA1MDUsImV4cCI6MjA2MzI4NjUwNX0.qp931AbeKsTpUZUj3OqLYSRlzDCWEWV7T4RboGerkN8",
+        "REACT_APP_FINNHUB_API_KEY": "d28vkmpr01qvka4rbb00d28vkmpr01qvka4rbb0g"
+    }
+}
