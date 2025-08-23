@@ -137,36 +137,16 @@ The system is designed with a modular, cloud-ready architecture for scalability 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/thanhdanh17/SPA-StockPriceAgent.git
-cd SPA
+cd SPA_AI
 
-# 2. Install Backend dependencies
-cd backend
-npm install
-
-# Configure environment variables in .env
-# API_KEY_SIMPLIZE=your_simplize_key
-# DATABASE_URL=your_supabase_connection_string
-# NEWS_API_SOURCES=your_news_sources
-# ... etc.
-
-# 3. Install AI Pipeline dependencies
-cd ../spa
+# 2. Install AI Pipeline dependencies
 pip install -r requirements.txt
 
-# 4. Install Frontend dependencies
-cd ../frontend
-npm install
-
 # 5. Run the applications
-# Terminal 1: Start Backend (from /backend)
-npm start
 
-# Terminal 2: Start AI Pipeline (from /spa)
-python main_pipeline.py
+#  Start AI Pipeline 
+python main.py
 
-# Terminal 3: Start Frontend (from /frontend)
-npm run dev
-```
 
 ### Docker Deployment
 ```bash
