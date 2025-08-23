@@ -142,9 +142,9 @@ cd SPA_AI
 # 2. Install AI Pipeline dependencies
 pip install -r requirements.txt
 
-# 5. Run the applications
+# 3. Run the applications
 
-#  Start AI Pipeline 
+# Start AI Pipeline 
 python main.py
 
 ```
