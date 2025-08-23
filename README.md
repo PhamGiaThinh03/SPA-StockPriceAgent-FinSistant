@@ -147,8 +147,6 @@ pip install -r requirements.txt
 #  Start AI Pipeline 
 python main.py
 
-
-```
 ```
 
 ### Cloud Deployment (Current)
