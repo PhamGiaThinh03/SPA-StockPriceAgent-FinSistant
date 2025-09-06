@@ -16,7 +16,7 @@ try:
     SUPABASE_AVAILABLE = True
 except ImportError:
     SUPABASE_AVAILABLE = False
-    print("⚠️ Supabase not installed. Install with: pip install supabase")
+    print("Supabase not installed. Install with: pip install supabase")
 
 # Try to import centralized database (optional for backwards compatibility)
 try:
@@ -33,7 +33,7 @@ class StockPredictor:
         self.supabase_config = supabase_config
         self.model = None
         self.scaler = MinMaxScaler()
-        self.window_size = 15  # ✅ Lấy đúng 15 ngày
+        self.window_size = 15  # Use the last 15 days
         self.features = ["Giá đóng cửa", "Positive", "Negative"]
         self.use_centralized_db = use_centralized_db
 
@@ -43,22 +43,22 @@ class StockPredictor:
                 self.db_manager = SupabaseManager()
                 self.supabase = self.db_manager.client
                 self.table_name = supabase_config["table_name"]
-                print(f"✅ Using centralized database for table: {self.table_name}")
+                print(f"Using centralized database for table: {self.table_name}")
             except Exception as e:
-                print(f"⚠️ Failed to use centralized database, falling back: {e}")
+                print(f"Failed to use centralized database, falling back: {e}")
                 self.use_centralized_db = False
                 self._setup_direct_connection(supabase_config)
         else:
             self._setup_direct_connection(supabase_config)
 
     def _setup_direct_connection(self, supabase_config):
-        """Setup direct supabase connection as fallback"""
+        """Setup direct Supabase connection as fallback"""
         if SUPABASE_AVAILABLE:
             self.supabase: Client = create_client(
                 supabase_config["url"], supabase_config["key"]
             )
             self.table_name = supabase_config["table_name"]
-            print(f"⚠️ Using direct connection for table: {self.table_name}")
+            print(f"Using direct connection for table: {self.table_name}")
         else:
             self.supabase = None
 
@@ -84,16 +84,16 @@ class StockPredictor:
     def load_model(self):
         try:
             self.model = tf.keras.models.load_model(self.model_path)
-            print(f"✅ Model loaded: {self.model_path}")
+            print(f"Model loaded: {self.model_path}")
             return True
         except Exception as e:
-            print(f"❌ Error loading model: {e}")
+            print(f"Error loading model: {e}")
             return False
 
     def load_last_window_data(self):
-        """Lấy dữ liệu window_size ngày gần nhất có close_price (15 ngày cho model hiện tại)"""
+        """Load the last window_size days of data with close_price (15 days for current model)"""
         if not self.supabase:
-            print("❌ Supabase client not initialized!")
+            print("Supabase client not initialized!")
             return None
 
         try:
@@ -103,12 +103,12 @@ class StockPredictor:
                 .neq("close_price", "")
                 .not_.is_("close_price", "null")
                 .order("date", desc=True)
-                .limit(self.window_size)  # Sử dụng window_size thay vì hardcode 15
+                .limit(self.window_size)  # Use window_size instead of hardcoded 15
                 .execute()
             )
 
             if not response.data:
-                print("❌ Không có dữ liệu close_price!")
+                print("No close_price data available!")
                 return None
 
             df = pd.DataFrame(response.data)
@@ -120,7 +120,7 @@ class StockPredictor:
 
             df = df.sort_values("Ngày").reset_index(drop=True)
 
-            # Xử lý sentiment - đảm bảo tất cả columns có giá trị số
+            # Handle sentiment columns - ensure all are numeric
             for col in ["Positive", "Neutral", "Negative"]:
                 if col not in df.columns:
                     df[col] = 0
@@ -130,12 +130,12 @@ class StockPredictor:
                         .fillna(0)
                     )
 
-            print(f"✅ Lấy thành công {len(df)} ngày gần nhất (window_size={self.window_size})")
+            print(f"Successfully loaded {len(df)} most recent days (window_size={self.window_size})")
             
-            # Hiển thị chi tiết 15 ngày như yêu cầu
-            print("\n📋 CHI TIẾT 15 NGÀY:")
+            # Display detailed last 15 days
+            print("\nDETAILS OF LAST 15 DAYS:")
             print("-" * 90)
-            print(f"{'STT':<4} {'Ngày':<12} {'Giá đóng cửa':<15} {'Positive':<10} {'Neutral':<10} {'Negative':<10}")
+            print(f"{'No.':<4} {'Date':<12} {'Close Price':<15} {'Positive':<10} {'Neutral':<10} {'Negative':<10}")
             print("-" * 90)
             
             for idx, row in df.iterrows():
@@ -152,7 +152,7 @@ class StockPredictor:
             return df
 
         except Exception as e:
-            print(f"❌ Error loading last days: {e}")
+            print(f"Error loading last days: {e}")
             return None
 
     def fit_scaler(self, df):
@@ -161,7 +161,7 @@ class StockPredictor:
 
     def predict_next_10_days(self, df):
         if self.model is None:
-            print("❌ Model not loaded!")
+            print("Model not loaded!")
             return None, None
 
         scaled_data = self.fit_scaler(df)
@@ -187,7 +187,7 @@ class StockPredictor:
 
     def update_existing_predictions(self, prediction_dates, predicted_prices):
         if not self.supabase:
-            print("❌ Supabase client not initialized!")
+            print("Supabase client not initialized!")
             return False
 
         updated, inserted = 0, 0
@@ -225,7 +225,7 @@ class StockPredictor:
                 self.supabase.table(self.table_name).insert(record).execute()
                 inserted += 1
 
-        print(f"✅ Updated: {updated}, Inserted: {inserted}")
+        print(f"Updated: {updated}, Inserted: {inserted}")
         return True
 
 
@@ -245,14 +245,14 @@ def run_prediction_for_table(model_path, table_name):
 
     df_last_days = predictor.load_last_window_data()
     if df_last_days is None or len(df_last_days) < predictor.window_size:
-        print(f"❌ Không đủ dữ liệu để dự đoán! Cần ít nhất {predictor.window_size} ngày, có {len(df_last_days) if df_last_days is not None else 0} ngày")
+        print(f"Not enough data to predict! Need at least {predictor.window_size} days, got {len(df_last_days) if df_last_days is not None else 0} days")
         return False
 
     future_dates, pred_prices = predictor.predict_next_10_days(df_last_days)
 
     if future_dates is not None:
         success = predictor.update_existing_predictions(future_dates, pred_prices)
-        print(f"\n📈 Dự đoán 10 ngày tiếp theo cho {table_name}:")
+        print(f"\nNext 10-day prediction for {table_name}:")
         for d, p in zip(future_dates, pred_prices):
             print(f"{d.strftime('%Y-%m-%d')}: {p:,.0f} VND")
         return success
@@ -266,13 +266,13 @@ def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(current_dir, "..", "model_AI", "timeseries_model", "model_lstm", "LSTM_missing10_window15.keras")
     
-    print(f"🔍 Model path: {model_path}")
-    print(f"🔍 Model exists: {os.path.exists(model_path)}")
+    print(f"Model path: {model_path}")
+    print(f"Model exists: {os.path.exists(model_path)}")
     
     # Test with multiple tables
     tables = ["FPT_Stock", "GAS_Stock", "IMP_Stock", "VCB_Stock"]
     
-    print("\n🚀 SPA VIP TIMESERIES PREDICTION")
+    print("\nSPA VIP TIMESERIES PREDICTION")
     print("="*60)
     
     successful_predictions = 0
@@ -280,25 +280,25 @@ def main():
     
     for table in tables:
         print("\n" + "=" * 50)
-        print(f"🚀 Đang xử lý {table}")
+        print(f"Processing {table}")
         print("=" * 50)
         
         try:
             success = run_prediction_for_table(model_path, table)
             if success:
                 successful_predictions += 1
-                print(f"✅ {table}: Dự đoán thành công")
+                print(f"{table}: Prediction successful")
             else:
-                print(f"❌ {table}: Dự đoán thất bại")
+                print(f"{table}: Prediction failed")
         except Exception as e:
-            print(f"❌ {table}: Lỗi - {e}")
+            print(f"{table}: Error - {e}")
     
     print("\n" + "="*60)
-    print("📊 SUMMARY")
+    print("SUMMARY")
     print("="*60)
-    print(f"✅ Successful: {successful_predictions}/{total_tables}")
-    print(f"❌ Failed: {total_tables - successful_predictions}/{total_tables}")
-    print(f"📈 Success rate: {successful_predictions/total_tables*100:.1f}%")
+    print(f"Successful: {successful_predictions}/{total_tables}")
+    print(f"Failed: {total_tables - successful_predictions}/{total_tables}")
+    print(f"Success rate: {successful_predictions/total_tables*100:.1f}%")
 
 
 if __name__ == "__main__":

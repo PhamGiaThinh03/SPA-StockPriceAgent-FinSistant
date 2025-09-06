@@ -1,13 +1,13 @@
 // src/supabaseClient.js
 import { createClient } from "@supabase/supabase-js";
 
-// Lấy key từ biến môi trường để bảo mật hơn
+// Get keys from environment variables for better security
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
 
 // Validate required environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('❌ Missing Supabase environment variables:', {
+    console.error('Missing Supabase environment variables:', {
         supabaseUrl: !!supabaseUrl,
         supabaseAnonKey: !!supabaseAnonKey
     });

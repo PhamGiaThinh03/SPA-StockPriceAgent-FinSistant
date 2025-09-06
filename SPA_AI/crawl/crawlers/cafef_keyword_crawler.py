@@ -8,10 +8,10 @@ from datetime import datetime
 import time
 import warnings
 import logging
-from urllib.parse import urlparse  # ✅ NEW
+from urllib.parse import urlparse
 from typing import Union
 
-# 🔇 Tắt hoàn toàn các warning và log không cần thiết
+# Completely disable unnecessary warnings and logs
 warnings.filterwarnings("ignore")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('selenium').setLevel(logging.ERROR)
@@ -32,15 +32,15 @@ def get_database_manager():
     return SupabaseManager()
 
 def get_table_name(stock_code=None, is_general=False):
-    """Get table name using new config"""
+    """Get table name using new configuration"""
     config = DatabaseConfig()
     return config.get_table_name(stock_code=stock_code, is_general=is_general)
 
 def get_recent_links_from_db(db_manager, table_name, limit=100):
-    """Lấy 100 link bài viết gần nhất từ database cho keyword crawling"""
+    """Get 100 most recent article links from the database for keyword crawling"""
     try:
         supabase_client = db_manager.get_supabase_client()
-        # Thử dùng id thay vì created_at nếu không có created_at
+        # Try using id instead of created_at if created_at is not available
         try:
             result = supabase_client.table(table_name).select("link").order("created_at", desc=True).limit(limit).execute()
         except Exception:
@@ -52,11 +52,11 @@ def get_recent_links_from_db(db_manager, table_name, limit=100):
             return set(item['link'] for item in result.data if item.get('link'))
         return set()
     except Exception as e:
-        print(f"❌ Lỗi khi lấy links từ DB: {e}")
+        print(f"Error fetching links from DB: {e}")
         return set()
 
 def check_stop_condition(links_to_check, existing_links):
-    """Dừng khi 3 bài liên tiếp đã có trong DB"""
+    """Stop crawling when 3 consecutive articles already exist in the database"""
     consecutive_found = 0
     for i, link in enumerate(links_to_check):
         if link in existing_links:
@@ -68,7 +68,7 @@ def check_stop_condition(links_to_check, existing_links):
     return -1
 
 def insert_article_to_database(db_manager, table_name, article_data, date_parser_func=None):
-    """Insert article using new database system"""
+    """Insert article using the new database system"""
     if date_parser_func and article_data.get("date"):
         try:
             parsed_date = date_parser_func(article_data["date"])
@@ -78,13 +78,13 @@ def insert_article_to_database(db_manager, table_name, article_data, date_parser
             pass
     return db_manager.insert_article(table_name, article_data)
 
-# ================== FORMAT NGÀY ==================
+# ================== DATE FORMATTING ==================
 def convert_date(date_str):
     if not date_str or date_str.strip() == "":
         return None
     formats = [
         "%d-%m-%Y - %I:%M %p",  # 25-07-2025 - 05:52 PM
-        "%d-%m-%Y - %H:%M %p",  # 25-07-2025 - 17:52 PM (nếu site hiếm gặp)
+        "%d-%m-%Y - %H:%M %p",  # 25-07-2025 - 17:52 PM (rare)
         "%d-%m-%Y",
         "%d/%m/%Y",
     ]
@@ -94,15 +94,15 @@ def convert_date(date_str):
             return format_datetime_for_db(dt)
         except:
             continue
-    print(f"⚠️ Không parse được ngày: {date_str}")
+    print(f"Cannot parse date: {date_str}")
     return None
 
-# ================== HÀM INSERT CHỐNG TRÙNG ==================
+# ================== INSERT FUNCTION WITH DUPLICATE CHECK ==================
 def insert_to_supabase(db_manager, table_name, data):
-    """Wrapper function để tương thích với code cũ - sử dụng hàm chung"""
+    """Wrapper function for backward compatibility with old code - use common function"""
     return insert_article_to_database(db_manager, table_name, data, convert_date)
 
-# ================== HÀM SETUP SELENIUM ==================
+# ================== SELENIUM DRIVER SETUP ==================
 def setup_driver():
     options = Options()
     options.add_argument("--headless")
@@ -115,7 +115,7 @@ def setup_driver():
     options.add_experimental_option('useAutomationExtension', False)
     return webdriver.Chrome(options=options)
 
-# ================== NEW: Helpers lấy source_link từ CafeF ==================
+# ================== Helpers to get source_link from CafeF ==================
 def _clean_url(u: str) -> Union[str, None]:
     if not u:
         return None
@@ -125,6 +125,7 @@ def _clean_url(u: str) -> Union[str, None]:
     return None
 
 def _is_external(u: str) -> bool:
+    """Check if the URL is external (not from cafef.vn)"""
     try:
         host = urlparse(u).netloc.lower()
         return bool(host) and ("cafef.vn" not in host)
@@ -133,10 +134,10 @@ def _is_external(u: str) -> bool:
 
 def extract_source_link_cafef(soup) -> Union[str, None]:
     """
-    Lấy URL nguồn gốc trong bài CafeF:
+    Extract the original source URL in a CafeF article:
       1) span.link-source-full (text)
       2) .btn-copy-link-source[data-clipboard-text]
-      3) <a href> hợp lệ trong .link-source-wrapper (loại javascript:)
+      3) valid <a href> in .link-source-wrapper (excluding javascript:)
     """
     wrapper = soup.select_one("div.link-source-wrapper")
     if not wrapper:
@@ -163,9 +164,8 @@ def extract_source_link_cafef(soup) -> Union[str, None]:
             return u
 
     return None
-# ===========================================================================
 
-# ================== TRÍCH XUẤT DỮ LIỆU BÀI VIẾT ==================
+# ================== EXTRACT ARTICLE DATA ==================
 def extract_article_data(driver):
     soup = BeautifulSoup(driver.page_source, "html.parser")
     try:
@@ -178,7 +178,7 @@ def extract_article_data(driver):
 
         content = " ".join(p.get_text(strip=True) for p in content_container.select("p"))
 
-        # 🔗 NEW: lấy link bài gốc
+        # Get original source link
         source_link = extract_source_link_cafef(soup)
 
         return {
@@ -186,15 +186,15 @@ def extract_article_data(driver):
             "date": date_tag.get_text(strip=True),
             "content": content,
             "link": driver.current_url,
-            "ai_summary": None,           # (nếu sau này có thể thêm)
-            "source_link": source_link,   # ✅ THÊM VÀO DB
+            "ai_summary": None,
+            "source_link": source_link,
         }
     except:
         return None
 
-# ================== CRAWL THEO TỪ KHÓA VỚI TỐI ƯU ==================
+# ================== SEQUENTIAL KEYWORD CRAWLING ==================
 def crawl_articles_sequentially(keyword="FPT", table_name="FPT_News", max_pages=1):
-    """Crawl articles với tối ưu thời gian"""
+    """Crawl articles with optimized timing"""
     start_time = time.time()
     
     driver = setup_driver()
@@ -207,10 +207,10 @@ def crawl_articles_sequentially(keyword="FPT", table_name="FPT_News", max_pages=
         crawled_count = 0
         new_articles = 0
         
-        # Lấy links từ các trang
+        # Get links from pages
         for page in range(1, max_pages + 1):
             search_url = f"https://cafef.vn/tim-kiem/trang-{page}.chn?keywords={keyword.replace(' ', '%20')}"
-            print(f"🔎 PAGE {page}: {search_url}")
+            print(f"PAGE {page}: {search_url}")
             driver.get(search_url)
             time.sleep(2)
 
@@ -218,32 +218,32 @@ def crawl_articles_sequentially(keyword="FPT", table_name="FPT_News", max_pages=
             page_links = [link.get_attribute("href") for link in article_links if link.get_attribute("href")]
             all_links.extend(page_links)
 
-        print(f"📄 Total {len(all_links)} news from {max_pages} pages")
+        print(f"Total {len(all_links)} news from {max_pages} pages")
 
-        # 🚀 IMPROVED: Kiểm tra và lọc bỏ existing links trước
+        # Check and filter out existing links before crawling
         links_to_crawl = []
         consecutive_existing = 0
         
         for link in all_links:
             if link in existing_links:
                 consecutive_existing += 1
-                # Nếu 3 bài liên tiếp đã có → dừng luôn
+                # Stop if 3 consecutive articles already exist
                 if consecutive_existing >= 3:
-                    print(f"🛑 Found {consecutive_existing} consecutive existing articles - stopping here")
+                    print(f"Found {consecutive_existing} consecutive existing articles - stopping here")
                     break
             else:
-                consecutive_existing = 0  # Reset nếu gặp bài mới
+                consecutive_existing = 0
                 links_to_crawl.append(link)
         
-        print(f"🎯 Crawl {len(links_to_crawl)} bài viết mới" if links_to_crawl else "📰 No new news")
+        print(f"Crawl {len(links_to_crawl)} new articles" if links_to_crawl else "No new news")
 
-        # Crawl các bài viết được chọn
+        # Crawl selected articles
         duplicate_count = 0
-        consecutive_duplicates = 0  # Track liên tiếp duplicate
+        consecutive_duplicates = 0
         
         for i, url in enumerate(links_to_crawl):
             try:
-                print(f"🔗 [{i+1}/{len(links_to_crawl)}] {url}")
+                print(f"[{i+1}/{len(links_to_crawl)}] {url}")
                 driver.get(url)
                 wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1.title")))
                 time.sleep(1)
@@ -253,33 +253,33 @@ def crawl_articles_sequentially(keyword="FPT", table_name="FPT_News", max_pages=
                     success = insert_to_supabase(db_manager, table_name, data)
                     if success:
                         new_articles += 1
-                        consecutive_duplicates = 0  # Reset khi có bài mới
-                        print(f"✅ Đã lưu bài viết: {data['title'][:50]}...")
+                        consecutive_duplicates = 0
+                        print(f"Saved article: {data['title'][:50]}...")
                     else:
                         duplicate_count += 1
                         consecutive_duplicates += 1
                         
                         if duplicate_count <= 3:
-                            print(f"⚠️  Duplicate title - skipped: {data['title'][:50]}...")
+                            print(f"Duplicate title - skipped: {data['title'][:50]}...")
                         elif duplicate_count == 4:
-                            print(f"⚠️  ... và {len(links_to_crawl) - i - 1} duplicates khác (ẩn bớt log)")
+                            print(f"... and {len(links_to_crawl) - i - 1} more duplicates (log suppressed)")
                         
-                        # 🚀 EARLY STOP: Nếu 5 bài liên tiếp duplicate → dừng ngay
+                        # Early stop if 5 consecutive duplicates
                         if consecutive_duplicates >= 5:
-                            print(f"🛑 Stopped crawling - Found {consecutive_duplicates} consecutive duplicates")
-                            print(f"📊 Saved {new_articles} new articles, skipped {duplicate_count} duplicates")
+                            print(f"Stopped crawling - Found {consecutive_duplicates} consecutive duplicates")
+                            print(f"Saved {new_articles} new articles, skipped {duplicate_count} duplicates")
                             break
                 else:
-                    print("⚠️  Không lấy được dữ liệu bài viết")
+                    print("Failed to extract article data")
                 
                 crawled_count += 1
                 time.sleep(1)
             except Exception as e:
-                print(f"❌ Lỗi khi crawl bài viết {i+1}: {e}")
+                print(f"Error crawling article {i+1}: {e}")
                 continue
 
     except Exception as e:
-        print(f"❌ Lỗi chung cho keyword {keyword}: {e}")
+        print(f"General error for keyword {keyword}: {e}")
     finally:
         driver.quit()
         db_manager.close_connections()
@@ -295,14 +295,14 @@ def crawl_articles_sequentially(keyword="FPT", table_name="FPT_News", max_pages=
             'stopped_early': consecutive_existing >= 3
         }
 
-# ================== MAIN VỚI DASHBOARD ==================
+# ================== MAIN DASHBOARD ==================
 def main_cafef():
     start_time = time.time()
     start_time_str = datetime.now().strftime("%H:%M:%S")
     
     print("\n" + "═" * 60)
-    print("🚀 CAFEF KEYWORD CRAWLER DASHBOARD".center(60))
-    print(f"⏰ Started: {start_time_str}".center(60))
+    print("CAFEF KEYWORD CRAWLER DASHBOARD".center(60))
+    print(f"Started: {start_time_str}".center(60))
     print("═" * 60)
 
     keyword_table_map = {
@@ -314,7 +314,7 @@ def main_cafef():
     
     results = []
     for kw, table_name in keyword_table_map.items():
-        print(f"\n🚀 Processing keyword CAFEF: ---{kw}---  → Save to {table_name}")
+        print(f"Processing keyword CAFEF: ---{kw}---  → Save to {table_name}")
         result = crawl_articles_sequentially(keyword=kw, table_name=table_name, max_pages=1)
         results.append(result)
         if kw != list(keyword_table_map.keys())[-1]:
@@ -327,7 +327,7 @@ def main_cafef():
     total_new = sum(r['new_articles'] for r in results)
     
     print("\n" + "═" * 60)
-    print("🎉 CRAWLING CAFEF KEYWORD CRAWLER COMPLETED - RESULTS".center(60))
+    print("CRAWLING CAFEF KEYWORD CRAWLER COMPLETED - RESULTS".center(60))
     print("═" * 60)
     print("┌─────────┬────────┬──────────────┬───────────────────┐")
     print("│ Keyword │ Time   │ Status       │ Saved Articles    │")
@@ -341,14 +341,14 @@ def main_cafef():
         print(f"│ {keyword:<7} │ {duration:>6.1f}s │ {status:<12} │ {results_text:<17} │")
     print("└─────────┴────────┴──────────────┴───────────────────┘")
     print("\n" + "═" * 60)
-    print("📊 SUMMARY CAFEF KEYWORD CRAWLER".center(60))
+    print("SUMMARY CAFEF KEYWORD CRAWLER".center(60))
     print("─" * 60)
-    print(f"⏱️  Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
-    print(f"📊 Total Found     : {total_found} articles")
-    print(f"✅ Total New       : {total_new} articles")
-    print(f"⚡ Avg per Keyword : {total_duration/len(results):.1f}s")
+    print(f"Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
+    print(f"Total Found     : {total_found} articles")
+    print(f"Total New       : {total_new} articles")
+    print(f"Avg per Keyword : {total_duration/len(results):.1f}s")
     print("═" * 60)
-    print("🎯 CAFEF KEYWORD CRAWLING COMPLETED!")
+    print("CAFEF KEYWORD CRAWLING COMPLETED!")
     print("═" * 60)
 
 if __name__ == "__main__":

@@ -1,0 +1,45 @@
+
+=== Sample 1 ===
+
+Text: Giá điện sinh hoạt đang bù chéo cho sản xuất, gây "méo mó" thị trường, đi ngược Nghị quyết 55. Người dân đang phải trả giá cao hơn để bù cho doanh nghiệp, đặc biệt FDI. Luật Điện lực sửa đổi mới chỉ quy định giảm dần bù chéo. Chuyên gia kiến nghị xóa bỏ bù chéo, cần cải cách giá điện theo cơ chế thị trường, minh bạch chi phí. Cần đẩy nhanh giá điện 2 thành phần, khuyến khích đầu tư tư nhân, nước ngoài vào ngành điện.
+
+
+Predicted Industry: Energy (Confidence: 1.00)
+Probabilities: {'Finance': 0.0009795400546863675, 'Technology': 0.0008036752115003765, 'Healthcare': 0.0008965007727965713, 'Energy': 0.9966979026794434, 'Other': 0.0006224566022865474}
+Actual Industry: Energy
+
+=== Sample 2 ===
+
+Text: HoSE xem xét hủy niêm yết bắt buộc cổ phiếu KPF do vi phạm công bố thông tin và chậm nộp BCTC. KPF đang bị đình chỉ giao dịch, cảnh báo, kiểm soát vì chậm nộp BCTC soát xét, có ý kiến ngoại trừ và chậm nộp BCTC kiểm toán. KPF xin gia hạn công bố BCTC do khó khăn đối chiếu số liệu, nhưng UBCKNN từ chối vì không thuộc trường hợp bất khả kháng. Quý I/2025, KPF không có doanh thu và lỗ ròng hơn 50 triệu đồng. Tổng tài sản KPF là 532,6 tỷ đồng, chủ yếu là đầu tư tài chính dài hạn, nợ phải trả gần 16,9 tỷ đồng.
+
+
+Predicted Industry: Finance (Confidence: 1.00)
+Probabilities: {'Finance': 0.9952011108398438, 'Technology': 0.0006774133653379977, 'Healthcare': 0.001101412228308618, 'Energy': 0.0017376895993947983, 'Other': 0.0012823316501453519}
+Actual Industry: Finance
+
+=== Sample 3 ===
+
+Text: Nghị quyết 42 hết hiệu lực gây khó khăn cho việc thu hồi nợ xấu, hiện ở mức 1,064 triệu tỉ đồng và tiếp tục tăng. Tỉ lệ khách hàng tự nguyện trả nợ thấp, nguồn xử lý nợ xấu chủ yếu từ dự phòng rủi ro của các tổ chức tín dụng, ảnh hưởng đến kết quả kinh doanh và hỗ trợ doanh nghiệp. Việc thu hồi nợ gặp khó khăn do tài sản đảm bảo phức tạp, tranh chấp. Các ngân hàng đề xuất luật hóa nghị quyết 42 để chủ động thu giữ tài sản đảm bảo, giảm thời gian và chi phí kiện tụng. Cần có quy định pháp luật rõ ràng để đảm bảo quyền lợi của các bên, yêu cầu người vay phải có trách nhiệm trả nợ.
+
+
+Predicted Industry: Finance (Confidence: 1.00)
+Probabilities: {'Finance': 0.995909571647644, 'Technology': 0.0006906886701472104, 'Healthcare': 0.0010050623677670956, 'Energy': 0.001177375321276486, 'Other': 0.0012172964634373784}
+Actual Industry: Finance
+
+=== Sample 4 ===
+
+Text: PV Power tổ chức sự kiện thường niên tăng cường quan hệ nhà đầu tư, giới thiệu hoạt động kinh doanh và chủ trương phát triển. 10 tháng đầu năm 2024, PV Power đạt 76% kế hoạch sản lượng điện, 77,74% doanh thu và vượt 136% kế hoạch lợi nhuận sau thuế. PV Power tập trung vận hành an toàn, hiệu quả để hoàn thành kế hoạch năm 2024. Dự án nhà máy điện Nhơn Trạch 3 dự kiến vận hành tháng 6/2025, Nhơn Trạch 4 tháng 9/2025. Khách mời đã tham quan dự án Nhơn Trạch 3&4 và tìm hiểu nhà máy Nhơn Trạch 2.
+
+
+Predicted Industry: Energy (Confidence: 1.00)
+Probabilities: {'Finance': 0.0009315177449025214, 'Technology': 0.0011576353572309017, 'Healthcare': 0.0006239776848815382, 'Energy': 0.9967185854911804, 'Other': 0.0005683077615685761}
+Actual Industry: Energy
+
+=== Sample 5 ===
+
+Text: Đại biểu Quốc hội băn khoăn về việc doanh nghiệp nhà nước đầu tư ngoài ngành, đặc biệt vào bất động sản, lo ngại thất thoát và rủi ro pháp lý. Một số ý kiến cho rằng cần cân nhắc kỹ, không nên cho phép tất cả doanh nghiệp nhà nước đầu tư bất động sản, mà nên xem xét theo điều kiện cụ thể. Hiệp hội doanh nghiệp vừa và nhỏ đề xuất ưu tiên doanh nghiệp nhà nước trong các lĩnh vực an sinh xã hội, quốc phòng, nhưng cần có sự giao việc cụ thể để tránh rủi ro khi "nhảy" vào lĩnh vực có lợi nhuận cao như bất động sản. Bộ Tài chính cho biết dự luật sửa đổi theo hướng Nhà nước không can thiệp trực tiếp vào hoạt động sản xuất, kinh doanh của doanh nghiệp, mà chỉ quản lý phần vốn nhà nước. Dự luật bổ sung quy định tăng phân cấp, phân quyền cho chủ sở hữu vốn nhà nước, khuyến khích doanh nghiệp tăng trưởng, đổi mới sáng tạo.
+
+
+Predicted Industry: Finance (Confidence: 0.99)
+Probabilities: {'Finance': 0.9940699934959412, 'Technology': 0.000770478683989495, 'Healthcare': 0.0010611003963276744, 'Energy': 0.0011220143642276525, 'Other': 0.0029763851780444384}
+Actual Industry: Finance

@@ -1,0 +1,41 @@
+
+=== Sample 1 ===
+
+Text: Báo Pháp nhấn mạnh yếu tố ảnh hưởng đến thành - bại của VinFast VF 3 là giá bán, nhấn mạnh rằng sau khi xuất hiện tại Châu Âu, xe sẽ phải đối mặt với sự cạnh tranh gay gắt từ các mẫu xe cỡ nhỏ khác. Họ so sánh xem VinFast VF 3 có thể đáp ứng được quy định mới hay không dành cho xe cỡ nhỏ, tương tự như xe kei car ở Nhật Bản. Ông Luca de Meo cũng nhấn mạnh về việc cần tạo ra các quy định riêng cho xe cỡ nhỏ tại Châu Âu để thúc đẩy thị trường.
+
+Predicted Industry: Technology (Confidence: 0.96)
+Probabilities: {'Finance': 0.004517009947448969, 'Technology': 0.9586671590805054, 'Healthcare': 0.003419509157538414, 'Energy': 0.003987520933151245, 'Other': 0.02940876968204975}
+Actual Industry: Technology
+
+=== Sample 2 ===
+
+Text: Tổng Bí thư Tô Lâm yêu cầu chuẩn bị điều kiện để dạy 2 buổi/ngày miễn phí ở bậc tiểu học, THCS từ năm học 2025 - 2026. Chính phủ, các ban, bộ, ngành cần thực hiện chủ trương này, đồng thời hỗ trợ bữa trưa cho học sinh ở các xã biên giới. Tổng Bí thư cũng khuyến khích xây dựng trường liên cấp nội trú, bán trú. Đồng thời, cần tháo gỡ điểm nghẽn, nâng cao chất lượng giáo dục, đào tạo để đáp ứng yêu cầu phát triển của đất nước. Kết luận được đưa ra sau buổi làm việc ngày 18/4 với Chính phủ và các ban, bộ, ngành.
+
+Predicted Industry: Other (Confidence: 0.81)
+Probabilities: {'Finance': 0.05991879105567932, 'Technology': 0.057325370609760284, 'Healthcare': 0.04886769503355026, 'Energy': 0.027025749906897545, 'Other': 0.8068624138832092}
+Actual Industry: Other
+
+=== Sample 3 ===
+
+Text: Đại biểu Quốc hội đề cập đến vấn đề doanh nghiệp ký hợp đồng điện tử nhưng hải quan yêu cầu chứng từ giấy. Đại biểu cũng đề xuất sửa Luật Doanh nghiệp và yêu cầu nâng cao tuân thủ chính sách bảo hiểm và lưu trữ tài liệu điện tử. Ngoài ra, đại biểu cũng nhấn mạnh về việc quản lý doanh nghiệp và cắt giảm thủ tục hành chính, đồng thời khắc phục việc người thuê đứng tên hộ cho doanh nghiệp. Đề xuất này nhằm giúp giảm gánh nặng thủ tục và tối ưu hoá môi trường kinh doanh.
+
+Predicted Industry: Finance (Confidence: 0.78)
+Probabilities: {'Finance': 0.7767302989959717, 'Technology': 0.04372949153184891, 'Healthcare': 0.015063236467540264, 'Energy': 0.011444274336099625, 'Other': 0.15303273499011993}
+Actual Industry: Other
+
+=== Sample 4 ===
+
+Text: Trong tuần qua, giá vàng tăng mạnh do lo ngại về suy thoái kinh tế và xung đột thương mại, đạt mức cao mới 3.245,48 USD/ounce. Dự báo cho tuần tới vẫn optimist với dự đoán giá vàng sẽ tiếp tục tăng. Các nhà phân tích và nhà giao dịch đều lạc quan về tăng trưởng của vàng nhưng khuyên nhà đầu tư nên quan tâm đến các tài sản khác để phòng ngừa rủi ro. Các sự kiện kinh tế quan trọng tiếp theo sẽ là tâm điểm của thị trường vào tuần tới.
+
+Predicted Industry: Finance (Confidence: 0.98)
+Probabilities: {'Finance': 0.9785972237586975, 'Technology': 0.0022981050424277782, 'Healthcare': 0.004986558575183153, 'Energy': 0.00727354409173131, 'Other': 0.006844553165137768}
+Actual Industry: Finance
+
+=== Sample 5 ===
+
+Text: Lọc hóa dầu Bình Sơn lần đầu được trao cơ chế tự chủ sau 8 năm. Chính phủ bãi bỏ thu điều tiết, tạo cạnh tranh bình đẳng với hàng nhập khẩu. Thuế nhập khẩu thấp khiến xăng dầu Bình Sơn từng đắt hơn 10%, gây tồn kho và nguy cơ đóng cửa. Gỡ bỏ cơ chế giúp hàng trong nước cạnh tranh, tăng xuất bán và nộp thuế. Chuyên gia cho rằng, bình đẳng thuế và tài chính là cần thiết trong hội nhập. Cơ chế tự chủ giúp doanh nghiệp minh bạch hóa, thu hút đầu tư khi cổ phần hóa.
+
+
+Predicted Industry: Energy (Confidence: 0.97)
+Probabilities: {'Finance': 0.011367433704435825, 'Technology': 0.006482177414000034, 'Healthcare': 0.0055664158426225185, 'Energy': 0.9697480797767639, 'Other': 0.0068358927965164185}
+Actual Industry: Energy

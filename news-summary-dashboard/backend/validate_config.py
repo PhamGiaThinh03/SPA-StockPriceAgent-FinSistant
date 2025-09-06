@@ -33,12 +33,12 @@ def validate_config():
             missing_vars.append(var)
             
     if missing_vars:
-        print(f"❌ Missing required environment variables:")
+        print(f"Missing required environment variables:")
         for var in missing_vars:
             print(f"   - {var}")
         return False
     
-    print("✅ All required environment variables are set")
+    print("All required environment variables are set")
     
     # Test Redis connections
     try:
@@ -52,7 +52,7 @@ def validate_config():
             decode_responses=True
         )
         news_redis.ping()
-        print("✅ News Redis connection successful")
+        print("News Redis connection successful")
         
         # Test stock Redis  
         stock_redis = redis.Redis(
@@ -62,10 +62,10 @@ def validate_config():
             decode_responses=True
         )
         stock_redis.ping()
-        print("✅ Stock Redis connection successful")
+        print("Stock Redis connection successful")
         
     except Exception as e:
-        print(f"❌ Redis connection failed: {e}")
+        print(f"Redis connection failed: {e}")
         return False
     
     # Test Supabase connection
@@ -74,9 +74,9 @@ def validate_config():
         supabase = create_client(current_config.SUPABASE_URL, current_config.SUPABASE_SERVICE_KEY)
         # Simple query to test connection
         result = supabase.table('bookmarks').select('id').limit(1).execute()
-        print("✅ Supabase connection successful")
+        print("Supabase connection successful")
     except Exception as e:
-        print(f"❌ Supabase connection failed: {e}")
+        print(f"Supabase connection failed: {e}")
         return False
         
     print("🎉 All configurations validated successfully!")

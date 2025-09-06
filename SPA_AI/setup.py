@@ -14,25 +14,25 @@ logger = logging.getLogger(__name__)
 
 def run_command(command, description):
     """Run a command and handle errors"""
-    logger.info(f"🔄 {description}")
+    logger.info(f"{description}")
     try:
         result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
-        logger.info(f"✅ {description} - Success")
+        logger.info(f"{description} - Success")
         return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"❌ {description} - Failed: {e.stderr}")
+        logger.error(f"{description} - Failed: {e.stderr}")
         return False
 
 def setup_spa_vip():
     """Setup entire SPA VIP system"""
     
-    logger.info("🚀 STARTING SPA VIP SYSTEM SETUP")
+    logger.info("STARTING SPA VIP SYSTEM SETUP")
     logger.info("="*60)
     
     # Create necessary directories
-    logger.info("📁 Creating directories...")
+    logger.info("Creating directories...")
     os.makedirs('logs', exist_ok=True)
-    logger.info("✅ Logs directory created")
+    logger.info("Logs directory created")
     
     # Install database dependencies
     if not run_command("pip install -r database/requirements.txt", 
@@ -50,27 +50,28 @@ def setup_spa_vip():
         return False
     
     # Test database connection
-    logger.info("🧪 Testing database connection...")
+    logger.info("Testing database connection...")
     if not run_command("python database/test_connection.py", 
                       "Testing database connection"):
-        logger.warning("⚠️ Database connection test failed - please check configuration")
+        logger.warning("Database connection test failed - please check configuration")
     
-    # Test main.py
-    logger.info("🧪 Testing main controller...")
+    # Test main.py controller
+    logger.info("Testing main controller...")
     if not run_command("python main.py --status", 
                       "Testing main controller"):
-        logger.warning("⚠️ Main controller test failed")
+        logger.warning("Main controller test failed")
     
     logger.info("\n" + "="*60)
-    logger.info("🎉 SPA VIP SETUP COMPLETED!")
+    logger.info("SPA VIP SETUP COMPLETED!")
     logger.info("="*60)
     
-    logger.info("📋 NEXT STEPS:")
+    # Next steps instructions
+    logger.info("NEXT STEPS:")
     logger.info("1. Verify model files in model_AI/summarization_model/model_vit5/")
     logger.info("2. Run: python main.py --status")
     logger.info("3. Run: python main.py --full")
     logger.info("")
-    logger.info("🎯 Quick commands:")
+    logger.info("Quick commands:")
     logger.info("  python main.py --help          # Show all options")
     logger.info("  python main.py --status        # Check system status")
     logger.info("  python main.py --full          # Run complete pipeline")

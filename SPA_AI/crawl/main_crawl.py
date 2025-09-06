@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Main Crawler Controller
-Chạy tất cả các crawler theo luồng có tổ chức
+Run all crawlers in an organized flow
 Author: Auto-generated
 Date: August 3, 2025
 """
@@ -14,7 +14,7 @@ import logging
 from datetime import datetime
 from typing import List, Dict, Callable
 
-# Import các crawler modules
+# Import crawler modules
 from crawlers.fireant_crawler import crawl_fireant
 from crawlers.cafef_keyword_crawler import main_cafef
 from crawlers.cafef_general_crawler import crawl_cafef_chung
@@ -38,7 +38,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'crawl_stock'))
 from crawl_stock.crawl_stock_price_history import main_stock_simplize
 
-# Cấu hình logging với UTF-8 encoding cho Windows
+# Configure logging with UTF-8 encoding for Windows
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -51,22 +51,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class CrawlerController:
-    """Controller để quản lý và chạy tất cả các crawler"""
+    """Controller to manage and run all crawlers"""
     
     def __init__(self):
         self.start_time = None
         self.crawlers_status = {}
         
     def log_start(self, crawler_name: str):
-        """Ghi log bắt đầu crawler"""
-        logger.info(f"[START] Bắt đầu {crawler_name}")
+        """Log crawler start"""
+        logger.info(f"[START] Starting {crawler_name}")
         self.crawlers_status[crawler_name] = {
             'start_time': datetime.now(),
             'status': 'running'
         }
         
     def log_success(self, crawler_name: str):
-        """Ghi log thành công"""
+        """Log crawler success"""
         end_time = datetime.now()
         start_time = self.crawlers_status[crawler_name]['start_time']
         duration = end_time - start_time
@@ -77,10 +77,10 @@ class CrawlerController:
             'duration': duration
         })
         
-        logger.info(f"[SUCCESS] {crawler_name} hoàn thành trong {duration}")
+        logger.info(f"[SUCCESS] {crawler_name} completed in {duration}")
         
     def log_error(self, crawler_name: str, error: Exception):
-        """Ghi log lỗi"""
+        """Log crawler error"""
         end_time = datetime.now()
         start_time = self.crawlers_status[crawler_name]['start_time']
         duration = end_time - start_time
@@ -92,10 +92,10 @@ class CrawlerController:
             'error': str(error)
         })
         
-        logger.error(f"[ERROR] {crawler_name} lỗi sau {duration}: {error}")
+        logger.error(f"[ERROR] {crawler_name} failed after {duration}: {error}")
         
     def run_crawler(self, crawler_func: Callable, crawler_name: str, *args, **kwargs):
-        """Chạy một crawler với error handling"""
+        """Run a crawler with error handling"""
         try:
             self.log_start(crawler_name)
             result = crawler_func(*args, **kwargs)
@@ -106,10 +106,10 @@ class CrawlerController:
             return None
             
     def run_fireant_crawlers(self):
-        """Chạy các crawler FireAnt"""
+        """Run FireAnt crawlers"""
         logger.info("=== FIREANT CRAWLERS ===")
         
-        # Crawler cho tất cả mã cổ phiếu
+        # Crawler for all stock codes
         stock_codes = ["FPT", "GAS", "IMP", "VCB"]
         for stock_code in stock_codes:
             self.run_crawler(
@@ -119,19 +119,19 @@ class CrawlerController:
                 table_name=f"{stock_code}_News"
             )
         
-        print("📝 FireAnt General News crawling has been disabled - only processing stock-specific news")
+        print("FireAnt General News crawling has been disabled - only processing stock-specific news")
         
     def run_cafef_crawlers(self):
-        """Chạy các crawler CafeF"""
+        """Run CafeF crawlers"""
         logger.info("=== CAFEF CRAWLERS ===")
         
-        # CafeF crawler với từ khóa
+        # CafeF crawler with keyword
         self.run_crawler(
             main_cafef,
             "CafeF Keyword Search"
         )
         
-        # CafeF crawler chung
+        # CafeF general crawler
         self.run_crawler(
             crawl_cafef_chung,
             "CafeF General News",
@@ -139,7 +139,7 @@ class CrawlerController:
         )
         
     def run_chungta_crawler(self):
-        """Chạy crawler ChungTa"""
+        """Run ChungTa crawler"""
         logger.info("=== CHUNGTA CRAWLER ===")
         
         self.run_crawler(
@@ -148,10 +148,10 @@ class CrawlerController:
         )
         
     def run_markettimes_crawlers(self):
-        """Chạy các crawler MarketTimes"""
+        """Run MarketTimes crawlers"""
         logger.info("=== MARKETTIMES CRAWLERS ===")
         
-        # Crawler cho tất cả mã cổ phiếu
+        # Crawler for all stock codes
         stock_codes = ["FPT", "GAS", "IMP", "VCB"]
         for stock_code in stock_codes:
             self.run_crawler(
@@ -161,7 +161,7 @@ class CrawlerController:
                 table_name=f"{stock_code}_News"
             )
         
-        # Crawler cho tin tức tổng quát MarketTimes
+        # Crawler for general MarketTimes news
         self.run_crawler(
             crawl_markettimes_general,
             "MarketTimes General News",
@@ -169,10 +169,10 @@ class CrawlerController:
         )
         
     def run_dddn_crawlers(self):
-        """Chạy các crawler DiendanDoanhNghiep"""
+        """Run DiendanDoanhNghiep crawlers"""
         logger.info("=== DIENDANDOANHNGHIEP CRAWLERS ===")
         
-        # Crawler cho tất cả mã cổ phiếu
+        # Crawler for all stock codes
         stock_codes = ["FPT", "GAS", "IMP", "VCB"]
         for stock_code in stock_codes:
             self.run_crawler(
@@ -182,7 +182,7 @@ class CrawlerController:
                 table_name=f"{stock_code}_News"
             )
         
-        # Crawler cho tin tức tổng quát DiendanDoanhNghiep
+        # Crawler for general DiendanDoanhNghiep news
         self.run_crawler(
             crawl_dddn_general,
             "DiendanDoanhNghiep General News",
@@ -190,7 +190,7 @@ class CrawlerController:
         )
         
     def run_imp_crawler(self):
-        """Chạy crawler IMP News"""
+        """Run IMP News crawler"""
         logger.info("=== IMP NEWS CRAWLER ===")
         
         self.run_crawler(
@@ -200,7 +200,7 @@ class CrawlerController:
         )
         
     def run_petrotimes_crawler(self):
-        """Chạy crawler Petrotimes GAS"""
+        """Run Petrotimes GAS crawler"""
         logger.info("=== PETROTIMES GAS CRAWLER ===")
         
         self.run_crawler(
@@ -210,7 +210,7 @@ class CrawlerController:
         )
         
     def run_stock_crawler(self):
-        """Chạy crawler Stock Price"""
+        """Run Stock Price crawler"""
         logger.info("=== STOCK PRICE CRAWLER ===")
         
         self.run_crawler(
@@ -219,79 +219,79 @@ class CrawlerController:
         )
         
     def print_summary(self):
-        """In báo cáo tổng kết"""
+        """Print summary report"""
         logger.info("\n" + "="*60)
-        logger.info("TONG KET CRAWLING SESSION")
+        logger.info("CRAWLING SESSION SUMMARY")
         logger.info("="*60)
         
         total_duration = datetime.now() - self.start_time
         successful = sum(1 for status in self.crawlers_status.values() if status['status'] == 'success')
         failed = sum(1 for status in self.crawlers_status.values() if status['status'] == 'error')
         
-        logger.info(f"Tong thoi gian: {total_duration}")
-        logger.info(f"Thanh cong: {successful}")
-        logger.info(f"That bai: {failed}")
-        logger.info(f"Tong crawler: {len(self.crawlers_status)}")
+        logger.info(f"Total time: {total_duration}")
+        logger.info(f"Successful: {successful}")
+        logger.info(f"Failed: {failed}")
+        logger.info(f"Total crawlers: {len(self.crawlers_status)}")
         
-        logger.info("\nChi tiet tung crawler:")
+        logger.info("\nDetails for each crawler:")
         for name, status in self.crawlers_status.items():
             status_icon = "[OK]" if status['status'] == 'success' else "[FAIL]"
             duration = status.get('duration', 'N/A')
             logger.info(f"{status_icon} {name}: {duration}")
             
             if status['status'] == 'error':
-                logger.info(f"   Loi: {status.get('error', 'Unknown error')}")
+                logger.info(f"   Error: {status.get('error', 'Unknown error')}")
                 
     def run_all_crawlers(self):
-        """Chạy tất cả các crawler theo luồng"""
+        """Run all crawlers in sequence"""
         self.start_time = datetime.now()
         
         logger.info("=" * 50)
-        logger.info("BAT DAU CRAWLING SESSION")
+        logger.info("STARTING CRAWLING SESSION")
         logger.info("=" * 50)
-        logger.info(f"Thoi gian bat dau: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info(f"Start time: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
         
         try:
-            # 1. Chạy Stock Price crawler đầu tiên
+            # 1. Run Stock Price crawler first
             self.run_stock_crawler()
-            time.sleep(2)  # Nghỉ giữa các session
+            time.sleep(2)  # Pause between sessions
             
-            # 2. Chạy FireAnt crawlers
+            # 2. Run FireAnt crawlers
             self.run_fireant_crawlers()
             time.sleep(2)
             
-            # 3. Chạy CafeF crawlers  
+            # 3. Run CafeF crawlers  
             self.run_cafef_crawlers()
             time.sleep(2)
             
-            # 4. Chạy ChungTa crawler
+            # 4. Run ChungTa crawler
             self.run_chungta_crawler()
             time.sleep(2)
             
-            # 5. Chạy MarketTimes crawlers
+            # 5. Run MarketTimes crawlers
             self.run_markettimes_crawlers()
             time.sleep(2)
             
-            # 6. Chạy DiendanDoanhNghiep crawlers
+            # 6. Run DiendanDoanhNghiep crawlers
             self.run_dddn_crawlers()
             time.sleep(2)
             
-            # 7. Chạy IMP crawler
+            # 7. Run IMP crawler
             self.run_imp_crawler()
             time.sleep(2)
             
-            # 8. Chạy Petrotimes GAS crawler
+            # 8. Run Petrotimes GAS crawler
             self.run_petrotimes_crawler()
             
         except KeyboardInterrupt:
-            logger.warning("Nguoi dung dung crawling session")
+            logger.warning("User stopped crawling session")
         except Exception as e:
-            logger.error(f"Loi nghiem trong trong crawling session: {e}")
+            logger.error(f"Critical error in crawling session: {e}")
         finally:
             self.print_summary()
 
 def run_single_crawler(crawler_name: str):
-    """Chạy một crawler đơn lẻ"""
+    """Run a single crawler"""
     controller = CrawlerController()
     
     crawler_map = {
@@ -322,8 +322,8 @@ def run_single_crawler(crawler_name: str):
     }
     
     if crawler_name not in crawler_map:
-        logger.error(f"Khong tim thay crawler: {crawler_name}")
-        logger.info(f"Cac crawler co san: {list(crawler_map.keys())}")
+        logger.error(f"Crawler not found: {crawler_name}")
+        logger.info(f"Available crawlers: {list(crawler_map.keys())}")
         return
         
     controller.start_time = datetime.now()
@@ -335,7 +335,7 @@ def main_crawl():
     import argparse
     
     parser = argparse.ArgumentParser(description='News Crawler Controller')
-    parser.add_argument('--single', '-s', help='Chạy một crawler đơn lẻ', 
+    parser.add_argument('--single', '-s', help='Run a single crawler', 
                        choices=['fireant_fpt', 'fireant_gas', 'fireant_imp', 'fireant_vcb', 
                                'cafef_keyword', 'cafef_general', 'chungta', 
                                'markettimes_fpt', 'markettimes_gas', 'markettimes_imp', 'markettimes_vcb', 
@@ -344,12 +344,12 @@ def main_crawl():
                                'imp_news', 'imp_all',
                                'petrotimes_gas', 'petrotimes_all',
                                'stock_price'])
-    parser.add_argument('--list', '-l', action='store_true', help='Liệt kê các crawler có sẵn')
+    parser.add_argument('--list', '-l', action='store_true', help='List available crawlers')
     
     args = parser.parse_args()
     
     if args.list:
-        print("Cac crawler co san:")
+        print("Available crawlers:")
         print("  - fireant_fpt: FireAnt FPT stock news")
         print("  - fireant_gas: FireAnt GAS stock news")
         print("  - fireant_imp: FireAnt IMP stock news")
@@ -366,9 +366,9 @@ def main_crawl():
         print("  - dddn_fpt: DiendanDoanhNghiep FPT stock news")
         print("  - dddn_gas: DiendanDoanhNghiep GAS stock news")
         print("  - dddn_imp: DiendanDoanhNghiep IMP stock news")
-        print("  - dddn_vcb: DiendanDoanhNghiep VCB stock news")
-        print("  - dddn_general: DiendanDoanhNghiep general news")
-        print("  - dddn_all: DiendanDoanhNghiep all crawlers")
+        print("  - dddn_vcb: DiendanDoanhiep VCB stock news")
+        print("  - dddn_general: DiendanDoanhiep general news")
+        print("  - dddn_all: DiendanDoanhiep all crawlers")
         print("  - imp_news: IMP News crawler")
         print("  - imp_all: IMP News all functions")
         print("  - petrotimes_gas: Petrotimes GAS stock news")
@@ -379,7 +379,7 @@ def main_crawl():
     if args.single:
         run_single_crawler(args.single)
     else:
-        # Chạy tất cả crawler
+        # Run all crawlers
         controller = CrawlerController()
         controller.run_all_crawlers()
 

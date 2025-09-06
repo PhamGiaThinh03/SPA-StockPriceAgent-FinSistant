@@ -45,7 +45,7 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
         const date = new Date(item.date);
         const dayOfWeek = date.getDay();
         if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-            // Bỏ qua cuối tuần
+            // Skip weekends
             if (item.close_price !== undefined) {
             historical.labels.push(item.date);
             historical.data.push(item.close_price);
@@ -62,24 +62,24 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
     const shouldShowPrediction = showPrediction && (timeRange === "1M" || timeRange === "3M");
     const { historical, predicted } = processStockData(chartData.rawData);
 
-    // *** LOGIC MỚI ĐỂ HỢP NHẤT TRỤC THỜI GIAN ***
-    // Điều chỉnh trục thời gian dựa trên việc có hiển thị prediction hay không
+    // *** NEW LOGIC TO MERGE TIME AXIS ***
+    // Adjust time axis based on whether prediction is shown
     let allUniqueLabels;
     
     if (shouldShowPrediction && predicted.labels.length > 0) {
-        // Nếu hiển thị prediction, bao gồm cả dữ liệu lịch sử và dự đoán
+        // If showing prediction, include both historical and predicted data
         allUniqueLabels = [
             ...new Set([...historical.labels, ...predicted.labels]),
         ];
     } else {
-        // Nếu không hiển thị prediction, chỉ hiển thị dữ liệu lịch sử
+        // If not showing prediction, only show historical data
         allUniqueLabels = [...historical.labels];
     }
 
-    // 2. Sắp xếp danh sách các ngày này theo đúng thứ tự thời gian
+    // 2. Sort the list of dates in chronological order
     allUniqueLabels.sort((a, b) => new Date(a) - new Date(b));
 
-    // 3. Tạo Map để tra cứu giá trị nhanh chóng
+    // 3. Create Map for fast value lookup
     const historicalDataMap = new Map(
         historical.labels.map((label, i) => [label, historical.data[i]])
     );
@@ -87,8 +87,8 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
         predicted.labels.map((label, i) => [label, predicted.data[i]])
     );
 
-    // 4. Tạo các mảng dữ liệu cuối cùng, ánh xạ giá trị vào trục thời gian đã hợp nhất
-    // Nếu không có giá trị cho một ngày, hãy điền `null`
+    // 4. Create final data arrays, map values to merged time axis
+    // If no value for a day, fill with `null`
     const finalHistoricalData = allUniqueLabels.map(
         (label) => historicalDataMap.get(label) || null
     );
@@ -98,26 +98,26 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
 
     const datasets = [];
 
-    // Dataset cho dữ liệu dự đoán
+    // Dataset for predicted data
     if (shouldShowPrediction && predicted.data.length > 0) {
         datasets.push({
-        label: "Giá dự đoán",
+        label: "Predicted Price",
         data: finalPredictedData,
         fill: true,
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         borderWidth: 2,
         pointRadius: 0,
-        tension: 0.4, // Làm cho đường cong mượt hơn
+        tension: 0.4, // Make the curve smoother
         borderDash: [5, 5],
-        spanGaps: true, // Nối các điểm dữ liệu bị `null` ở giữa
+        spanGaps: true, // Connect data points with `null` in between
         });
     }
 
-    // Dataset cho dữ liệu lịch sử
+    // Dataset for historical data
     if (historical.data.length > 0) {
         datasets.push({
-        label: shouldShowPrediction ? "Giá thực tế" : "Giá cổ phiếu",
+        label: shouldShowPrediction ? "Actual Price" : "Stock Price",
         data: finalHistoricalData,
         fill: true,
         borderColor: "rgb(54, 162, 235)",
@@ -130,7 +130,7 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
     }
 
     const data = {
-        labels: allUniqueLabels, // Sử dụng trục thời gian đã được hợp nhất và sắp xếp
+        labels: allUniqueLabels, // Use the merged and sorted time axis
         datasets: datasets,
     };
 
@@ -150,9 +150,9 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
                 day: "numeric",
                 });
             },
-            maxRotation: 0, // Ngăn xoay nhãn
-            autoSkip: true, // Tự động bỏ qua nhãn nếu quá dày
-            maxTicksLimit: 10, // Giới hạn số lượng nhãn
+            maxRotation: 0, // Prevent label rotation
+            autoSkip: true, // Automatically skip labels if too dense
+            maxTicksLimit: 10, // Limit number of labels
             },
             grid: { display: false },
         },
@@ -171,10 +171,10 @@ const PriceChart = ({ chartData, timeRange, showPrediction = false }) => {
             intersect: false,
             callbacks: {
             title: (context) =>
-                new Date(context[0].label).toLocaleDateString("vi-VN"),
+                new Date(context[0].label).toLocaleDateString("en-US"),
             label: (context) =>
                 `${context.dataset.label}: ${context.parsed.y.toLocaleString(
-                "vi-VN"
+                "en-US"
                 )} VND`,
             },
         },

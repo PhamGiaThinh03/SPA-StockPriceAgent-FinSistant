@@ -33,7 +33,7 @@ sys.path.insert(0, industry_path)
 # Import database manager
 from database import SupabaseManager, DatabaseConfig
 
-# Create logs directory if not exists
+# Create logs directory if it does not exist
 os.makedirs('logs', exist_ok=True)
 
 # Setup logging
@@ -65,10 +65,10 @@ class SPAVIPPipeline:
         self.timeseries_results = {}
         self.industry_results = {}
         
-        # Create logs directory if not exists
+        # Create logs directory if it does not exist
         os.makedirs('logs', exist_ok=True)
         
-        logger.info("🚀 SPA VIP Pipeline initialized")
+        logger.info("SPA VIP Pipeline initialized")
         self._initialize_database()
     
     def _initialize_database(self):
@@ -78,18 +78,18 @@ class SPAVIPPipeline:
             
             # Test connection
             if self.db_manager.test_connection():
-                logger.info("✅ Database connection established")
+                logger.info("Database connection established")
             else:
                 raise Exception("Database connection test failed")
                 
         except Exception as e:
-            logger.error(f"❌ Database initialization failed: {e}")
+            logger.error(f"Database initialization failed: {e}")
             raise
     
     def show_system_status(self):
         """Display current system status"""
         logger.info("\n" + "="*80)
-        logger.info("📊 SPA VIP SYSTEM STATUS")
+        logger.info("SPA VIP SYSTEM STATUS")
         logger.info("="*80)
         
         # Database statistics
@@ -104,16 +104,16 @@ class SPAVIPPipeline:
         overall_completion = (total_summarized / total_articles * 100) if total_articles > 0 else 0
         overall_classification = (total_classified / total_summarized * 100) if total_summarized > 0 else 0
         
-        logger.info(f"📰 Total Articles: {total_articles:,}")
-        logger.info(f"🤖 AI Summarized: {total_summarized:,}")
-        logger.info(f"🏭 Industry Classified: {total_classified:,}")
-        logger.info(f"⏳ Pending Summary: {total_pending:,}")
-        logger.info(f"⏳ Pending Classification: {total_unclassified:,}")
-        logger.info(f"📈 Summary Rate: {overall_completion:.1f}%")
-        logger.info(f"🏭 Classification Rate: {overall_classification:.1f}%")
+        logger.info(f"Total Articles: {total_articles:,}")
+        logger.info(f"AI Summarized: {total_summarized:,}")
+        logger.info(f"Industry Classified: {total_classified:,}")
+        logger.info(f"Pending Summary: {total_pending:,}")
+        logger.info(f"Pending Classification: {total_unclassified:,}")
+        logger.info(f"Summary Rate: {overall_completion:.1f}%")
+        logger.info(f"Classification Rate: {overall_classification:.1f}%")
         logger.info("")
         
-        logger.info("📋 TABLE BREAKDOWN:")
+        logger.info("TABLE BREAKDOWN:")
         logger.info("-" * 80)
         logger.info(f"{'Table':<15} {'Total':<8} {'Summary':<8} {'Industry':<10} {'S-Rate':<8} {'I-Rate':<8}")
         logger.info("-" * 80)
@@ -134,7 +134,7 @@ class SPAVIPPipeline:
         Args:
             crawler_options: Options for crawler execution
         """
-        logger.info("\n🗞️  PHASE 1: NEWS CRAWLING")
+        logger.info("\nPHASE 1: NEWS CRAWLING")
         logger.info("="*50)
         
         phase_start = time.time()
@@ -146,10 +146,10 @@ class SPAVIPPipeline:
             # Check if single crawler option is provided
             if crawler_options and crawler_options.get('single'):
                 single_crawler = crawler_options['single']
-                logger.info(f"🎯 Running single crawler: {single_crawler}")
+                logger.info(f"Running single crawler: {single_crawler}")
                 run_single_crawler(single_crawler)
             else:
-                logger.info("🔄 Running all crawlers...")
+                logger.info("Running all crawlers...")
                 # Run all crawlers
                 controller = CrawlerController()
                 controller.run_all_crawlers()
@@ -161,7 +161,7 @@ class SPAVIPPipeline:
                 'crawlers_status': {'all_crawlers': {'status': 'success'}}
             }
             
-            logger.info(f"✅ Crawling phase completed in {phase_time/60:.1f} minutes")
+            logger.info(f"Crawling phase completed in {phase_time/60:.1f} minutes")
             
         except Exception as e:
             phase_time = time.time() - phase_start
@@ -170,7 +170,7 @@ class SPAVIPPipeline:
                 'duration': phase_time,
                 'error': str(e)
             }
-            logger.error(f"❌ Crawling phase failed: {e}")
+            logger.error(f"Crawling phase failed: {e}")
             raise
     
     def run_summarization_phase(self, summarization_options: Dict[str, Any] = None):
@@ -184,7 +184,7 @@ class SPAVIPPipeline:
                 - use_map_reduce: Enable/disable Map-Reduce (default: True)
                 - analyze_texts: Analyze text lengths only
         """
-        logger.info("\n🤖 PHASE 2: AI SUMMARIZATION")
+        logger.info("\nPHASE 2: AI SUMMARIZATION")
         logger.info("="*50)
         
         phase_start = time.time()
@@ -199,28 +199,28 @@ class SPAVIPPipeline:
             # Initialize pipeline with Map-Reduce option
             pipeline = SummarizationPipeline(use_map_reduce=use_map_reduce)
             
-            logger.info(f"🗺️  Map-Reduce: {'ENABLED' if use_map_reduce else 'DISABLED'}")
+            logger.info(f"Map-Reduce: {'ENABLED' if use_map_reduce else 'DISABLED'}")
             
             if summarization_options and summarization_options.get('analyze_texts'):
                 # Analyze text lengths only
-                logger.info("📊 Analyzing text lengths in database...")
+                logger.info("Analyzing text lengths in database...")
                 pipeline._analyze_database_texts()
                 processed = 0
                 
             elif summarization_options and summarization_options.get('table'):
                 # Process specific table
                 table_name = summarization_options['table']
-                logger.info(f"🎯 Processing specific table: {table_name}")
+                logger.info(f"Processing specific table: {table_name}")
                 processed = pipeline.process_specific_table(table_name)
                 
             elif summarization_options and summarization_options.get('priority'):
                 # Process by priority
-                logger.info("🎯 Processing all tables by priority")
+                logger.info("Processing all tables by priority")
                 processed = pipeline.process_all_tables_by_priority()
                 
             else:
                 # Default: process by priority
-                logger.info("🎯 Processing all tables by priority (default)")
+                logger.info("Processing all tables by priority (default)")
                 processed = pipeline.process_all_tables_by_priority()
             
             phase_time = time.time() - phase_start
@@ -230,7 +230,7 @@ class SPAVIPPipeline:
                 'articles_processed': processed if isinstance(processed, int) else 0
             }
             
-            logger.info(f"✅ Summarization phase completed in {phase_time/60:.1f} minutes")
+            logger.info(f"Summarization phase completed in {phase_time/60:.1f} minutes")
             
         except Exception as e:
             phase_time = time.time() - phase_start
@@ -239,7 +239,7 @@ class SPAVIPPipeline:
                 'duration': phase_time,
                 'error': str(e)
             }
-            logger.error(f"❌ Summarization phase failed: {e}")
+            logger.error(f"Summarization phase failed: {e}")
             raise
     
     def run_sentiment_phase(self, sentiment_options: Dict[str, Any] = None):
@@ -254,7 +254,7 @@ class SPAVIPPipeline:
                 - optimized_update: Whether to use optimized update (only affected trading days) (default: False)
                 - 30day_aggregate: Whether to use 30-day aggregation (weekend/holiday aggregation) (default: True)
         """
-        logger.info("\n🎭 PHASE 3: SENTIMENT ANALYSIS")
+        logger.info("\nPHASE 3: SENTIMENT ANALYSIS")
         logger.info("="*50)
         
         phase_start = time.time()
@@ -265,11 +265,11 @@ class SPAVIPPipeline:
             update_stock = sentiment_options.get('update_stock', True) if sentiment_options else True
             recalculate_all_stock = sentiment_options.get('recalculate_all_stock', False) if sentiment_options else False
             optimized_update = sentiment_options.get('optimized_update', False) if sentiment_options else False
-            use_30day_aggregate = sentiment_options.get('30day_aggregate', True) if sentiment_options else True  # Default to True
+            use_30day_aggregate = sentiment_options.get('30day_aggregate', True) if sentiment_options else True
             
             if use_30day_aggregate and not recalculate_all_stock:
-                # Use 30-day sentiment aggregation logic (DEFAULT)
-                logger.info("🚀 Using 30-DAY SENTIMENT AGGREGATION mode (default)")
+                # Use 30-day sentiment aggregation logic (default)
+                logger.info("Using 30-DAY SENTIMENT AGGREGATION mode (default)")
                 from sentiment.reset_aggregate_sentiment_30days import reset_and_aggregate_sentiment_30days
                 from sentiment.predict_sentiment_db import get_database_manager, predict_and_update_sentiment
                 from database import DatabaseConfig
@@ -278,7 +278,7 @@ class SPAVIPPipeline:
                     # Default: process all stock news tables
                     config = DatabaseConfig()
                     tables = [config.get_table_name(stock_code=code) for code in ["FPT", "GAS", "IMP", "VCB"]]
-                    tables.append(config.get_table_name(is_general=True))  # Add General_News
+                    tables.append(config.get_table_name(is_general=True))
                 
                 db_manager = get_database_manager()
                 total_updated_dates = set()
@@ -286,7 +286,7 @@ class SPAVIPPipeline:
                 # Phase 1: Predict sentiment for new records
                 stock_updates = {}
                 for table_name in tables:
-                    logger.info(f"🎯 Processing table: {table_name}")
+                    logger.info(f"Processing table: {table_name}")
                     try:
                         updated_dates = predict_and_update_sentiment(db_manager, table_name)
                         total_updated_dates.update(updated_dates)
@@ -296,32 +296,31 @@ class SPAVIPPipeline:
                             stock_code = table_name.replace("_News", "")
                             stock_updates[stock_code] = updated_dates
                         
-                        logger.info(f"✅ Completed processing {table_name}")
+                        logger.info(f"Completed processing {table_name}")
                     except Exception as e:
-                        logger.error(f"❌ Error processing {table_name}: {e}")
+                        logger.error(f"Error processing {table_name}: {e}")
                 
                 # Phase 2: 30-day sentiment aggregation for stock tables
                 if update_stock:
-                    logger.info("🚀 Phase 2: 30-DAY SENTIMENT AGGREGATION")
+                    logger.info("Phase 2: 30-DAY SENTIMENT AGGREGATION")
                     
-                    # Process each stock with 30-day aggregation
                     for stock_code in ["FPT", "GAS", "IMP", "VCB"]:
                         if stock_code in stock_updates and stock_updates[stock_code]:
-                            logger.info(f"📊 Processing 30-day aggregation for {stock_code}")
+                            logger.info(f"Processing 30-day aggregation for {stock_code}")
                             try:
                                 reset_and_aggregate_sentiment_30days(stock_code)
-                                logger.info(f"✅ Completed 30-day aggregation for {stock_code}")
+                                logger.info(f"Completed 30-day aggregation for {stock_code}")
                             except Exception as e:
-                                logger.error(f"❌ Error 30-day aggregation {stock_code}: {e}")
+                                logger.error(f"Error 30-day aggregation {stock_code}: {e}")
                         else:
-                            logger.info(f"⏭️ Skipping {stock_code} - no new predictions")
+                            logger.info(f"Skipping {stock_code} - no new predictions")
                 
                 db_manager.close_connections()
                 processed_dates = total_updated_dates
                 
             elif optimized_update:
                 # Use optimized sentiment update logic
-                logger.info("🚀 Using OPTIMIZED sentiment update mode")
+                logger.info("Using OPTIMIZED sentiment update mode")
                 from sentiment.optimized_sentiment_update import optimized_process_sentiment_to_stock
                 from sentiment.predict_sentiment_db import get_database_manager, predict_and_update_sentiment
                 from database import DatabaseConfig
@@ -330,7 +329,7 @@ class SPAVIPPipeline:
                     # Default: process all stock news tables
                     config = DatabaseConfig()
                     tables = [config.get_table_name(stock_code=code) for code in ["FPT", "GAS", "IMP", "VCB"]]
-                    tables.append(config.get_table_name(is_general=True))  # Add General_News
+                    tables.append(config.get_table_name(is_general=True))
                 
                 db_manager = get_database_manager()
                 total_updated_dates = set()
@@ -338,27 +337,25 @@ class SPAVIPPipeline:
                 # Phase 1: Predict sentiment for new records
                 stock_updates = {}
                 for table_name in tables:
-                    logger.info(f"🎯 Processing table: {table_name}")
+                    logger.info(f"Processing table: {table_name}")
                     try:
                         updated_dates = predict_and_update_sentiment(db_manager, table_name)
                         total_updated_dates.update(updated_dates)
                         
-                        # Store updated dates for optimized stock processing
                         if table_name.endswith("_News") and table_name != "General_News":
                             stock_code = table_name.replace("_News", "")
                             stock_updates[stock_code] = updated_dates
                         
-                        logger.info(f"✅ Completed processing {table_name}")
+                        logger.info(f"Completed processing {table_name}")
                     except Exception as e:
-                        logger.error(f"❌ Error processing {table_name}: {e}")
+                        logger.error(f"Error processing {table_name}: {e}")
                 
                 # Phase 2: Optimized stock table updates
                 if update_stock:
-                    logger.info("🚀 Phase 2: OPTIMIZED Stock Table Updates")
+                    logger.info("Phase 2: OPTIMIZED Stock Table Updates")
                     
-                    # First, ensure all sentiment columns are not NULL
                     from sentiment.predict_sentiment_db import ensure_all_stock_sentiment_not_null
-                    logger.info("🔧 Ensuring stock sentiment columns are not NULL...")
+                    logger.info("Ensuring stock sentiment columns are not NULL...")
                     ensure_all_stock_sentiment_not_null(db_manager)
                     
                     for stock_code, updated_dates in stock_updates.items():
@@ -366,9 +363,9 @@ class SPAVIPPipeline:
                             try:
                                 optimized_process_sentiment_to_stock(db_manager, stock_code, updated_dates)
                             except Exception as e:
-                                logger.error(f"❌ Error optimized processing {stock_code}: {e}")
+                                logger.error(f"Error optimized processing {stock_code}: {e}")
                         else:
-                            logger.info(f"⏭️ Skipping {stock_code} - no new predictions")
+                            logger.info(f"Skipping {stock_code} - no new predictions")
                 
                 db_manager.close_connections()
                 processed_dates = total_updated_dates
@@ -376,14 +373,11 @@ class SPAVIPPipeline:
                 # Use standard sentiment analysis pipeline
                 from sentiment.predict_sentiment_db import run_sentiment_analysis_pipeline
                 
-                # Process sentiment analysis
                 if tables:
-                    # Process specific tables
-                    logger.info(f"🎯 Processing specific tables: {tables}")
+                    logger.info(f"Processing specific tables: {tables}")
                     processed_dates = run_sentiment_analysis_pipeline(tables, update_stock, recalculate_all_stock)
                 else:
-                    # Default: process all tables
-                    logger.info("🎯 Processing all news tables")
+                    logger.info("Processing all news tables")
                     processed_dates = run_sentiment_analysis_pipeline(None, update_stock, recalculate_all_stock)
             
             phase_time = time.time() - phase_start
@@ -393,7 +387,7 @@ class SPAVIPPipeline:
                 'dates_processed': len(processed_dates) if processed_dates else 0
             }
             
-            logger.info(f"✅ Sentiment analysis phase completed in {phase_time/60:.1f} minutes")
+            logger.info(f"Sentiment analysis phase completed in {phase_time/60:.1f} minutes")
             
         except Exception as e:
             phase_time = time.time() - phase_start
@@ -402,7 +396,7 @@ class SPAVIPPipeline:
                 'duration': phase_time,
                 'error': str(e)
             }
-            logger.error(f"❌ Sentiment analysis phase failed: {e}")
+            logger.error(f"Sentiment analysis phase failed: {e}")
             raise
     
     def run_timeseries_phase(self, timeseries_options: Dict[str, Any] = None):
@@ -414,7 +408,7 @@ class SPAVIPPipeline:
                 - stock_codes: List of specific stock codes to predict
                 - predict_all: Whether to predict all available stocks (default: True)
         """
-        logger.info("\n📈 PHASE 4: TIMESERIES PREDICTION")
+        logger.info("\nPHASE 4: TIMESERIES PREDICTION")
         logger.info("="*50)
         
         phase_start = time.time()
@@ -429,12 +423,12 @@ class SPAVIPPipeline:
             if timeseries_options and timeseries_options.get('stock_codes'):
                 # Predict specific stocks
                 stock_codes = timeseries_options['stock_codes']
-                logger.info(f"🎯 Predicting specific stocks: {stock_codes}")
+                logger.info(f"Predicting specific stocks: {stock_codes}")
                 results = pipeline.predict_specific_stocks(stock_codes)
                 
             else:
                 # Default: predict all stocks
-                logger.info("🎯 Predicting all available stocks")
+                logger.info("Predicting all available stocks")
                 results = pipeline.predict_all_stocks()
             
             # Close connections
@@ -449,7 +443,7 @@ class SPAVIPPipeline:
                 'success_rate': results.get('summary', {}).get('success_rate', 0)
             }
             
-            logger.info(f"✅ Timeseries prediction phase completed in {phase_time/60:.1f} minutes")
+            logger.info(f"Timeseries prediction phase completed in {phase_time/60:.1f} minutes")
             
         except Exception as e:
             phase_time = time.time() - phase_start
@@ -458,7 +452,7 @@ class SPAVIPPipeline:
                 'duration': phase_time,
                 'error': str(e)
             }
-            logger.error(f"❌ Timeseries prediction phase failed: {e}")
+            logger.error(f"Timeseries prediction phase failed: {e}")
             raise
     
     def run_industry_phase(self, industry_options: Dict[str, Any] = None):
@@ -471,7 +465,7 @@ class SPAVIPPipeline:
                 - batch_size: Number of articles to process in one batch (default: 50)
                 - process_all: Process ALL pending articles in batches (default: False)
         """
-        logger.info("\n🏭 PHASE 5: INDUSTRY CLASSIFICATION")
+        logger.info("\nPHASE 5: INDUSTRY CLASSIFICATION")
         logger.info("="*50)
         
         phase_start = time.time()
@@ -489,22 +483,22 @@ class SPAVIPPipeline:
             process_all = industry_options.get('process_all', False) if industry_options else False
             
             if process_all:
-                # Process ALL pending articles in batches
-                logger.info(f"🔄 Processing ALL pending articles in batches of {batch_size}")
+                # Process all pending articles in batches
+                logger.info(f"Processing all pending articles in batches of {batch_size}")
                 results = pipeline.process_all_pending(batch_size)
                 total_processed = sum(results.values())
                 
             elif tables:
                 # Process specific tables
-                logger.info(f"🎯 Processing specific tables: {tables}")
+                logger.info(f"Processing specific tables: {tables}")
                 total_processed = 0
                 for table_name in tables:
                     processed = pipeline.process_specific_table(table_name, batch_size)
                     total_processed += processed
                     
             else:
-                # Process all tables (single batch)
-                logger.info("🎯 Processing all tables for industry classification")
+                # Process all tables in a single batch
+                logger.info("Processing all tables for industry classification")
                 results = pipeline.process_all_tables(batch_size)
                 total_processed = sum(results.values())
             
@@ -518,7 +512,7 @@ class SPAVIPPipeline:
                 'articles_processed': total_processed
             }
             
-            logger.info(f"✅ Industry classification phase completed in {phase_time/60:.1f} minutes")
+            logger.info(f"Industry classification phase completed in {phase_time/60:.1f} minutes")
             
         except Exception as e:
             phase_time = time.time() - phase_start
@@ -527,7 +521,7 @@ class SPAVIPPipeline:
                 'duration': phase_time,
                 'error': str(e)
             }
-            logger.error(f"❌ Industry classification phase failed: {e}")
+            logger.error(f"Industry classification phase failed: {e}")
             raise
     
     def run_full_pipeline(self, options: Dict[str, Any] = None):
@@ -539,10 +533,10 @@ class SPAVIPPipeline:
         """
         self.start_time = time.time()
         
-        logger.info("\n" + "🚀"*20)
-        logger.info("🚀 STARTING SPA VIP FULL PIPELINE")
-        logger.info("🚀"*20)
-        logger.info(f"⏰ Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info("\n" + "="*20)
+        logger.info("STARTING SPA VIP FULL PIPELINE")
+        logger.info("="*20)
+        logger.info(f"Start time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         try:
             # Phase 1: Crawling
@@ -550,7 +544,7 @@ class SPAVIPPipeline:
             self.run_crawling_phase(crawl_options)
             
             # Wait between phases
-            logger.info("⏸️ Waiting 10 seconds between phases...")
+            logger.info("Waiting 10 seconds between phases...")
             time.sleep(10)
             
             # Phase 2: Summarization
@@ -558,7 +552,7 @@ class SPAVIPPipeline:
             self.run_summarization_phase(summarization_options)
             
             # Wait between phases
-            logger.info("⏸️ Waiting 10 seconds between phases...")
+            logger.info("Waiting 10 seconds between phases...")
             time.sleep(10)
             
             # Phase 3: Sentiment Analysis
@@ -566,7 +560,7 @@ class SPAVIPPipeline:
             self.run_sentiment_phase(sentiment_options)
             
             # Wait between phases
-            logger.info("⏸️ Waiting 10 seconds between phases...")
+            logger.info("Waiting 10 seconds between phases...")
             time.sleep(10)
             
             # Phase 4: Timeseries Prediction
@@ -574,7 +568,7 @@ class SPAVIPPipeline:
             self.run_timeseries_phase(timeseries_options)
             
             # Wait between phases
-            logger.info("⏸️ Waiting 10 seconds between phases...")
+            logger.info("Waiting 10 seconds between phases...")
             time.sleep(10)
             
             # Phase 5: Industry Classification
@@ -585,10 +579,10 @@ class SPAVIPPipeline:
             self._print_pipeline_summary()
             
         except KeyboardInterrupt:
-            logger.warning("⚠️ Pipeline interrupted by user")
+            logger.warning("Pipeline interrupted by user")
             self._print_pipeline_summary()
         except Exception as e:
-            logger.error(f"💥 Pipeline failed with error: {e}")
+            logger.error(f"Pipeline failed with error: {e}")
             self._print_pipeline_summary()
             raise
     
@@ -597,76 +591,76 @@ class SPAVIPPipeline:
         total_time = time.time() - self.start_time if self.start_time else 0
         
         logger.info("\n" + "="*80)
-        logger.info("📋 PIPELINE EXECUTION SUMMARY")
+        logger.info("PIPELINE EXECUTION SUMMARY")
         logger.info("="*80)
-        logger.info(f"⏱️ Total execution time: {total_time/60:.1f} minutes")
+        logger.info(f"Total execution time: {total_time/60:.1f} minutes")
         logger.info("")
         
         # Crawling results
         if self.crawl_results:
-            crawl_status = "✅ SUCCESS" if self.crawl_results['status'] == 'success' else "❌ FAILED"
+            crawl_status = "SUCCESS" if self.crawl_results['status'] == 'success' else "FAILED"
             crawl_time = self.crawl_results['duration'] / 60
-            logger.info(f"🗞️ CRAWLING PHASE: {crawl_status} ({crawl_time:.1f} min)")
+            logger.info(f"CRAWLING PHASE: {crawl_status} ({crawl_time:.1f} min)")
             
             if self.crawl_results['status'] == 'success' and 'crawlers_status' in self.crawl_results:
                 successful_crawlers = sum(1 for status in self.crawl_results['crawlers_status'].values() 
                                         if status['status'] == 'success')
                 total_crawlers = len(self.crawl_results['crawlers_status'])
-                logger.info(f"   📊 Successful crawlers: {successful_crawlers}/{total_crawlers}")
+                logger.info(f"   Successful crawlers: {successful_crawlers}/{total_crawlers}")
         
         # Summarization results
         if self.summarization_results:
-            summ_status = "✅ SUCCESS" if self.summarization_results['status'] == 'success' else "❌ FAILED"
+            summ_status = "SUCCESS" if self.summarization_results['status'] == 'success' else "FAILED"
             summ_time = self.summarization_results['duration'] / 60
-            logger.info(f"🤖 SUMMARIZATION PHASE: {summ_status} ({summ_time:.1f} min)")
+            logger.info(f"SUMMARIZATION PHASE: {summ_status} ({summ_time:.1f} min)")
             
             if self.summarization_results['status'] == 'success':
                 articles_processed = self.summarization_results.get('articles_processed', 0)
-                logger.info(f"   📊 Articles processed: {articles_processed}")
+                logger.info(f"   Articles processed: {articles_processed}")
         
         # Sentiment results
         if self.sentiment_results:
-            sent_status = "✅ SUCCESS" if self.sentiment_results['status'] == 'success' else "❌ FAILED"
+            sent_status = "SUCCESS" if self.sentiment_results['status'] == 'success' else "FAILED"
             sent_time = self.sentiment_results['duration'] / 60
-            logger.info(f"🎭 SENTIMENT PHASE: {sent_status} ({sent_time:.1f} min)")
+            logger.info(f"SENTIMENT PHASE: {sent_status} ({sent_time:.1f} min)")
             
             if self.sentiment_results['status'] == 'success':
                 dates_processed = self.sentiment_results.get('dates_processed', 0)
-                logger.info(f"   📊 Dates processed: {dates_processed}")
+                logger.info(f"   Dates processed: {dates_processed}")
         
         # Timeseries results
         if self.timeseries_results:
-            ts_status = "✅ SUCCESS" if self.timeseries_results['status'] == 'success' else "❌ FAILED"
+            ts_status = "SUCCESS" if self.timeseries_results['status'] == 'success' else "FAILED"
             ts_time = self.timeseries_results['duration'] / 60
-            logger.info(f"📈 TIMESERIES PHASE: {ts_status} ({ts_time:.1f} min)")
+            logger.info(f"TIMESERIES PHASE: {ts_status} ({ts_time:.1f} min)")
             
             if self.timeseries_results['status'] == 'success':
                 predictions_made = self.timeseries_results.get('predictions_made', 0)
                 total_stocks = self.timeseries_results.get('total_stocks', 0)
                 success_rate = self.timeseries_results.get('success_rate', 0)
-                logger.info(f"   📊 Predictions: {predictions_made}/{total_stocks} ({success_rate:.1f}%)")
+                logger.info(f"   Predictions: {predictions_made}/{total_stocks} ({success_rate:.1f}%)")
         
         # Industry results
         if self.industry_results:
-            ind_status = "✅ SUCCESS" if self.industry_results['status'] == 'success' else "❌ FAILED"
+            ind_status = "SUCCESS" if self.industry_results['status'] == 'success' else "FAILED"
             ind_time = self.industry_results['duration'] / 60
-            logger.info(f"🏭 INDUSTRY PHASE: {ind_status} ({ind_time:.1f} min)")
+            logger.info(f"INDUSTRY PHASE: {ind_status} ({ind_time:.1f} min)")
             
             if self.industry_results['status'] == 'success':
                 articles_processed = self.industry_results.get('articles_processed', 0)
-                logger.info(f"   📊 Articles classified: {articles_processed}")
+                logger.info(f"   Articles classified: {articles_processed}")
         
         logger.info("")
-        logger.info("🎯 FINAL STATUS:")
+        logger.info("FINAL STATUS:")
         self.show_system_status()
         
-        logger.info("\n🎉 PIPELINE EXECUTION COMPLETED!")
+        logger.info("\nPIPELINE EXECUTION COMPLETED!")
         logger.info("="*80)
 
 def main():
     """Main function with command line interface"""
     parser = argparse.ArgumentParser(
-        description='🚀 SPA VIP - Integrated News Processing System (Runs --full by default)',
+        description='SPA VIP - Integrated News Processing System (Runs --full by default)',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -721,6 +715,7 @@ Examples:
                        help='Disable Map-Reduce for long texts (use truncation)')
     parser.add_argument('--analyze-texts', action='store_true',
                        help='Analyze text lengths in database to show Map-Reduce benefits')
+    
     # Sentiment options
     parser.add_argument('--sent-tables', nargs='+', 
                        choices=['General_News', 'FPT_News', 'GAS_News', 'IMP_News', 'VCB_News'],
@@ -755,18 +750,18 @@ Examples:
     
     try:
         if args.status:
-            # Show status only
+            # Show system status only
             pipeline.show_system_status()
             
         elif args.crawl_only:
-            # Crawling only
+            # Run only crawling phase
             crawl_options = {}
             if args.crawl_single:
                 crawl_options['single'] = args.crawl_single
             pipeline.run_crawling_phase(crawl_options)
             
         elif args.summarize_only:
-            # Summarization only
+            # Run only summarization phase
             summarization_options = {}
             if args.summ_table:
                 summarization_options['table'] = args.summ_table
@@ -782,7 +777,7 @@ Examples:
             pipeline.run_summarization_phase(summarization_options)
             
         elif args.sentiment_only:
-            # Sentiment analysis only
+            # Run only sentiment analysis phase
             sentiment_options = {}
             if args.sent_tables:
                 sentiment_options['tables'] = args.sent_tables
@@ -792,19 +787,19 @@ Examples:
                 sentiment_options['recalculate_all_stock'] = True
             if args.optimized_update:
                 sentiment_options['optimized_update'] = True
-            if args.__dict__.get('30day_aggregate'):  # Use __dict__ to access the hyphenated argument
+            if args.__dict__.get('30day_aggregate'):  # Access hyphenated argument
                 sentiment_options['30day_aggregate'] = True
             pipeline.run_sentiment_phase(sentiment_options)
             
         elif args.timeseries_only:
-            # Timeseries prediction only
+            # Run only timeseries prediction phase
             timeseries_options = {}
             if args.ts_stocks:
                 timeseries_options['stock_codes'] = args.ts_stocks
             pipeline.run_timeseries_phase(timeseries_options)
             
         elif args.industry_only:
-            # Industry classification only
+            # Run only industry classification phase
             industry_options = {}
             if args.ind_tables:
                 industry_options['tables'] = args.ind_tables
@@ -815,7 +810,7 @@ Examples:
             pipeline.run_industry_phase(industry_options)
             
         elif args.full:
-            # Full pipeline
+            # Run full pipeline
             options = {}
             
             # Crawl options
@@ -850,6 +845,7 @@ Examples:
                 sent_opts['optimized_update'] = True
             if sent_opts:
                 options['sentiment'] = sent_opts
+            
             # Industry options
             ind_opts = {}
             if args.ind_tables:
@@ -862,29 +858,26 @@ Examples:
             pipeline.run_full_pipeline(options)
             
         else:
-            # Default: Run full pipeline (NEW BEHAVIOR)
+            # Default behavior: run full pipeline automatically
             print("\n" + "="*80)
-            print("🚀 SPA VIP - RUNNING FULL PIPELINE (DEFAULT)")
+            print("SPA VIP - RUNNING FULL PIPELINE (DEFAULT)")
             print("="*80)
-            print("� No arguments provided - Running complete pipeline automatically")
-            print("📌 To see all available commands, use: python main.py --help")
+            print("No arguments provided - Running complete pipeline automatically")
+            print("To see all available commands, use: python main.py --help")
             print("="*80)
             
             # Run full pipeline with default options
             pipeline.run_full_pipeline({})
             
-            # Simple completion message only
-            print("\n🎉 PIPELINE EXECUTION COMPLETED!")
+            # Simple completion message
+            print("\nPIPELINE EXECUTION COMPLETED!")
             print("="*80)
             
     except KeyboardInterrupt:
-        logger.info("\n⚠️ Operation interrupted by user")
+        logger.info("\nOperation interrupted by user")
     except Exception as e:
-        logger.error(f"💥 System error: {e}")
+        logger.error(f"System error: {e}")
         raise
 
 if __name__ == "__main__":
     main()
-
-
-

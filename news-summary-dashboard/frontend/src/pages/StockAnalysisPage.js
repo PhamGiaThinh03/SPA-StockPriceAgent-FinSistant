@@ -17,52 +17,52 @@ import {
 import PriceChart from "../components/stocks/PriceChart";
 import { useStockData } from "../hooks/useApi";
 
-// Định nghĩa các hằng số để dễ quản lý
+// Define constants for easier management
 const tickers = ["FPT", "IMP", "VCB", "GAS"];
 const timeRanges = [
-    { key: "all", label: "Tất cả" },
-    { key: "1M", label: "1 Tháng" },
-    { key: "3M", label: "3 Tháng" },
-    { key: "1Y", label: "1 Năm" },
-    { key: "5Y", label: "5 Năm" },
+    { key: "all", label: "All" },
+    { key: "1M", label: "1 Month" },
+    { key: "3M", label: "3 Months" },
+    { key: "1Y", label: "1 Year" },
+    { key: "5Y", label: "5 Years" },
 ];
 
 const StockAnalysisPage = () => {
-    // State cho các bộ lọc
+    // State for filters
     const [selectedTicker, setSelectedTicker] = useState("FPT");
     const [selectedTimeRange, setSelectedTimeRange] = useState("1M");
     const [showPrediction, setShowPrediction] = useState(false);
 
-    // Color scheme cho theme
+    // Color scheme for theme
     const bgFilter = useColorModeValue("white", "gray.800");
     const borderColor = useColorModeValue("gray.200", "gray.600");
     const shadowColor = useColorModeValue("sm", "dark-lg");
 
-    // Sử dụng custom hook
+    // Use custom hook
     const {
         stockData,
         loading: isLoading,
         error,
     } = useStockData(selectedTicker, selectedTimeRange);
 
-    // State cho dữ liệu chart được xử lý
+    // State for processed chart data
     const [chartData, setChartData] = useState(null);
 
-    // Xử lý dữ liệu cho chart khi stockData thay đổi
+    // Process data for chart when stockData changes
     useEffect(() => {
         if (stockData && stockData.length > 0) {
-        // TẠO BẢN SAO VÀ SẮP XẾP DỮ LIỆU
+        // CREATE A COPY AND SORT DATA
         const sortedData = [...stockData].sort(
             (a, b) => new Date(a.date) - new Date(b.date)
         );
 
-        // Sử dụng dữ liệu đã được sắp xếp (sortedData) để cập nhật state
+        // Use sortedData to update state
         setChartData({
             rawData: sortedData,
             labels: sortedData.map((item) => item.date),
             datasets: [
             {
-                label: `Giá đóng cửa của ${selectedTicker}`,
+                label: `Closing price of ${selectedTicker}`,
                 data: sortedData.map((item) => item.close_price),
             },
             ],
@@ -93,14 +93,14 @@ const StockAnalysisPage = () => {
         }
         return (
         <Center minH="400px">
-            <Text>Không có dữ liệu biểu đồ để hiển thị.</Text>
+            <Text>No chart data available to display.</Text>
         </Center>
         );
     };
 
     return (
         <Box>
-        {/* Container cho các filter */}
+        {/* Container for filters */}
         <Box
             bg={bgFilter}
             borderRadius="xl"
@@ -111,10 +111,10 @@ const StockAnalysisPage = () => {
             mb={8}
         >
             <VStack spacing={6} align="stretch">
-            {/* Nhóm nút chọn Công ty */}
+            {/* Company selection buttons group */}
             <Box>
                 <Text fontSize="sm" fontWeight="semibold" color="gray.600" mb={3}>
-                Chọn cổ phiếu
+                Select Stock
                 </Text>
                 <Flex wrap="wrap" gap={3}>
                 {tickers.map((ticker) => (
@@ -134,10 +134,10 @@ const StockAnalysisPage = () => {
                 </Flex>
             </Box>
 
-            {/* Nhóm nút chọn Khung thời gian */}
+            {/* Time range selection buttons group */}
             <Box>
                 <Text fontSize="sm" fontWeight="semibold" color="gray.600" mb={3}>
-                Khung thời gian
+                Time Range
                 </Text>
                 <VStack spacing={3} align="stretch">
                 <HStack spacing={2} wrap="wrap">
@@ -159,11 +159,11 @@ const StockAnalysisPage = () => {
                     ))}
                 </HStack>
                 
-                {/* Button toggle prediction cho 1M và 3M */}
+                {/* Toggle prediction button for 1M and 3M */}
                 {(selectedTimeRange === "1M" || selectedTimeRange === "3M") && (
                     <HStack spacing={2}>
                     <Text fontSize="sm" color="gray.600">
-                        Hiển thị dự đoán:
+                        Show prediction:
                     </Text>
                     <Switch
                         colorScheme="teal"

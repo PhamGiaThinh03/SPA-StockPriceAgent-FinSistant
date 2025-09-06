@@ -47,7 +47,7 @@ class Config:
     MAX_RETRIES = 3  # Try again when you encounter an error
     RETRY_DELAY = 5  # Waiting time between testing (seconds)
     
-    # Tables to process (sử dụng từ crawl config)
+    # Tables to process
     # News tables
     NEWS_TABLES = TABLE_NAMES  # TABLE_NAMES đã là list
         

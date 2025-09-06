@@ -13,13 +13,13 @@ const paddingY = 30;
 const chartW = width - 2 * paddingX;
 const chartH = height - 2 * paddingY;
 
-// Tính điểm
+// Calculate points
 const points = data.map((v, i) => [
   paddingX + (i * chartW) / (data.length - 1),
   paddingY + chartH - ((v - Math.min(...data)) * chartH) / (Math.max(...data) - Math.min(...data)),
 ]);
 
-// Hàm tạo đường cong mượt (Cubic Bezier)
+// Function to create smooth curve (Cubic Bezier)
 function getSmoothPath(pts) {
   let d = "";
   for (let i = 0; i < pts.length; i++) {
@@ -159,4 +159,4 @@ const InfluenceTrendsChart = () => {
   );
 };
 
-export default InfluenceTrendsChart; 
+export default InfluenceTrendsChart;

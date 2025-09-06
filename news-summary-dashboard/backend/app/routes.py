@@ -9,7 +9,7 @@ load_dotenv()
 from .config import current_config
 from .services import get_news_from_db, get_bookmarks, add_bookmark, delete_bookmark, get_user_from_token, get_stock_data_from_redis, check_bookmark_exists, remove_bookmark_by_article
 
-# Khởi tạo ứng dụng Flask
+# Initialize Flask application
 app = Flask(__name__)
 
 # Apply configuration
@@ -42,18 +42,18 @@ def health_check():
         "message": "News Summary Dashboard API is running"
     }), 200
 
-# Định nghĩa API endpoint tên là '/api/news'
+# Define API endpoint named '/api/news'
 @app.route('/api/news', methods=['GET'])
 def news_endpoint():
     """
-    Endpoint này sẽ được frontend gọi đến.
-    Nó lấy dữ liệu từ database, chuyển thành JSON và trả về với pagination.
+    This endpoint will be called by the frontend.
+    It fetches data from the database, converts it to JSON, and returns it with pagination.
     """
     try:
-        # Lấy tất cả các tham số từ URL
+        # Get all parameters from URL
         industry_filter = request.args.get('industry')
         sentiment_filter = request.args.get('sentiment')
-        date_filter = request.args.get('date') # Thêm tham số date
+        date_filter = request.args.get('date') # Add date parameter
         
         # Pagination parameters
         page = int(request.args.get('page', 1))
@@ -65,7 +65,7 @@ def news_endpoint():
         if limit < 1 or limit > 100:  # Max 100 items per page
             limit = 5
 
-        # Truyền tất cả các tham số vào hàm service
+        # Pass all parameters to the service function
         result = get_news_from_db(
             industry=industry_filter, 
             sentiment=sentiment_filter,
@@ -78,16 +78,16 @@ def news_endpoint():
 
     except Exception as e:
         print(f"Error fetching news: {e}")
-        return jsonify({"error": "Không thể lấy dữ liệu từ server"}), 500
+        return jsonify({"error": "Cannot fetch data from server"}), 500
     
-# --- CÁC ENDPOINT MỚI CHO BOOKMARK ---
+# --- NEW ENDPOINTS FOR BOOKMARKS ---
 
 @app.route('/api/bookmarks', methods=['GET'])
 def handle_get_bookmarks():
     try:
         user = get_user_from_token(request)
         if not user:
-            return jsonify({"error": "Xác thực không hợp lệ"}), 401
+            return jsonify({"error": "Invalid authentication"}), 401
         
         bookmarks = get_bookmarks(user.id)
         return jsonify(bookmarks)
@@ -99,7 +99,7 @@ def handle_add_bookmark():
     try:
         user = get_user_from_token(request)
         if not user:
-            return jsonify({"error": "Xác thực không hợp lệ"}), 401
+            return jsonify({"error": "Invalid authentication"}), 401
         
         article_data = request.get_json()
         new_bookmark = add_bookmark(user.id, article_data)
@@ -111,26 +111,26 @@ def handle_add_bookmark():
 
 @app.route('/api/bookmarks/toggle', methods=['POST'])
 def handle_toggle_bookmark():
-    """Toggle bookmark - thêm nếu chưa có, xóa nếu đã có."""
+    """Toggle bookmark - add if not exists, remove if exists."""
     try:
         user = get_user_from_token(request)
         if not user:
-            return jsonify({"error": "Xác thực không hợp lệ"}), 401
+            return jsonify({"error": "Invalid authentication"}), 401
         
         article_data = request.get_json()
-        # Ưu tiên sử dụng article_id từ frontend, fallback về id/news_id
+        # Prefer using article_id from frontend, fallback to id/news_id
         article_id = (article_data.get('article_id') or 
                     article_data.get('id') or 
                     article_data.get('news_id') or 
                     str(hash(str(article_data))))
         
-        # Kiểm tra bookmark đã tồn tại
+        # Check if bookmark exists
         if check_bookmark_exists(user.id, article_id):
-            # Xóa bookmark
+            # Remove bookmark
             remove_bookmark_by_article(user.id, article_id)
             return jsonify({"action": "removed", "bookmarked": False}), 200
         else:
-            # Thêm bookmark
+            # Add bookmark
             new_bookmark = add_bookmark(user.id, article_data)
             return jsonify({"action": "added", "bookmarked": True, "bookmark": new_bookmark}), 201
             
@@ -142,50 +142,50 @@ def handle_delete_bookmark(bookmark_id):
     try:
         user = get_user_from_token(request)
         if not user:
-            return jsonify({"error": "Xác thực không hợp lệ"}), 401
+            return jsonify({"error": "Invalid authentication"}), 401
         
         delete_bookmark(user.id, bookmark_id)
-        return jsonify({"message": "Bookmark đã được xóa"}), 200
+        return jsonify({"message": "Bookmark has been deleted"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
 @app.route('/api/stocks/<string:ticker>/history', methods=['GET'])
 def stock_history_endpoint(ticker):
     """
-    Endpoint này trả về dữ liệu lịch sử giá của một cổ phiếu
-    lấy từ cache trên Redis.
+    This endpoint returns historical price data for a stock
+    fetched from cache on Redis.
     """
     try:
-        # Lấy tham số 'range' từ URL, nếu không có thì mặc định là 'all'
+        # Get 'range' parameter from URL, default to 'all' if not present
         time_range = request.args.get('range', 'all')
         
-        # Chuyển mã ticker thành chữ hoa để đảm bảo tính nhất quán
+        # Convert ticker code to uppercase for consistency
         ticker_upper = ticker.upper()
         
         print(f"Fetching stock data for {ticker_upper} with range {time_range}")
         
-        # Gọi hàm service mới với cả ticker và time_range
+        # Call new service function with both ticker and time_range
         stock_data = get_stock_data_from_redis(ticker_upper, time_range)
 
         if not stock_data:
-            return jsonify({"error": f"Không tìm thấy dữ liệu cho {ticker_upper} với khung thời gian {time_range}"}), 404
+            return jsonify({"error": f"No data found for {ticker_upper} with time range {time_range}"}), 404
 
         return jsonify(stock_data)
 
     except Exception as e:
         print(f"Error fetching stock history: {e}")
-        return jsonify({"error": "Lỗi khi lấy dữ liệu lịch sử từ server"}), 500
+        return jsonify({"error": "Error fetching historical data from server"}), 500
 
-# Debug endpoint để kiểm tra Redis stock keys
+# Debug endpoint to check Redis stock keys
 @app.route('/api/debug/redis-stock-keys', methods=['GET'])
 def debug_redis_stock_keys():
-    """Debug endpoint để xem có keys nào trong Redis stock"""
+    """Debug endpoint to view keys in Redis stock"""
     try:
         from .services import redis_client_stock
         if not redis_client_stock:
             return jsonify({"error": "Redis stock connection not available"}), 500
         
-        # Lấy tất cả keys pattern stock:*
+        # Get all keys with pattern stock:*
         keys = redis_client_stock.keys('stock:*')
         return jsonify({"keys": keys, "total": len(keys)})
     except Exception as e:

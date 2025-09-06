@@ -1,6 +1,6 @@
 """
 Crawlers Package
-Chứa tất cả các crawler cho các trang tin tức khác nhau
+Contains all crawlers for different news websites
 """
 
 from .fireant_crawler import crawl_fireant

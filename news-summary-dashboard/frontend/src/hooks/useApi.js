@@ -19,7 +19,7 @@ export const useNews = (filters = {}) => {
         const response = await axios.get(`${API_BASE_URL}/api/news`, { params });
         setNews(response.data);
         } catch (err) {
-        setError(err.response?.data?.error || 'Không thể tải dữ liệu tin tức');
+        setError(err.response?.data?.error || 'Unable to load news data');
         } finally {
         setLoading(false);
         }
@@ -73,13 +73,13 @@ export const useDashboardNews = () => {
 
         const params = new URLSearchParams();
 
-        // **LOGIC CHUẨN: Ưu tiên bộ lọc công ty**
+        // **STANDARD LOGIC: Prioritize company filter**
         const key = filters.company || translateIndustryToEnglish(filters.industry);
         if (key) {
             params.append("industry", key);
         }
 
-        // Các bộ lọc khác
+        // Other filters
         const sentimentTranslated = translateSentiment(filters.sentiment);
         if (sentimentTranslated) params.append("sentiment", sentimentTranslated);
         if (filters.date) params.append("date", filters.date);
@@ -94,7 +94,7 @@ export const useDashboardNews = () => {
 
         try {
             const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error("Lỗi mạng hoặc server không phản hồi");
+            if (!response.ok) throw new Error("Network error or server not responding");
             const data = await response.json();
             
             // Handle both old format (array) and new format (object with pagination)
@@ -123,7 +123,7 @@ export const useDashboardNews = () => {
             }
         } catch (err) {
             console.error("Error fetching dashboard news:", err.message);
-            setError("Không thể tải dữ liệu tin tức.");
+            setError("Unable to load news data.");
             setNews([]);
             setPagination({
                 total: 0,
@@ -162,14 +162,14 @@ export const useBookmarks = () => {
         });
         setBookmarks(response.data);
         } catch (err) {
-        setError(err.response?.data?.error || 'Không thể tải danh sách bookmark');
+        setError(err.response?.data?.error || 'Unable to load bookmarks list');
         } finally {
         setLoading(false);
         }
     }, [session?.access_token]); // Only depend on access_token
 
     const addBookmark = useCallback(async (articleData) => {
-        if (!session?.access_token) throw new Error('Chưa đăng nhập');
+        if (!session?.access_token) throw new Error('Not logged in');
         
         try {
         const response = await axios.post(
@@ -184,12 +184,12 @@ export const useBookmarks = () => {
         setBookmarks(prev => [response.data, ...prev]);
         return response.data;
         } catch (err) {
-        throw new Error(err.response?.data?.error || 'Không thể thêm bookmark');
+        throw new Error(err.response?.data?.error || 'Unable to add bookmark');
         }
     }, [session?.access_token]);
 
     const removeBookmark = useCallback(async (bookmarkId) => {
-        if (!session?.access_token) throw new Error('Chưa đăng nhập');
+        if (!session?.access_token) throw new Error('Not logged in');
         
         try {
         await axios.delete(`${API_BASE_URL}/api/bookmarks/${bookmarkId}`, {
@@ -199,7 +199,7 @@ export const useBookmarks = () => {
         });
         setBookmarks(prev => prev.filter(bookmark => bookmark.id !== bookmarkId));
         } catch (err) {
-        throw new Error(err.response?.data?.error || 'Không thể xóa bookmark');
+        throw new Error(err.response?.data?.error || 'Unable to remove bookmark');
         }
     }, [session?.access_token]);
 
@@ -217,12 +217,12 @@ export const useBookmarks = () => {
     };
 };
 
-// Lightweight hook chỉ cho bookmark actions (không fetch data)
+// Lightweight hook for bookmark actions only (no data fetching)
 export const useBookmarkActions = () => {
     const { session } = useAuth();
 
     const toggleBookmark = useCallback(async (articleData, articleId = null) => {
-        if (!session?.access_token) throw new Error('Chưa đăng nhập');
+        if (!session?.access_token) throw new Error('Not logged in');
         
         try {
         const response = await axios.post(
@@ -239,12 +239,12 @@ export const useBookmarkActions = () => {
         );
         return response.data;
         } catch (err) {
-        throw new Error(err.response?.data?.error || 'Không thể thay đổi bookmark');
+        throw new Error(err.response?.data?.error || 'Unable to toggle bookmark');
         }
     }, [session?.access_token]);
 
     const addBookmark = useCallback(async (articleData) => {
-        if (!session?.access_token) throw new Error('Chưa đăng nhập');
+        if (!session?.access_token) throw new Error('Not logged in');
         
         try {
         const response = await axios.post(
@@ -258,12 +258,12 @@ export const useBookmarkActions = () => {
         );
         return response.data;
         } catch (err) {
-        throw new Error(err.response?.data?.error || 'Không thể thêm bookmark');
+        throw new Error(err.response?.data?.error || 'Unable to add bookmark');
         }
     }, [session?.access_token]);
 
     const removeBookmark = useCallback(async (bookmarkId) => {
-        if (!session?.access_token) throw new Error('Chưa đăng nhập');
+        if (!session?.access_token) throw new Error('Not logged in');
         
         try {
         await axios.delete(`${API_BASE_URL}/api/bookmarks/${bookmarkId}`, {
@@ -272,7 +272,7 @@ export const useBookmarkActions = () => {
             },
         });
         } catch (err) {
-        throw new Error(err.response?.data?.error || 'Không thể xóa bookmark');
+        throw new Error(err.response?.data?.error || 'Unable to remove bookmark');
         }
     }, [session?.access_token]);
 
@@ -298,7 +298,7 @@ export const useStockData = (ticker, timeRange = 'all') => {
         );
         setStockData(response.data);
         } catch (err) {
-        setError(err.response?.data?.error || 'Không thể tải dữ liệu cổ phiếu');
+        setError(err.response?.data?.error || 'Unable to load stock data');
         } finally {
         setLoading(false);
         }

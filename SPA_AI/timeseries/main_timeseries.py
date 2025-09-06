@@ -40,11 +40,11 @@ class TimeseriesPipeline:
         # Available stock codes
         self.available_stocks = ["FPT", "GAS", "IMP", "VCB"]
         
-        logger.info("🚀 Timeseries Pipeline initialized")
+        logger.info("Timeseries Pipeline initialized")
     
     def _get_predictor(self, stock_code: str, model_path: str = None) -> StockPredictor:
         """
-        Get or create a predictor for specific stock using centralized database
+        Get or create a predictor for a specific stock using the centralized database
         
         Args:
             stock_code: Stock code (e.g., 'FPT', 'GAS')
@@ -56,7 +56,7 @@ class TimeseriesPipeline:
         if stock_code not in self.predictors:
             # Default model path if not provided
             if model_path is None:
-                # Use relative path from timeseries directory
+                # Use relative path from the timeseries directory
                 model_path = os.path.join(current_dir, "..", "model_AI", "timeseries_model", "model_lstm", "LSTM_missing10_window15.keras")
             
             # Create stock table name
@@ -81,7 +81,7 @@ class TimeseriesPipeline:
         Returns:
             Dictionary with prediction results
         """
-        logger.info(f"🎯 Starting prediction for {stock_code}")
+        logger.info(f"Starting prediction for {stock_code}")
         
         try:
             # Get predictor
@@ -96,7 +96,7 @@ class TimeseriesPipeline:
                     'predictions': None
                 }
             
-            # Load window data (15 days for current model)
+            # Load window data (15 days for the current model)
             df_window = predictor.load_last_window_data()
             if df_window is None or len(df_window) < predictor.window_size:
                 return {
@@ -138,11 +138,11 @@ class TimeseriesPipeline:
                 'total_predictions': len(predictions)
             }
             
-            logger.info(f"✅ Successfully predicted {stock_code}: {len(predictions)} predictions")
+            logger.info(f"Successfully predicted {stock_code}: {len(predictions)} predictions")
             return result
             
         except Exception as e:
-            logger.error(f"❌ Error predicting {stock_code}: {e}")
+            logger.error(f"Error predicting {stock_code}: {e}")
             return {
                 'stock_code': stock_code,
                 'status': 'error',
@@ -161,7 +161,7 @@ class TimeseriesPipeline:
         Returns:
             Dictionary with aggregated results
         """
-        logger.info(f"🎯 Starting predictions for {len(stock_codes)} stocks: {stock_codes}")
+        logger.info(f"Starting predictions for {len(stock_codes)} stocks: {stock_codes}")
         
         results = []
         successful_predictions = 0
@@ -169,7 +169,7 @@ class TimeseriesPipeline:
         
         for stock_code in stock_codes:
             if stock_code not in self.available_stocks:
-                logger.warning(f"⚠️ Stock code {stock_code} not in available stocks: {self.available_stocks}")
+                logger.warning(f"Stock code {stock_code} not in available stocks: {self.available_stocks}")
                 continue
             
             result = self.predict_single_stock(stock_code, model_path)
@@ -192,7 +192,7 @@ class TimeseriesPipeline:
             'results': results
         }
         
-        logger.info(f"📊 Prediction Summary: {successful_predictions}/{total_stocks} successful ({success_rate:.1f}%)")
+        logger.info(f"Prediction Summary: {successful_predictions}/{total_stocks} successful ({success_rate:.1f}%)")
         
         self.results = summary
         return summary
@@ -207,7 +207,7 @@ class TimeseriesPipeline:
         Returns:
             Dictionary with aggregated results
         """
-        logger.info(f"🎯 Starting predictions for all available stocks: {self.available_stocks}")
+        logger.info(f"Starting predictions for all available stocks: {self.available_stocks}")
         return self.predict_specific_stocks(self.available_stocks, model_path)
     
     def get_stock_prediction_status(self, stock_code: str) -> Dict[str, Any]:
@@ -244,7 +244,7 @@ class TimeseriesPipeline:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error checking status for {stock_code}: {e}")
+            logger.error(f"Error checking status for {stock_code}: {e}")
             return {
                 'stock_code': stock_code,
                 'error': str(e)
@@ -257,7 +257,7 @@ class TimeseriesPipeline:
         Returns:
             Dictionary with system status
         """
-        logger.info("📊 Checking timeseries system status...")
+        logger.info("Checking timeseries system status...")
         
         stock_status = []
         total_predictions = 0
@@ -281,7 +281,7 @@ class TimeseriesPipeline:
             'last_checked': datetime.now().isoformat()
         }
         
-        logger.info(f"📈 System Status: {stocks_with_predictions}/{len(self.available_stocks)} stocks have predictions")
+        logger.info(f"System Status: {stocks_with_predictions}/{len(self.available_stocks)} stocks have predictions")
         return system_status
     
     def close_connections(self):
@@ -289,9 +289,9 @@ class TimeseriesPipeline:
         if hasattr(self, 'db_manager') and self.db_manager:
             try:
                 self.db_manager.close_connections()
-                logger.info("🔒 Database connections closed")
+                logger.info("Database connections closed")
             except Exception as e:
-                logger.warning(f"⚠️ Error closing connections: {e}")
+                logger.warning(f"Error closing connections: {e}")
 
 
 def main():
@@ -306,29 +306,29 @@ def main():
     try:
         # Show system status
         logger.info("="*60)
-        logger.info("📊 TIMESERIES SYSTEM STATUS")
+        logger.info("TIMESERIES SYSTEM STATUS")
         logger.info("="*60)
         
         status = pipeline.get_system_status()
-        logger.info(f"📈 Coverage: {status['stocks_with_predictions']}/{status['total_stocks']} stocks")
-        logger.info(f"📊 Recent predictions: {status['total_recent_predictions']}")
+        logger.info(f"Coverage: {status['stocks_with_predictions']}/{status['total_stocks']} stocks")
+        logger.info(f"Recent predictions: {status['total_recent_predictions']}")
         
         # Run predictions for all stocks
         logger.info("\n" + "="*60)
-        logger.info("🚀 RUNNING PREDICTIONS FOR ALL STOCKS")
+        logger.info("RUNNING PREDICTIONS FOR ALL STOCKS")
         logger.info("="*60)
         
         results = pipeline.predict_all_stocks()
         
         # Print results summary
         logger.info("\n" + "="*60)
-        logger.info("📋 PREDICTION RESULTS SUMMARY")
+        logger.info("PREDICTION RESULTS SUMMARY")
         logger.info("="*60)
         
-        logger.info(f"📊 Total stocks processed: {results['total_stocks']}")
-        logger.info(f"✅ Successful predictions: {results['successful_predictions']}")
-        logger.info(f"❌ Failed predictions: {results['failed_predictions']}")
-        logger.info(f"📈 Success rate: {results['success_rate']:.1f}%")
+        logger.info(f"Total stocks processed: {results['total_stocks']}")
+        logger.info(f"Successful predictions: {results['successful_predictions']}")
+        logger.info(f"Failed predictions: {results['failed_predictions']}")
+        logger.info(f"Success rate: {results['success_rate']:.1f}%")
         
         # Print details for each stock
         for result in results['results']:
@@ -337,15 +337,15 @@ def main():
             
             if status == 'success':
                 pred_count = result['total_predictions']
-                logger.info(f"✅ {stock_code}: {pred_count} predictions made")
+                logger.info(f"{stock_code}: {pred_count} predictions made")
             else:
                 error = result['error']
-                logger.info(f"❌ {stock_code}: {error}")
+                logger.info(f"{stock_code}: {error}")
         
     except KeyboardInterrupt:
-        logger.info("\n⚠️ Process interrupted by user")
+        logger.info("\nProcess interrupted by user")
     except Exception as e:
-        logger.error(f"💥 Pipeline error: {e}")
+        logger.error(f"Pipeline error: {e}")
         raise
     finally:
         pipeline.close_connections()

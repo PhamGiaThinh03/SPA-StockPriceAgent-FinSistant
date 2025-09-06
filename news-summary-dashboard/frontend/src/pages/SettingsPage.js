@@ -84,7 +84,7 @@ const SettingsPage = () => {
             } else if (data) {
             setFullName(data.full_name || "");
             setAvatarUrl(data.avatar_url);
-            // Giả sử notification_preferences có dạng { industries: ["Công nghệ", ...] }
+            // Assume notification_preferences is in the form { industries: ["Technology", ...] }
             setInterestedIndustries(
                 data.notification_preferences?.industries || []
             );
@@ -112,34 +112,34 @@ const SettingsPage = () => {
 
         if (error) {
         toast({
-            title: "Lỗi cập nhật hồ sơ",
+            title: "Profile update error",
             description: error.message,
             status: "error",
         });
         } else {
-        toast({ title: "Hồ sơ đã được cập nhật!", status: "success" });
+        toast({ title: "Profile updated successfully!", status: "success" });
         }
     };
 
     const handlePasswordChange = async () => {
         if (password !== confirmPassword) {
-        toast({ title: "Mật khẩu không khớp", status: "error" });
+        toast({ title: "Passwords do not match", status: "error" });
         return;
         }
         if (password.length < 6) {
-        toast({ title: "Mật khẩu phải có ít nhất 6 ký tự", status: "warning" });
+        toast({ title: "Password must be at least 6 characters", status: "warning" });
         return;
         }
 
         const { error } = await supabase.auth.updateUser({ password: password });
         if (error) {
         toast({
-            title: "Lỗi đổi mật khẩu",
+            title: "Password change error",
             description: error.message,
             status: "error",
         });
         } else {
-        toast({ title: "Đổi mật khẩu thành công!", status: "success" });
+        toast({ title: "Password changed successfully!", status: "success" });
         setPassword("");
         setConfirmPassword("");
         }
@@ -163,7 +163,7 @@ const SettingsPage = () => {
                     </Text>
                 </Box>
 
-                {/* Tabs với design mới */}
+                {/* Tabs with new design */}
                 <Tabs variant="unstyled" colorScheme="blue" isFitted>
                     <TabList 
                         bg={cardBg} 
@@ -244,7 +244,7 @@ const SettingsPage = () => {
                                                     variant="outline"
                                                     colorScheme="blue"
                                                 >
-                                                    Đổi ảnh đại diện
+                                                    Change avatar
                                                 </Button>
                                             </Flex>
                                             
@@ -252,7 +252,7 @@ const SettingsPage = () => {
                                                 <FormControl>
                                                     <FormLabel fontWeight="semibold">
                                                         <Icon as={FiUser} mr={2} />
-                                                        Tên đầy đủ
+                                                        Full Name
                                                     </FormLabel>
                                                     <Input
                                                         value={fullName}
@@ -282,7 +282,7 @@ const SettingsPage = () => {
                                                     leftIcon={<Icon as={FiSave} />}
                                                     onClick={handleUpdateProfile}
                                                 >
-                                                    Lưu thay đổi
+                                                    Save changes
                                                 </Button>
                                             </VStack>
                                         </VStack>
@@ -294,13 +294,13 @@ const SettingsPage = () => {
                                     <CardHeader>
                                         <Flex align="center">
                                             <Icon as={FiLock} color="orange.500" mr={3} />
-                                            <Heading size="md">Đổi mật khẩu</Heading>
+                                            <Heading size="md">Change Password</Heading>
                                         </Flex>
                                     </CardHeader>
                                     <CardBody>
                                         <VStack spacing={4}>
                                             <FormControl>
-                                                <FormLabel fontWeight="semibold">Mật khẩu mới</FormLabel>
+                                                <FormLabel fontWeight="semibold">New Password</FormLabel>
                                                 <Input
                                                     type="password"
                                                     value={password}
@@ -312,7 +312,7 @@ const SettingsPage = () => {
                                             </FormControl>
                                             
                                             <FormControl>
-                                                <FormLabel fontWeight="semibold">Xác nhận mật khẩu mới</FormLabel>
+                                                <FormLabel fontWeight="semibold">Confirm New Password</FormLabel>
                                                 <Input
                                                     type="password"
                                                     value={confirmPassword}
@@ -329,7 +329,7 @@ const SettingsPage = () => {
                                                 w="full"
                                                 leftIcon={<Icon as={FiLock} />}
                                             >
-                                                Đổi mật khẩu
+                                                Change Password
                                             </Button>
                                         </VStack>
                                     </CardBody>
@@ -343,7 +343,7 @@ const SettingsPage = () => {
                                 <CardHeader>
                                     <Flex align="center">
                                         <Icon as={FiBell} color="green.500" mr={3} />
-                                        <Heading size="md">Cài đặt thông báo</Heading>
+                                        <Heading size="md">Notification Settings</Heading>
                                     </Flex>
                                 </CardHeader>
                                 <CardBody>
@@ -358,9 +358,9 @@ const SettingsPage = () => {
                                             borderColor="green.200"
                                         >
                                             <Box>
-                                                <Text fontWeight="semibold">Thông báo qua Email</Text>
+                                                <Text fontWeight="semibold">Email Notifications</Text>
                                                 <Text fontSize="sm" color="gray.600">
-                                                    Nhận cập nhật tin tức và phân tích qua email
+                                                    Receive news and analysis updates via email
                                                 </Text>
                                             </Box>
                                             <Switch
@@ -373,7 +373,7 @@ const SettingsPage = () => {
                                         
                                         <Box>
                                             <Text fontWeight="semibold" mb={3}>
-                                                Nhận thông báo cho các ngành:
+                                                Receive notifications for industries:
                                             </Text>
                                             <CheckboxGroup
                                                 colorScheme="blue"
@@ -404,7 +404,7 @@ const SettingsPage = () => {
                                             colorScheme="green"
                                             leftIcon={<Icon as={FiSave} />}
                                         >
-                                            Lưu cài đặt thông báo
+                                            Save notification settings
                                         </Button>
                                     </VStack>
                                 </CardBody>
@@ -419,7 +419,7 @@ const SettingsPage = () => {
                                     <CardHeader>
                                         <Flex align="center">
                                             <Icon as={FiSettings} color="gray.500" mr={3} />
-                                            <Heading size="md">Quản lý tài khoản</Heading>
+                                            <Heading size="md">Account Management</Heading>
                                         </Flex>
                                     </CardHeader>
                                     <CardBody>
@@ -443,7 +443,7 @@ const SettingsPage = () => {
                                                 }
                                             }}
                                         >
-                                            Đăng xuất
+                                            Log Out
                                         </Button>
                                     </CardBody>
                                 </Card>
@@ -460,20 +460,20 @@ const SettingsPage = () => {
                                         <Flex align="center">
                                             <Icon as={FiTrash2} color="red.500" mr={3} />
                                             <Heading size="md" color="red.600">
-                                                Vùng nguy hiểm
+                                                Danger Zone
                                             </Heading>
                                         </Flex>
                                     </CardHeader>
                                     <CardBody>
                                         <Text mb={4} color="red.700" _dark={{ color: "red.300" }}>
-                                            Hành động này không thể hoàn tác. Toàn bộ dữ liệu của bạn sẽ bị xóa vĩnh viễn.
+                                            This action cannot be undone. All your data will be permanently deleted.
                                         </Text>
                                         <Button 
                                             colorScheme="red"
                                             leftIcon={<Icon as={FiTrash2} />}
                                             size="lg"
                                         >
-                                            Xóa tài khoản
+                                            Delete Account
                                         </Button>
                                     </CardBody>
                                 </Card>

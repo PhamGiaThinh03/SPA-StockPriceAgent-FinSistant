@@ -20,10 +20,10 @@ try:
     # Create WSGI application
     application = app
     
-    print("✅ Successfully loaded Flask app from app.routes")
+    print("Successfully loaded Flask app from app.routes")
     
 except ImportError as e:
-    print(f"❌ Import error: {e}")
+    print(f"Import error: {e}")
     print("Creating fallback Flask app...")
     
     # Fallback: create a simple Flask app if import fails
@@ -51,7 +51,7 @@ except ImportError as e:
     application = app
 
 except Exception as e:
-    print(f"❌ Unexpected error: {e}")
+    print(f"Unexpected error: {e}")
     # Last resort fallback
     from flask import Flask, jsonify
     app = Flask(__name__)
@@ -65,5 +65,5 @@ except Exception as e:
 if __name__ == '__main__':
     # Force port 7860 for HF Spaces (ignore PORT from .env to avoid DB port conflict)
     port = 7860
-    print(f"🚀 Starting WSGI app on port {port}")
+    print(f"Starting WSGI app on port {port}")
     application.run(host='0.0.0.0', port=port, debug=False)

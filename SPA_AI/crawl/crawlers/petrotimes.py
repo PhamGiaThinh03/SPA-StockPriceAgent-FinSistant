@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-⛽ PETROTIMES.VN CRAWLER - SPA-VIP PROFESSIONAL EDITION
+PETROTIMES.VN CRAWLER - SPA-VIP PROFESSIONAL EDITION
 =======================================================
-Crawl chuyên nghiệp từ petrotimes.vn với:
+Professional crawling from petrotimes.vn with:
 - Centralized database integration
 - Professional error handling & logging  
 - Deduplication logic
@@ -26,7 +26,7 @@ import warnings
 import logging
 from urllib.parse import urljoin, urlparse
 
-# 🔇 Tắt hoàn toàn các warning và log không cần thiết
+# Disable all unnecessary warnings and logs
 warnings.filterwarnings("ignore")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('selenium').setLevel(logging.ERROR)
@@ -39,37 +39,37 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from database import SupabaseManager, DatabaseConfig, format_datetime_for_db
 
 # ============================================
-# 🔧 CONSTANTS & CONFIGURATION
+# CONSTANTS & CONFIGURATION
 # ============================================
 PETROTIMES_BASE_URL = "https://petrovietnam.petrotimes.vn"
 PETROTIMES_PVGAS_URL = "https://petrovietnam.petrotimes.vn/tag/pv-gas-5931.tag"
 PETROTIMES_GENERAL_URL = "https://petrovietnam.petrotimes.vn/dau-khi"
 
-WAIT_SEC = 5  # Timeout cho WebDriverWait
+WAIT_SEC = 5  # Timeout for WebDriverWait
 
 # ============================================
-# 🔧 HELPER FUNCTIONS
+# HELPER FUNCTIONS
 # ============================================
 def get_recent_links_from_db(db_manager, table_name, limit=100):
-    """Lấy 100 link bài viết gần nhất từ database để tối ưu crawling"""
+    """Get 100 most recent article links from database to optimize crawling"""
     try:
         supabase_client = db_manager.get_supabase_client()
-        # Thử dùng created_at trước, fallback sang id
+        # Try using created_at first, fallback to id
         try:
             result = supabase_client.table(table_name).select("link").order("created_at", desc=True).limit(limit).execute()
         except Exception:
-            # Fallback: sử dụng id hoặc không order
+            # Fallback: use id or no order
             try:
                 result = supabase_client.table(table_name).select("link").order("id", desc=True).limit(limit).execute()
             except Exception:
-                # Fallback cuối: chỉ lấy link không order
+                # Final fallback: just get links without order
                 result = supabase_client.table(table_name).select("link").limit(limit).execute()
         
         if result.data:
             return set(item['link'] for item in result.data if item.get('link'))
         return set()
     except Exception as e:
-        print(f"❌ Lỗi khi lấy links từ DB: {e}")
+        print(f"Error getting links from DB: {e}")
         return set()
 
 def get_database_manager():
@@ -82,19 +82,19 @@ def get_table_name(stock_code=None, is_general=False):
     return config.get_table_name(stock_code=stock_code, is_general=is_general)
 
 def clean_text(s: str) -> str:
-    """Dọn dẹp text: loại bỏ whitespace thừa"""
+    """Clean up text: remove extra whitespace"""
     if not s:
         return ""
     s = re.sub(r"\s+", " ", s)
     return s.strip()
 
 # ============================================
-# 🕐 DATETIME PARSING FUNCTIONS
+# DATETIME PARSING FUNCTIONS
 # ============================================
 def parse_petrotimes_datetime(raw_text):
     """
-    Parse datetime từ petrotimes.vn
-    Format thường gặp: 
+    Parse datetime from petrotimes.vn
+    Common formats: 
     - "19:37 | 15/08/2025"
     - "15:30 | 16/08/2025"
     - "hôm nay 10:30"
@@ -108,7 +108,7 @@ def parse_petrotimes_datetime(raw_text):
     raw_text = raw_text.lower()
     
     try:
-        # Xử lý "hôm nay" và "hôm qua"
+        # Handle "today" and "yesterday"
         if "hôm nay" in raw_text:
             time_match = re.search(r"(\d{1,2}):(\d{2})", raw_text)
             if time_match:
@@ -123,7 +123,7 @@ def parse_petrotimes_datetime(raw_text):
                 yesterday = datetime.now() - timedelta(days=1)
                 return yesterday.replace(hour=hour, minute=minute, second=0, microsecond=0)
 
-        # Xử lý format Petrotimes: "19:37 | 15/08/2025"
+        # Handle Petrotimes format: "19:37 | 15/08/2025"
         petrotimes_pattern = re.search(r"(\d{1,2}):(\d{2})\s*\|\s*(\d{1,2})/(\d{1,2})/(\d{4})", original_text)
         if petrotimes_pattern:
             hour, minute, day, month, year = map(int, petrotimes_pattern.groups())
@@ -135,13 +135,13 @@ def parse_petrotimes_datetime(raw_text):
             day, month, year, hour, minute = map(int, date_time_pattern.groups())
             return datetime(year, month, day, hour, minute)
             
-        # Pattern 3: Chỉ có ngày "15/08/2025"
+        # Pattern 3: Only date "15/08/2025"
         date_pattern = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})", original_text)
         if date_pattern:
             day, month, year = map(int, date_pattern.groups())
             return datetime(year, month, day, 0, 0)
         
-        # Fallback: thử parse với dateutil
+        # Fallback: try parsing with dateutil
         try:
             return parser.parse(original_text, fuzzy=True)
         except:
@@ -150,20 +150,20 @@ def parse_petrotimes_datetime(raw_text):
         return None
 
     except Exception as e:
-        print(f"⚠️ Lỗi parse datetime Petrotimes: '{original_text}' ({e})")
+        print(f"Warning parsing Petrotimes datetime: '{original_text}' ({e})")
         return None
 
 def format_datetime_obj(dt):
-    """Format datetime object cho database"""
+    """Format datetime object for database"""
     return format_datetime_for_db(dt)
 
 # ============================================
-# 🔧 SELENIUM SETUP
+# SELENIUM SETUP
 # ============================================
 def setup_driver():
-    """Setup Chrome driver với các option tối ưu"""
+    """Setup Chrome driver with optimal options"""
     options = Options()
-    options.add_argument("--headless")  # Chạy ẩn để tối ưu performance
+    options.add_argument("--headless")  # Run headless for optimal performance
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
@@ -180,15 +180,15 @@ def setup_driver():
     return driver
 
 # ============================================
-# 🔍 LINK COLLECTION FUNCTIONS
+# LINK COLLECTION FUNCTIONS
 # ============================================
 def collect_article_links_on_tag_page(driver):
     """
-    Thu thập link bài viết trên trang tag Petrotimes
+    Collect article links on Petrotimes tag page
     """
     links = []
     
-    # Các selector khả dĩ cho Petrotimes
+    # Possible selectors for Petrotimes
     selectors = [
         "ul.list-news li h2 a",
         "ul.list-news li h3 a", 
@@ -211,7 +211,7 @@ def collect_article_links_on_tag_page(driver):
         except Exception:
             continue
     
-    # Fallback: tìm tất cả links có chứa petrotimes
+    # Fallback: find all links containing petrotimes
     if not links:
         try:
             all_links = driver.find_elements(By.CSS_SELECTOR, "a[href]")
@@ -227,22 +227,22 @@ def collect_article_links_on_tag_page(driver):
 
 def collect_links_from_single_page(driver):
     """
-    Thu thập links từ trang hiện tại (chỉ 1 trang)
+    Collect links from current page (single page)
     """
     current_links = collect_article_links_on_tag_page(driver)
     return current_links
 
 # ============================================
-# 📄 ARTICLE EXTRACTION FUNCTIONS  
+# ARTICLE EXTRACTION FUNCTIONS  
 # ============================================
 def extract_article(driver, url):
     """
-    Trích xuất thông tin chi tiết từ một bài viết Petrotimes
+    Extract detailed information from a Petrotimes article
     """
     try:
         driver.get(url)
         
-        # Đợi page load
+        # Wait for page to load
         try:
             WebDriverWait(driver, WAIT_SEC).until(
                 EC.presence_of_element_located(
@@ -254,7 +254,7 @@ def extract_article(driver, url):
         
         soup = BeautifulSoup(driver.page_source, "html.parser")
         
-        # 📰 Title
+        # Title
         title = ""
         title_selectors = [
             "h1.detail-title",
@@ -271,7 +271,7 @@ def extract_article(driver, url):
                 title = clean_text(title_element.get_text())
                 break
         
-        # 🕐 Time - Format Petrotimes: "19:37 | 15/08/2025"
+        # Time - Petrotimes format: "19:37 | 15/08/2025"
         time_text = ""
         time_selectors = [
             "div.published-dated.clearfix p",
@@ -291,10 +291,10 @@ def extract_article(driver, url):
                 time_text = clean_text(time_element.get_text())
                 break
         
-        # 📝 Content
+        # Content
         content_parts = []
         
-        # Thử lấy content từ các container của Petrotimes
+        # Try to get content from Petrotimes containers
         content_selectors = [
             "div.colLeftDetails div.boxTextDetails",
             "div.colLeftDetails",
@@ -312,12 +312,12 @@ def extract_article(driver, url):
                 paragraphs = content_div.find_all("p")
                 for p in paragraphs:
                     txt = clean_text(p.get_text())
-                    if txt and len(txt) > 20:  # Lọc bỏ đoạn ngắn
+                    if txt and len(txt) > 20:  # Filter out short paragraphs
                         content_parts.append(txt)
                 if content_parts:
                     break
         
-        # Fallback: lấy tất cả <p> trong body
+        # Fallback: get all <p> in body
         if not content_parts:
             paragraphs = soup.find_all("p")
             for p in paragraphs:
@@ -327,28 +327,28 @@ def extract_article(driver, url):
         
         content = "\n\n".join(content_parts).strip()
         
-        # 🔗 Source link extraction (nếu có)
+        # Source link extraction (if available)
         source_link = extract_source_link_from_article(soup)
         
-        print(f"🕒 Found time: '{time_text}'")
+        print(f"Found time: '{time_text}'")
         
         return {
             "title": title,
             "content": content,
             "link": url,
-            "ai_summary": "",  # Có thể thêm AI summary sau
+            "ai_summary": "",  # AI summary can be added later
             "fuzzy_time": time_text,
             "source_link": source_link,
         }
         
     except Exception as e:
-        print(f"❌ Lỗi khi crawl bài viết: {url} ({e})")
+        print(f"Error crawling article: {url} ({e})")
         return {}
 
 def extract_source_link_from_article(soup):
-    """Tìm link gốc trong bài viết Petrotimes (nếu có)"""
+    """Find original link in Petrotimes article (if available)"""
     try:
-        # Tìm trong div content hoặc main content
+        # Search in div content or main content
         content_div = soup.select_one("div.colLeftDetails") or soup.select_one(".detail-content")
         if not content_div:
             return None
@@ -372,14 +372,14 @@ def extract_source_link_from_article(soup):
 
         KEYWORDS = ("nguồn", "source", "xem thêm", "đọc thêm", "chi tiết")
 
-        # Ưu tiên các anchor có text phù hợp
+        # Prioritize anchors with matching text
         for a in reversed(anchors):
             text = (a.get_text(strip=True) or "").lower()
             href = normalize_href(a.get("href", ""))
             if any(k in text for k in KEYWORDS) and is_external(href):
                 return href
 
-        # Fallback: lấy external link cuối cùng
+        # Fallback: get last external link
         for a in reversed(anchors):
             href = normalize_href(a.get("href", ""))
             if is_external(href):
@@ -390,7 +390,7 @@ def extract_source_link_from_article(soup):
         return None
 
 # ============================================
-# 💾 DATABASE OPERATIONS
+# DATABASE OPERATIONS
 # ============================================
 def insert_article_to_database(db_manager, table_name, article_data):
     """Insert article using centralized database system"""
@@ -410,43 +410,43 @@ def insert_article_to_database(db_manager, table_name, article_data):
     return db_manager.insert_article(table_name, article_data)
 
 # ============================================
-# 🎯 MAIN CRAWLING FUNCTIONS
+# MAIN CRAWLING FUNCTIONS
 # ============================================
 def crawl_petrotimes_gas(table_name="GAS_News", db_manager=None):
     """
-    Crawl petrotimes.vn cho GAS (PV GAS) - chuyên biệt cho bảng GAS_News
+    Crawl petrotimes.vn for GAS (PV GAS) - specialized for GAS_News table
     """
     start_time = time.time()
     
-    # Tạo db_manager nếu không được truyền vào
+    # Create db_manager if not provided
     if db_manager is None:
         db_manager = get_database_manager()
     
     print(f"\n===============================================================================")
-    print(f"⛽ Petrotimes Crawler - Stock: GAS (PV GAS)")
-    print(f"📋 Table: {table_name}")
+    print(f"Petrotimes Crawler - Stock: GAS (PV GAS)")
+    print(f"Table: {table_name}")
     
-    # Lấy existing links từ DB
+    # Get existing links from DB
     existing_links = get_recent_links_from_db(db_manager, table_name, 100)
-    print(f"📊 Found {len(existing_links)} existing articles in DB (last 100)")
+    print(f"Found {len(existing_links)} existing articles in DB (last 100)")
     
     source_url = PETROTIMES_PVGAS_URL
-    print(f"🔍 Searching Petrotimes for: PV GAS")
-    print(f"🌐 URL: {source_url}")
+    print(f"Searching Petrotimes for: PV GAS")
+    print(f"URL: {source_url}")
     
     driver = setup_driver()
     
     try:
-        # Mở trang
+        # Open page
         driver.get(source_url)
         
-        # Đợi page load
+        # Wait for page to load
         try:
             WebDriverWait(driver, WAIT_SEC).until(
                 EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.bx-title, ul.list-news li a"))
             )
         except TimeoutException:
-            print("⚠️ Không tìm thấy danh sách bài viết")
+            print("Warning: Article list not found")
             return {
                 'stock_code': 'GAS',
                 'duration': time.time() - start_time,
@@ -456,62 +456,62 @@ def crawl_petrotimes_gas(table_name="GAS_News", db_manager=None):
                 'stopped_early': False
             }
         
-        # Thu thập links từ trang hiện tại
+        # Collect links from current page
         article_links = collect_links_from_single_page(driver)
-        print(f"✅ Found {len(article_links)} unique links for GAS")
+        print(f"Found {len(article_links)} unique links for GAS")
         
-        # Lọc bỏ những link đã có trong DB
+        # Filter out links already in DB
         links_to_crawl = [link for link in article_links if link not in existing_links]
         
         if len(links_to_crawl) > 0:
-            print(f"🎯 Crawling {len(links_to_crawl)} new articles (skipping {len(article_links) - len(links_to_crawl)} existing)")
+            print(f"Crawling {len(links_to_crawl)} new articles (skipping {len(article_links) - len(links_to_crawl)} existing)")
         else:
-            print(f"📰 No new news - all {len(article_links)} articles already in DB")
+            print(f"No new news - all {len(article_links)} articles already in DB")
         
         new_articles = 0
         crawled_count = 0
         duplicate_count = 0
         
-        # Crawl từng bài viết mới
+        # Crawl each new article
         for idx, link in enumerate(links_to_crawl):
             try:
-                print(f"📄 [{idx+1}/{len(links_to_crawl)}] {link}")
+                print(f"[{idx+1}/{len(links_to_crawl)}] {link}")
                 raw_data = extract_article(driver, link)
                 
                 if not raw_data.get("title"):
-                    print(f"⚠️ Bỏ qua bài không có title")
+                    print(f"Warning: Skipping article without title")
                     continue
                 
                 # Parse datetime
                 if raw_data.get("fuzzy_time"):
                     dt = parse_petrotimes_datetime(raw_data["fuzzy_time"])
                     if dt:
-                        print(f"🕒 Raw time: '{raw_data['fuzzy_time']}' → Parsed: {dt} → Formatted: '{format_datetime_obj(dt)}'")
+                        print(f"Raw time: '{raw_data['fuzzy_time']}' → Parsed: {dt} → Formatted: '{format_datetime_obj(dt)}'")
                 
                 success = insert_article_to_database(db_manager, table_name, raw_data)
                 if success:
                     new_articles += 1
-                    print(f"✅ Saved: {raw_data.get('title', '')[:50]}...")
+                    print(f"Saved: {raw_data.get('title', '')[:50]}...")
                 else:
                     duplicate_count += 1
                     if duplicate_count <= 3:
-                        print(f"⚠️ Duplicate - skipped: {raw_data.get('title', '')[:50]}...")
+                        print(f"Duplicate - skipped: {raw_data.get('title', '')[:50]}...")
                     elif duplicate_count == 4:
-                        print(f"⚠️ ... và {len(links_to_crawl) - idx - 1} duplicates khác (không hiển thị)")
+                        print(f"... and {len(links_to_crawl) - idx - 1} other duplicates (not shown)")
                 
                 crawled_count += 1
                 time.sleep(1)  # Delay between requests
                 
             except Exception as e:
-                print(f"❌ Lỗi crawl bài {link}: {e}")
+                print(f"Error crawling article {link}: {e}")
                 continue
         
     except Exception as e:
-        print(f"❌ Lỗi crawl GAS: {e}")
+        print(f"Error crawling GAS: {e}")
     finally:
         driver.quit()
     
-    # Tính toán kết quả
+    # Calculate results
     end_time = time.time()
     duration = end_time - start_time
     
@@ -525,35 +525,35 @@ def crawl_petrotimes_gas(table_name="GAS_News", db_manager=None):
     }
 
 # ============================================
-# 🚀 MAIN FUNCTION WITH DASHBOARD
+# MAIN FUNCTION WITH DASHBOARD
 # ============================================
 def main_petrotimes():
-    """Main function với dashboard timing và thống kê cho GAS"""
+    """Main function with dashboard timing and statistics for GAS"""
     start_time = time.time()
     start_time_str = datetime.now().strftime("%H:%M:%S")
     
     print("\n" + "═" * 60)
-    print("⛽ PETROTIMES CRAWLER DASHBOARD".center(60))
-    print(f"⏰ Started: {start_time_str}".center(60))
+    print("PETROTIMES CRAWLER DASHBOARD".center(60))
+    print(f"Started: {start_time_str}".center(60))
     print("═" * 60)
 
     db_manager = get_database_manager()
     
-    # Crawl cho GAS_News
-    print(f"\n🚀 Processing Stock: GAS (PV GAS)")
+    # Crawl for GAS_News
+    print(f"\nProcessing Stock: GAS (PV GAS)")
     table_name = get_table_name(stock_code="GAS")
-    print(f"📋 Save to: {table_name}")
+    print(f"Save to: {table_name}")
     
     result = crawl_petrotimes_gas(table_name=table_name, db_manager=db_manager)
 
     db_manager.close_connections()
     
-    # Hiển thị dashboard kết quả
+    # Display dashboard results
     end_time = time.time()
     total_duration = end_time - start_time
     
     print("\n" + "═" * 60)
-    print("🎉 CRAWLING COMPLETED - RESULTS".center(60))
+    print("CRAWLING COMPLETED - RESULTS".center(60))
     print("═" * 60)
     
     # Table header
@@ -566,7 +566,7 @@ def main_petrotimes():
     duration = result['duration']
     new_count = result['new_articles']
     
-    # Status đơn giản
+    # Simple status
     status = "No new news" if new_count == 0 else "New news"
     results_text = f"{new_count} saved"
     
@@ -577,14 +577,14 @@ def main_petrotimes():
     
     # Summary
     print("\n" + "═" * 60)
-    print("📊 SUMMARY PETROTIMES CRAWLING".center(60))
+    print("SUMMARY PETROTIMES CRAWLING".center(60))
     print("─" * 60)
-    print(f"⏱️  Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
-    print(f"📊 Total Found     : {result['total_found']} articles")
-    print(f"🎯 Total Crawled   : {result['crawled_count']} articles")
-    print(f"✅ Total New       : {result['new_articles']} articles")
+    print(f"Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
+    print(f"Total Found     : {result['total_found']} articles")
+    print(f"Total Crawled   : {result['crawled_count']} articles")
+    print(f"Total New       : {result['new_articles']} articles")
     print("═" * 60)
-    print("🎯 PETROTIMES CRAWLING COMPLETED!")
+    print("PETROTIMES CRAWLING COMPLETED!")
     print("═" * 60)
 
 if __name__ == "__main__":

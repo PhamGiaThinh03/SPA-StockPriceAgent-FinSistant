@@ -22,13 +22,13 @@ from utils.logger import logger
 class MapReduceSummarizer:
     """
     Map-Reduce Summarization Implementation
-    Xử lý văn bản dài bằng cách phân tầng (hierarchical summarization)
+    Handles long text using hierarchical summarization.
     
     Pipeline:
-    1. Đo độ dài văn bản
-    2. MAP: Cắt thành chunks với overlap, tóm tắt từng chunk
-    3. REDUCE: Ghép và tóm tắt các partial summaries
-    4. FINAL: Tóm tắt cuối cùng để tăng tính mạch lạc
+    1. Measure text length
+    2. MAP: Split into chunks with overlap, summarize each chunk
+    3. REDUCE: Merge and summarize partial summaries
+    4. FINAL: Final summary for coherence
     """
     
     def __init__(self):
@@ -42,12 +42,12 @@ class MapReduceSummarizer:
         self.available_src = self.max_src_len - self.prefix_tokens  # 1004
         
         # Chunking parameters
-        self.chunk_overlap = 128  # Overlap giữa các chunk để tránh đứt mạch ý
+        self.chunk_overlap = 128  # Overlap between chunks to avoid breaking context
         self.min_chunk_size = 256  # Minimum chunk size
         
         # Generation configurations for different phases
         self.map_config = {
-            "max_length": 128,  # Ngắn cho MAP phase
+            "max_length": 128,  # Short for MAP phase
             "min_length": 30,
             "num_beams": 2,
             "repetition_penalty": 1.1,
@@ -57,7 +57,7 @@ class MapReduceSummarizer:
         }
         
         self.reduce_config = {
-            "max_length": 200,  # Dài hơn cho REDUCE phase
+            "max_length": 200,  # Longer for REDUCE phase
             "min_length": 50,
             "num_beams": 3,
             "repetition_penalty": 1.2,
@@ -77,7 +77,7 @@ class MapReduceSummarizer:
         }
         
         # Control parameters
-        self.max_reduce_rounds = 3  # Tối đa 3 vòng reduce
+        self.max_reduce_rounds = 3  # Maximum 3 reduce rounds
         
         logger.info("Map-Reduce Summarizer initialized")
         logger.info(f"Max input length: {self.max_src_len}")
@@ -118,39 +118,38 @@ class MapReduceSummarizer:
             raise RuntimeError("Failed to initialize Map-Reduce summarizer") from e
     
     def count_tokens(self, text: str) -> int:
-        """Đếm số token của văn bản"""
+        """Count the number of tokens in the text"""
         return len(self.tokenizer.encode(text, add_special_tokens=False))
     
     def summarize(self, text: str) -> str:
         """
-        Main summarization function với Map-Reduce
+        Main summarization function with Map-Reduce
         
         Args:
-            text: Văn bản cần tóm tắt
-            
+            text: Text to summarize
         Returns:
-            str: Bản tóm tắt cuối cùng
+            str: Final summary
         """
         if not text.strip():
             raise ValueError("Input text cannot be empty")
         
-        # 1. Đo độ dài
+        # 1. Measure length
         input_text = "summarize: " + text.strip()
         total_tokens = self.count_tokens(input_text)
         
         logger.info(f"Input text tokens: {total_tokens}")
         
-        # 2. Nếu ngắn hơn max_src_len → tóm tắt 1-pass
+        # 2. If shorter than max_src_len → single-pass summarization
         if total_tokens <= self.max_src_len:
             logger.info("Text fits in context, using single-pass summarization")
             return self._single_pass_summarize(text)
         
-        # 3. Map-Reduce pipeline cho văn bản dài
+        # 3. Map-Reduce pipeline for long text
         logger.info("Text too long, using Map-Reduce pipeline")
         return self._map_reduce_summarize(text)
     
     def _single_pass_summarize(self, text: str) -> str:
-        """Tóm tắt 1-pass cho văn bản ngắn"""
+        """Single-pass summarization for short text"""
         try:
             input_text = "summarize: " + text.strip()
             
@@ -175,9 +174,9 @@ class MapReduceSummarizer:
             raise
     
     def _map_reduce_summarize(self, text: str) -> str:
-        """Map-Reduce pipeline cho văn bản dài"""
+        """Map-Reduce pipeline for long text"""
         try:
-            # MAP Phase: Cắt và tóm tắt từng chunk
+            # MAP Phase: Split and summarize each chunk
             chunks = self._create_chunks(text)
             logger.info(f"Created {len(chunks)} chunks for MAP phase")
             
@@ -187,7 +186,7 @@ class MapReduceSummarizer:
                 summary = self._map_summarize(chunk)
                 partial_summaries.append(summary)
             
-            # REDUCE Phase: Ghép và giảm dần
+            # REDUCE Phase: Merge and reduce
             current = " ".join(partial_summaries)
             reduce_round = 0
             
@@ -198,11 +197,11 @@ class MapReduceSummarizer:
                 if current_tokens <= self.available_src:
                     break
                 
-                # Cần reduce thêm
+                # Need further reduction
                 current = self._reduce_summarize(current)
                 reduce_round += 1
             
-            # FINAL Phase: Tóm tắt cuối cùng
+            # FINAL Phase: Final summarization
             logger.info("Final summarization phase")
             return self._final_summarize(current)
             
@@ -212,15 +211,14 @@ class MapReduceSummarizer:
     
     def _create_chunks(self, text: str) -> List[str]:
         """
-        Cắt văn bản thành các chunk với overlap
+        Split text into chunks with overlap
         
         Args:
-            text: Văn bản gốc
-            
+            text: Original text
         Returns:
-            List[str]: Danh sách các chunk
+            List[str]: List of chunks
         """
-        # Tokenize toàn bộ văn bản
+        # Tokenize the entire text
         tokens = self.tokenizer.encode(text, add_special_tokens=False)
         total_tokens = len(tokens)
         
@@ -232,20 +230,20 @@ class MapReduceSummarizer:
         
         start = 0
         while start < total_tokens:
-            # Xác định end position
+            # Determine end position
             end = min(start + chunk_size, total_tokens)
             
-            # Lấy chunk tokens
+            # Get chunk tokens
             chunk_tokens = tokens[start:end]
             
             # Decode chunk
             chunk_text = self.tokenizer.decode(chunk_tokens, skip_special_tokens=True)
             
-            # Đảm bảo chunk không quá ngắn (trừ chunk cuối)
+            # Ensure chunk is not too short (except last chunk)
             if len(chunk_text.strip()) >= self.min_chunk_size or end >= total_tokens:
                 chunks.append(chunk_text.strip())
             
-            # Di chuyển start position với overlap
+            # Move start position with overlap
             if end >= total_tokens:
                 break
             start = end - self.chunk_overlap
@@ -253,7 +251,7 @@ class MapReduceSummarizer:
         return chunks
     
     def _map_summarize(self, chunk: str) -> str:
-        """MAP phase: Tóm tắt một chunk"""
+        """MAP phase: Summarize a chunk"""
         try:
             input_text = "summarize: " + chunk
             
@@ -275,11 +273,11 @@ class MapReduceSummarizer:
             
         except Exception as e:
             logger.error(f"MAP summarization failed for chunk: {str(e)}")
-            # Fallback: trả về chunk gốc (truncated)
+            # Fallback: return original chunk (truncated)
             return chunk[:500] + "..."
     
     def _reduce_summarize(self, text: str) -> str:
-        """REDUCE phase: Tóm tắt các partial summaries"""
+        """REDUCE phase: Summarize partial summaries"""
         try:
             input_text = "summarize: " + text
             
@@ -305,7 +303,7 @@ class MapReduceSummarizer:
             return text[:1000] + "..."
     
     def _final_summarize(self, text: str) -> str:
-        """FINAL phase: Tóm tắt cuối cùng để tăng tính mạch lạc"""
+        """FINAL phase: Final summary for coherence"""
         try:
             input_text = "summarize: " + text
             
@@ -339,7 +337,7 @@ class MapReduceSummarizer:
         ).strip()
     
     def get_statistics(self) -> Dict[str, Any]:
-        """Trả về thống kê về cấu hình Map-Reduce"""
+        """Return statistics about Map-Reduce configuration"""
         return {
             "max_input_length": self.max_src_len,
             "available_source_length": self.available_src,

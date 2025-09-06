@@ -1,0 +1,9 @@
+Total samples: 12007
+
+Industry distribution:
+industry
+Finance       4475
+Other         3473
+Energy        1755
+Technology    1496
+Healthcare     808

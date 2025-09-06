@@ -5,7 +5,7 @@ import importlib.util
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from pathlib import Path
 
-# Import Config bằng cách explicit để tránh conflict
+ # Explicitly import Config to avoid conflicts
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 config_file = os.path.join(parent_dir, 'config.py')
 spec = importlib.util.spec_from_file_location("summarization_config", config_file)
@@ -13,13 +13,13 @@ config_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(config_module)
 Config = config_module.Config
 
-# Import logger với absolute import
+ # Import logger using absolute import
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.logger import logger
 from typing import List
 from tqdm import tqdm
 
-# Import Map-Reduce Summarizer
+ # Import Map-Reduce Summarizer
 from .map_reduce_summarizer import MapReduceSummarizer
 
 class NewsSummarizer:
@@ -32,11 +32,11 @@ class NewsSummarizer:
         self._validate_model_path()
         self._load_model()
         
-        # Initialize Map-Reduce summarizer if enabled
+    # Initialize Map-Reduce summarizer if enabled
         if self.use_map_reduce:
             try:
                 self.map_reduce_summarizer = MapReduceSummarizer()
-                logger.info("✅ Map-Reduce Summarizer initialized")
+                logger.info("Map-Reduce Summarizer initialized")
             except Exception as e:
                 logger.warning(f"Map-Reduce initialization failed: {e}")
                 logger.warning("Falling back to standard summarization")
@@ -45,7 +45,7 @@ class NewsSummarizer:
         self._warmup_model()
     
     def get_text_length_stats(self, text: str) -> dict:
-        """Analyze text length to determine best summarization approach"""
+        """Analyze text length to determine the best summarization approach"""
         token_count = len(self.tokenizer.encode("summarize: " + text, add_special_tokens=False))
         
         stats = {
@@ -131,11 +131,10 @@ class NewsSummarizer:
 
     def summarize(self, text: str) -> str:
         """
-        Generate summary for single article with automatic approach selection
+        Generate summary for a single article with automatic approach selection
         
         Args:
             text: Input text to summarize
-            
         Returns:
             str: Generated summary
         """
@@ -152,7 +151,7 @@ class NewsSummarizer:
         
         # Choose summarization approach
         if stats['exceeds_limit'] and self.use_map_reduce:
-            logger.info("📊 Using Map-Reduce summarization for long text")
+            logger.info("Using Map-Reduce summarization for long text")
             try:
                 return self.map_reduce_summarizer.summarize(text)
             except Exception as e:
@@ -160,8 +159,8 @@ class NewsSummarizer:
                 return self._standard_summarize(text)
         else:
             if stats['exceeds_limit']:
-                logger.warning(f"⚠️ Text exceeds token limit ({stats['token_count']} > {stats['max_input_length']}), truncating...")
-            logger.info("📝 Using standard summarization")
+                logger.warning(f"Text exceeds token limit ({stats['token_count']} > {stats['max_input_length']}), truncating...")
+            logger.info("Using standard summarization")
             return self._standard_summarize(text)
     
     def _standard_summarize(self, text: str) -> str:
@@ -249,10 +248,8 @@ class NewsSummarizer:
         # Automatic fallback to sequential on CPU or small batches
         if Config.DEVICE == "cpu" or len(texts) <= 2:
             return [self._standard_summarize(text) for text in texts]
-            
         try:
             input_texts = ["summarize: " + t.strip() for t in texts]
-            
             inputs = self.tokenizer(
                 input_texts,
                 return_tensors="pt",
@@ -260,15 +257,12 @@ class NewsSummarizer:
                 truncation=True,
                 padding="max_length"
             ).to(self.device)
-            
             with torch.no_grad():
                 outputs = self.model.generate(
                     **inputs,
                     **Config.get_generation_config()
                 )
-            
             return [self._clean_output(output) for output in outputs]
-            
         except RuntimeError as e:
             logger.warning(f"Standard batch failed: {str(e)}")
             return [self._standard_summarize(text) for text in texts]
@@ -307,10 +301,9 @@ class NewsSummarizer:
         if self.use_map_reduce and not hasattr(self, 'map_reduce_summarizer'):
             try:
                 self.map_reduce_summarizer = MapReduceSummarizer()
-                logger.info("✅ Map-Reduce Summarizer enabled")
+                logger.info("Map-Reduce Summarizer enabled")
             except Exception as e:
                 logger.error(f"Failed to enable Map-Reduce: {e}")
                 self.use_map_reduce = False
-        
         logger.info(f"Map-Reduce summarization: {'ENABLED' if self.use_map_reduce else 'DISABLED'}")
         return self.use_map_reduce

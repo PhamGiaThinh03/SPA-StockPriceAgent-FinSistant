@@ -1,4 +1,4 @@
-# 🚀 SPA VIP - Vietnamese Stock News Processing System
+# SPA VIP - Vietnamese Stock News Processing System
 
 Automated Vietnamese financial news processing pipeline with AI-powered analysis for stock market insights.
 

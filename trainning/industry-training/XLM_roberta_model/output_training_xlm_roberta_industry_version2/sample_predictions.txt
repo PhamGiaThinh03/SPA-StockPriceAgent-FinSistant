@@ -1,0 +1,42 @@
+
+=== Sample 1 ===
+
+Text: Chủ tịch Hội đồng thành viên EVN tiếp và làm việc với lãnh đạo KEPCO về ứng dụng công nghệ thông minh và phát triển nguồn điện hạt nhân. Các bên muốn tăng cường hợp tác, chia sẻ kinh nghiệm để phát triển dự án điện. EVN đề xuất thành lập tổ công tác chuyên môn. KEPCO đang quản lý 83GW và tham gia đầu tư dự án BOT tại Việt Nam. Nhiều đối tác nước ngoài muốn hợp tác với Việt Nam trong dự án điện hạt nhân Ninh Thuận, bao gồm Mỹ, Hàn Quốc, Nga, Nhật, Trung Quốc, Pháp.
+
+Predicted Industry: Energy (Confidence: 0.94)
+Probabilities: {'Finance': 0.013467533513903618, 'Technology': 0.01810125820338726, 'Healthcare': 0.009299561381340027, 'Energy': 0.9440290331840515, 'Other': 0.015102625824511051}
+Actual Industry: Energy
+
+=== Sample 2 ===
+
+Text: Từ ngày 1/7, Việt Nam chỉ còn 34 tỉnh, thành phố sau khi sắp xếp lại hành chính từ 63 đơn vị trước đây. Việc này nhằm tạo điều kiện thuận lợi hơn cho các địa phương thu hút vốn đầu tư trực tiếp nước ngoài (FDI). Các “thủ phủ” mới đã được hình thành và hi vọng sẽ thu hút được nhiều vốn FDI hơn trong thời gian tới.
+
+Predicted Industry: Other (Confidence: 0.61)
+Probabilities: {'Finance': 0.32452666759490967, 'Technology': 0.018702132627367973, 'Healthcare': 0.02568824402987957, 'Energy': 0.023477284237742424, 'Other': 0.6076056957244873}
+Actual Industry: Other
+
+=== Sample 3 ===
+
+Text: Trong bối cảnh cần tái cấu trúc doanh nghiệp nhà nước tại TPHCM, các chuyên gia nhấn mạnh về việc định vị lại phạm vi hoạt động và nâng cao quản trị. Việc xác định vai trò của doanh nghiệp nhà nước trong kinh tế thành phố, cũng như tách biệt giữa vai trò nhà nước và chức năng thị trường, được đề xuất. Đồng thời, cần tạo điều kiện để thu hút nhân tài, khuyến khích đổi mới và đầu tư công nghệ. Việc thực hiện các giải pháp này cần sự hỗ trợ và quan tâm từ các chính sách và tổ chức chính trị.
+
+Predicted Industry: Other (Confidence: 0.53)
+Probabilities: {'Finance': 0.37764808535575867, 'Technology': 0.02471749857068062, 'Healthcare': 0.03909286856651306, 'Energy': 0.029091158881783485, 'Other': 0.5294503569602966}
+Actual Industry: Finance
+
+=== Sample 4 ===
+
+Text: Cá thu giàu dinh dưỡng, đặc biệt vitamin B12, selen và omega-3, cao gấp đôi cá hồi. Ăn cá thu giúp hạ đường huyết, bổ máu, chống ung thư nhờ Coenzyme Q10 và omega-3. Cá thu dễ tiêu hóa, tốt cho gan, thận, tim mạch do cân bằng cholesterol, giảm nguy cơ bệnh tim. Omega-3 trong cá thu cải thiện trí não, giảm nguy cơ bệnh tâm thần, vitamin B12 tăng cường miễn dịch. Vitamin D, đồng, selen trong cá thu giúp xương chắc khỏe.
+
+
+Predicted Industry: Healthcare (Confidence: 0.76)
+Probabilities: {'Finance': 0.060706693679094315, 'Technology': 0.048278216272592545, 'Healthcare': 0.7628986239433289, 'Energy': 0.07320787012577057, 'Other': 0.05490865185856819}
+Actual Industry: Healthcare
+
+=== Sample 5 ===
+
+Text: Sacombank dự kiến mua công ty chứng khoán, đầu tư tối đa 1.500 tỷ đồng và sở hữu trên 50%. Ngân hàng cũng trình phương án tăng vốn điều lệ bằng phát hành cổ phiếu để trả cổ tức và thưởng cho nhân viên từ lợi nhuận giữ lại. Nếu được duyệt, đây là lần chia cổ tức đầu tiên sau 10 năm. Lợi nhuận chưa phân phối năm 2024 là 28.426 tỷ đồng, nợ xấu tăng lên 12.955 tỷ đồng. Sacombank đã nộp hơn 196 tỷ đồng tiền thuế và nghĩa vụ bổ sung cho giai đoạn 2019-2021.
+
+
+Predicted Industry: Finance (Confidence: 0.96)
+Probabilities: {'Finance': 0.9556307792663574, 'Technology': 0.008226757869124413, 'Healthcare': 0.007319577503949404, 'Energy': 0.009801007807254791, 'Other': 0.019021954387426376}
+Actual Industry: Finance

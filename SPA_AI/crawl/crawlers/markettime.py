@@ -20,7 +20,7 @@ import warnings
 import logging
 from urllib.parse import urljoin, urlparse
 
-# 🔇 Tắt hoàn toàn các warning và log không cần thiết
+# Disable all unnecessary warnings and logs
 warnings.filterwarnings("ignore")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('selenium').setLevel(logging.ERROR)
@@ -38,44 +38,44 @@ MARKETTIMES_SEARCH_URL = "https://markettimes.vn/search"
 STOCK_CODES = ["FPT", "GAS", "IMP", "VCB"]
 
 # Configuration constants
-HEADLESS = True  # Chuyển về True để tối ưu performance
+HEADLESS = True  # Set to True for optimal performance
 SCROLL_PAUSE = 1.2
 SCROLL_PATIENCE = 3
 IMPLICIT_WAIT = 5
 TIMEOUT = 10
-MAX_SCROLLS = 5  # Số lần scroll tối đa
+MAX_SCROLLS = 5  # Maximum number of scrolls
 
 # Helper functions to replace old config functions
 def get_recent_links_from_db(db_manager, table_name, limit=100):
-    """Lấy 100 link bài viết gần nhất từ database để tối ưu crawling"""
+    """Get 100 most recent article links from database to optimize crawling"""
     try:
         supabase_client = db_manager.get_supabase_client()
-        # Thử dùng created_at trước, fallback sang id
+        # Try using created_at first, fallback to id
         try:
             result = supabase_client.table(table_name).select("link").order("created_at", desc=True).limit(limit).execute()
         except Exception:
-            # Fallback: sử dụng id hoặc không order
+            # Fallback: use id or no order
             try:
                 result = supabase_client.table(table_name).select("link").order("id", desc=True).limit(limit).execute()
             except Exception:
-                # Fallback cuối: chỉ lấy link không order
+                # Final fallback: just get links without order
                 result = supabase_client.table(table_name).select("link").limit(limit).execute()
         
         if result.data:
             return set(item['link'] for item in result.data if item.get('link'))
         return set()
     except Exception as e:
-        print(f"❌ Lỗi khi lấy links từ DB: {e}")
+        print(f"Error getting links from DB: {e}")
         return set()
 
 def check_stop_condition(links_to_check, existing_links):
     """
-    Kiểm tra điều kiện dừng: 3 bài liên tiếp có trong DB
+    Check stop condition: 3 consecutive articles already in DB
     Args:
-        links_to_check: List các link cần kiểm tra (theo thứ tự từ trên xuống)
-        existing_links: Set các link đã có trong DB
+        links_to_check: List of links to check (ordered from top)
+        existing_links: Set of links already in DB
     Returns:
-        int: Index để dừng (nếu tìm thấy 3 bài liên tiếp), -1 nếu không
+        int: Index to stop (if 3 consecutive found), -1 if not
     """
     consecutive_found = 0
     
@@ -83,12 +83,12 @@ def check_stop_condition(links_to_check, existing_links):
         if link in existing_links:
             consecutive_found += 1
             if consecutive_found >= 3:
-                # Dừng tại vị trí bài thứ 3 liên tiếp
-                return i - 2  # Trả về index của bài đầu tiên trong 3 bài liên tiếp
+                # Stop at the position of the first of 3 consecutive articles
+                return i - 2  # Return index of the first in the 3 consecutive
         else:
-            consecutive_found = 0  # Reset nếu không liên tiếp
+            consecutive_found = 0  # Reset if not consecutive
     
-    return -1  # Không tìm thấy 3 bài liên tiếp
+    return -1  # Not found 3 consecutive
 
 def get_database_manager():
     """Get database manager instance"""
@@ -113,7 +113,7 @@ def insert_article_to_database(db_manager, table_name, article_data, date_parser
     return db_manager.insert_article(table_name, article_data)
 
 def parse_markettimes_datetime(raw_text, current_year=2025):
-    """Parse datetime từ MarketTimes format"""
+    """Parse datetime from MarketTimes format"""
     if not raw_text:
         return None
         
@@ -122,7 +122,7 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
     raw_text = raw_text.lower()
     
     try:
-        # Xử lý "hôm nay", "hôm qua"
+        # Handle "today", "yesterday"
         if "hôm nay" in raw_text:
             time_part = raw_text.replace("hôm nay", "").strip()
             dt = datetime.strptime(time_part, "%H:%M")
@@ -135,7 +135,7 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
             yesterday = datetime.now() - timedelta(days=1)
             return yesterday.replace(hour=dt.hour, minute=dt.minute, second=0, microsecond=0)
 
-        # Xử lý "X phút trước", "X giờ trước"
+        # Handle "X minutes ago", "X hours ago"
         match = re.match(r"(\d+)\s*phút", raw_text)
         if match:
             minutes_ago = int(match.group(1))
@@ -146,7 +146,7 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
             hours_ago = int(match.group(1))
             return datetime.now() - timedelta(hours=hours_ago)
 
-        # 🔥 NEW: Xử lý format cụ thể của MarketTimes: "17:22 17/08/2025"
+        # NEW: Handle specific MarketTimes format: "17:22 17/08/2025"
         # Pattern: HH:MM DD/MM/YYYY
         match = re.match(r"(\d{1,2}):(\d{2})\s+(\d{1,2})/(\d{1,2})/(\d{4})", original_text)
         if match:
@@ -154,9 +154,9 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
             dt = datetime(int(year), int(month), int(day), int(hour), int(minute))
             return dt
 
-        # Danh sách các format ngày khác có thể từ MarketTimes
+        # List of other possible date formats from MarketTimes
         date_formats = [
-            "%H:%M %d/%m/%Y",     # 17:22 17/08/2025 (chính xác format từ HTML)
+            "%H:%M %d/%m/%Y",     # 17:22 17/08/2025 (exact format from HTML)
             "%d/%m/%Y %H:%M",     # 17/08/2025 17:22
             "%d-%m-%Y %H:%M",     # 17-08-2025 17:22
             "%Y-%m-%d %H:%M:%S",  # 2025-08-17 17:22:00
@@ -168,7 +168,7 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
         for fmt in date_formats:
             try:
                 dt = datetime.strptime(original_text, fmt)
-                # Nếu không có năm thì dùng current_year
+                # If year is missing, use current_year
                 if "%Y" not in fmt:
                     dt = dt.replace(year=current_year)
                 return dt
@@ -178,15 +178,15 @@ def parse_markettimes_datetime(raw_text, current_year=2025):
         return None
 
     except Exception as e:
-        print(f"⚠️ Lỗi parse datetime MarketTimes: '{original_text}' ({e})")
+        print(f"Warning parsing MarketTimes datetime: '{original_text}' ({e})")
         return None
 
 def format_datetime_obj(dt):
-    """Format datetime object theo chuẩn database"""
+    """Format datetime object according to database standard"""
     return format_datetime_for_db(dt)
 
 def markettimes_date_parser(raw_text, current_year=2025):
-    """Date parser cho MarketTimes"""
+    """Date parser for MarketTimes"""
     return parse_markettimes_datetime(raw_text, current_year)
 
 def clean_text(s: str) -> str:
@@ -198,7 +198,7 @@ def clean_text(s: str) -> str:
     return s.strip()
 
 def setup_driver():
-    """Setup Chrome driver với cấu hình tối ưu cho production"""
+    """Setup Chrome driver with optimal configuration for production"""
     options = Options()
     if HEADLESS:
         options.add_argument("--headless")  
@@ -216,7 +216,7 @@ def setup_driver():
     return driver
 
 def scroll_to_bottom(driver, pause=SCROLL_PAUSE, patience=SCROLL_PATIENCE):
-    """Scroll to bottom với patience control"""
+    """Scroll to bottom with patience control"""
     still = 0
     last_h = driver.execute_script("return document.body.scrollHeight")
     while True:
@@ -233,9 +233,9 @@ def get_search_url(keyword: str) -> str:
     return f"{MARKETTIMES_SEARCH_URL}?q={keyword}"
 
 def collect_article_links(driver, keyword: str):
-    """Thu thập tất cả links từ search page với scroll"""
+    """Collect all links from search page with scroll"""
     url = get_search_url(keyword)
-    print(f"🔍 Searching MarketTimes for: {keyword}")
+    print(f"Searching MarketTimes for: {keyword}")
     driver.get(url)
     
     try:
@@ -243,13 +243,13 @@ def collect_article_links(driver, keyword: str):
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.c-head-list, ul.loadAjax"))
         )
     except TimeoutException:
-        print(f"⚠️ Không thấy vùng kết quả cho: {keyword}")
+        print(f"Warning: No result area found for: {keyword}")
         return []
     
-    # Scroll để load thêm nội dung
+    # Scroll to load more content
     scroll_to_bottom(driver)
     
-    # Thu thập links
+    # Collect links
     anchors = driver.find_elements(By.CSS_SELECTOR,
         ".c-head-list a, ul.loadAjax li.loadArticle h4.b-grid__title a")
     
@@ -260,11 +260,11 @@ def collect_article_links(driver, keyword: str):
             seen.add(href)
             links.append(href)
     
-    print(f"✅ Found {len(links)} unique links for {keyword}")
+    print(f"Found {len(links)} unique links for {keyword}")
     return links
 
 def extract_article(driver, url: str) -> dict:
-    """Extract article data từ MarketTimes page"""
+    """Extract article data from MarketTimes page"""
     try:
         driver.get(url)
         WebDriverWait(driver, TIMEOUT).until(
@@ -273,12 +273,12 @@ def extract_article(driver, url: str) -> dict:
             )
         )
     except TimeoutException:
-        print(f"⚠️ Timeout loading article: {url}")
+        print(f"Warning: Timeout loading article: {url}")
 
     try:
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
-        # Title - thử các selector khác nhau
+        # Title - try different selectors
         title = ""
         title_selectors = ["h1.c-detail-head__title", "h1", ".c-detail-head__title"]
         for sel in title_selectors:
@@ -291,7 +291,7 @@ def extract_article(driver, url: str) -> dict:
             except Exception:
                 continue
 
-        # Description (lead) - merge vào content
+        # Description (lead) - merge into content
         description = ""
         desc_selectors = ["h2.desc", "h2", ".desc"]
         for sel in desc_selectors:
@@ -304,7 +304,7 @@ def extract_article(driver, url: str) -> dict:
             except Exception:
                 continue
 
-        # Publish time - cập nhật selector dựa trên HTML structure thực tế
+        # Publish time - update selector based on actual HTML structure
         publish_time = ""
         time_selectors = [
             "span.c-detail-head__time",           # Format: "17:22 17/08/2025"
@@ -316,7 +316,7 @@ def extract_article(driver, url: str) -> dict:
                 time_element = soup.select_one(sel)
                 if time_element:
                     publish_time = clean_text(time_element.get_text())
-                    print(f"🕒 Found time: '{publish_time}'")  # Debug log
+                    print(f"Found time: '{publish_time}'")  # Debug log
                     if publish_time.strip(): 
                         break
             except Exception:
@@ -345,7 +345,7 @@ def extract_article(driver, url: str) -> dict:
                     paragraphs = container.select("p")
                     content_parts = []
                     
-                    # Gộp description vào đầu content nếu có
+                    # Merge description at the beginning of content if available
                     if description:
                         content_parts.append(description)
                     
@@ -359,27 +359,27 @@ def extract_article(driver, url: str) -> dict:
             except Exception:
                 continue
 
-        # Fallback cho content nếu không extract được
+        # Fallback for content if not extracted
         if not content:
             try:
                 body_text = soup.select_one("body").get_text() if soup.select_one("body") else ""
                 content = clean_text((description + " " + body_text) if description else body_text)
             except Exception:
-                content = description  # fallback cuối
+                content = description  # final fallback
 
-        # Parse datetime với improved logic
+        # Parse datetime with improved logic
         current_year = datetime.now().year
         dt = parse_markettimes_datetime(publish_time, current_year)
         
-        # Fallback: nếu không parse được thì dùng ngày hiện tại
+        # Fallback: if cannot parse, use current date
         if not dt:
-            print(f"⚠️ Cannot parse time '{publish_time}', using current date")
+            print(f"Warning: Cannot parse time '{publish_time}', using current date")
             dt = datetime.now()
             
         formatted_date = format_datetime_obj(dt) if dt else ""
 
         # Debug log
-        print(f"🕒 Raw time: '{publish_time}' → Parsed: {dt} → Formatted: '{formatted_date}'")
+        print(f"Raw time: '{publish_time}' → Parsed: {dt} → Formatted: '{formatted_date}'")
 
         return {
             "title": title,
@@ -391,7 +391,7 @@ def extract_article(driver, url: str) -> dict:
         }
 
     except Exception as e:
-        print(f"❌ Lỗi extract article {url}: {e}")
+        print(f"Error extracting article {url}: {e}")
         return {
             "title": "",
             "content": "",
@@ -402,8 +402,8 @@ def extract_article(driver, url: str) -> dict:
         }
 
 def insert_to_supabase(db_manager, table_name, data):
-    """Wrapper function để tương thích với code cũ - sử dụng hàm chung"""
-    # Tạo date parser function cho MarketTimes
+    """Wrapper function for compatibility with old code - uses common function"""
+    # Create date parser function for MarketTimes
     def markettimes_date_parser_wrapper(date_str):
         dt = parse_markettimes_datetime(date_str, 2025)
         return format_datetime_for_db(dt) if dt else None
@@ -412,37 +412,37 @@ def insert_to_supabase(db_manager, table_name, data):
 
 def crawl_markettimes(stock_code="FPT", table_name="FPT_News", db_manager=None):
     """
-    Crawl MarketTimes cho specific stock code với logic tối ưu
+    Crawl MarketTimes for specific stock code with optimized logic
     
     Args:
-        stock_code: Mã cổ phiếu cần crawl
-        table_name: Tên bảng database
+        stock_code: Stock code to crawl
+        table_name: Database table name
         db_manager: Database manager instance
     """
     start_time = time.time()
     
-    # Tạo db_manager nếu không được truyền vào
+    # Create db_manager if not provided
     if db_manager is None:
         db_manager = get_database_manager()
     
     print(f"\n===============================================================================")
-    print(f"� MarketTimes Crawler - Stock: {stock_code}")
-    print(f"📋 Table: {table_name}")
+    print(f"MarketTimes Crawler - Stock: {stock_code}")
+    print(f"Table: {table_name}")
     
-    # Lấy existing links từ database
+    # Get existing links from database
     existing_links = get_recent_links_from_db(db_manager, table_name, 100)
-    print(f"� Found {len(existing_links)} existing articles in DB (last 100)")
+    print(f"Found {len(existing_links)} existing articles in DB (last 100)")
 
     driver = setup_driver()
     article_links = collect_article_links(driver, stock_code)
     
-    # Lọc bỏ những link đã có trong DB
+    # Filter out links already in DB
     links_to_crawl = [link for link in article_links if link not in existing_links]
     
     if len(links_to_crawl) > 0:
-        print(f"🎯 Crawling {len(links_to_crawl)} new articles (skipping {len(article_links) - len(links_to_crawl)} existing)")
+        print(f"Crawling {len(links_to_crawl)} new articles (skipping {len(article_links) - len(links_to_crawl)} existing)")
     else:
-        print(f"📰 No new articles - all {len(article_links)} already in DB")
+        print(f"No new articles - all {len(article_links)} already in DB")
 
     new_articles = 0
     crawled_count = 0
@@ -450,30 +450,30 @@ def crawl_markettimes(stock_code="FPT", table_name="FPT_News", db_manager=None):
     
     for idx, link in enumerate(links_to_crawl):
         try:
-            print(f"📄 [{idx+1}/{len(links_to_crawl)}] {link}")
+            print(f"[{idx+1}/{len(links_to_crawl)}] {link}")
             article_data = extract_article(driver, link)
             
             success = insert_to_supabase(db_manager, table_name, article_data)
             if success:
                 new_articles += 1
-                print(f"✅ Saved: {article_data.get('title', '')[:50]}...")
+                print(f"Saved: {article_data.get('title', '')[:50]}...")
             else:
                 duplicate_count += 1
                 if duplicate_count <= 3:
-                    print(f"⚠️  Duplicate - skipped: {article_data.get('title', '')[:50]}...")
+                    print(f"Duplicate - skipped: {article_data.get('title', '')[:50]}...")
                 elif duplicate_count == 4:
-                    print(f"⚠️  ... và {len(links_to_crawl) - idx - 1} duplicates khác")
+                    print(f"... and {len(links_to_crawl) - idx - 1} other duplicates")
             
             crawled_count += 1
             time.sleep(1)  # Delay between requests
             
         except Exception as e:
-            print(f"❌ Error crawling {link}: {e}")
+            print(f"Error crawling {link}: {e}")
             continue
     
     driver.quit()
     
-    # Tính toán kết quả
+    # Calculate results
     end_time = time.time()
     duration = end_time - start_time
     
@@ -488,66 +488,66 @@ def crawl_markettimes(stock_code="FPT", table_name="FPT_News", db_manager=None):
 
 def crawl_markettimes_general(table_name="General_News", db_manager=None):
     """
-    Crawl MarketTimes cho general news
+    Crawl MarketTimes for general news
     
     Args:
-        table_name: Tên bảng database
+        table_name: Database table name
         db_manager: Database manager instance
     """
     start_time = time.time()
     
-    # Tạo db_manager nếu không được truyền vào
+    # Create db_manager if not provided
     if db_manager is None:
         db_manager = get_database_manager()
     
-    print(f"\n🔍 MarketTimes General Crawler")
-    print(f"📋 Table: {table_name}")
+    print(f"\nMarketTimes General Crawler")
+    print(f"Table: {table_name}")
     
-    # Lấy existing links từ database
+    # Get existing links from database
     existing_links = get_recent_links_from_db(db_manager, table_name, 100)
-    print(f"📊 Found {len(existing_links)} existing articles in DB")
+    print(f"Found {len(existing_links)} existing articles in DB")
 
     driver = setup_driver()
     
-    # Crawl các keyword chung
+    # Crawl general keywords
     general_keywords = ["chứng khoán"]
     all_links = []
     
     for keyword in general_keywords:
-        print(f"🔎 Searching for: {keyword}")
+        print(f"Searching for: {keyword}")
         keyword_links = collect_article_links(driver, keyword)
         for link in keyword_links:
             if link not in all_links:
                 all_links.append(link)
     
-    # Lọc bỏ những link đã có trong DB
+    # Filter out links already in DB
     links_to_crawl = [link for link in all_links if link not in existing_links]
     
     if len(links_to_crawl) > 0:
-        print(f"🎯 Crawling {len(links_to_crawl)} new articles")
+        print(f"Crawling {len(links_to_crawl)} new articles")
     else:
-        print(f"📰 No new articles found")
+        print(f"No new articles found")
 
     new_articles = 0
     crawled_count = 0
     
     for idx, link in enumerate(links_to_crawl):
         try:
-            print(f"📄 [{idx+1}/{len(links_to_crawl)}] {link}")
+            print(f"[{idx+1}/{len(links_to_crawl)}] {link}")
             article_data = extract_article(driver, link)
             
             success = insert_to_supabase(db_manager, table_name, article_data)
             if success:
                 new_articles += 1
-                print(f"✅ Saved: {article_data.get('title', '')[:50]}...")
+                print(f"Saved: {article_data.get('title', '')[:50]}...")
             else:
-                print(f"⚠️  Duplicate - skipped")
+                print(f"Duplicate - skipped")
             
             crawled_count += 1
             time.sleep(1)
             
         except Exception as e:
-            print(f"❌ Error crawling {link}: {e}")
+            print(f"Error crawling {link}: {e}")
             continue
     
     driver.quit()
@@ -565,23 +565,23 @@ def crawl_markettimes_general(table_name="General_News", db_manager=None):
     }
 
 def main_markettimes():
-    """Main function với dashboard timing và thống kê theo chuẩn SPA_VIP"""
+    """Main function with dashboard timing and statistics following SPA_VIP standard"""
     start_time = time.time()
     start_time_str = datetime.now().strftime("%H:%M:%S")
     
     print("\n" + "═" * 60)
-    print("🚀 MARKETTIMES CRAWLER DASHBOARD".center(60))
-    print(f"⏰ Started: {start_time_str}".center(60))
+    print("MARKETTIMES CRAWLER DASHBOARD".center(60))
+    print(f"Started: {start_time_str}".center(60))
     print("═" * 60)
 
     db_manager = get_database_manager()
     results = []
     
-    # Crawl cho từng stock code
+    # Crawl for each stock code
     for i, code in enumerate(STOCK_CODES, 1):
-        print(f"\n🚀 Processing Stock [{i}/{len(STOCK_CODES)}]: {code}")
+        print(f"\nProcessing Stock [{i}/{len(STOCK_CODES)}]: {code}")
         table_name = get_table_name(stock_code=code)
-        print(f"📋 Save to: {table_name}")
+        print(f"Save to: {table_name}")
         
         result = crawl_markettimes(stock_code=code, table_name=table_name, db_manager=db_manager)
         results.append(result)
@@ -591,9 +591,9 @@ def main_markettimes():
             time.sleep(3)
     
     # Crawl general news
-    print(f"\n🚀 Processing General News")
+    print(f"\nProcessing General News")
     general_table = get_table_name(is_general=True)
-    print(f"📋 Save to: {general_table}")
+    print(f"Save to: {general_table}")
     
     general_result = crawl_markettimes_general(table_name=general_table, db_manager=db_manager)
     results.append(general_result)
@@ -608,7 +608,7 @@ def main_markettimes():
     total_new = sum(r['new_articles'] for r in results)
     
     print("\n" + "═" * 60)
-    print("🎉 CRAWLING COMPLETED - RESULTS".center(60))
+    print("CRAWLING COMPLETED - RESULTS".center(60))
     print("═" * 60)
     
     # Table header
@@ -632,14 +632,14 @@ def main_markettimes():
     
     # Summary
     print("\n" + "═" * 60)
-    print("📊 SUMMARY MARKETTIMES CRAWLING".center(60))
+    print("SUMMARY MARKETTIMES CRAWLING".center(60))
     print("─" * 60)
-    print(f"⏱️  Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
-    print(f"📊 Total Found     : {total_found} articles")
-    print(f"🎯 Total Crawled   : {total_crawled} articles")
-    print(f"✅ Total New       : {total_new} articles")
+    print(f"Total Time      : {total_duration:.1f}s ({total_duration/60:.1f} minutes)")
+    print(f"Total Found     : {total_found} articles")
+    print(f"Total Crawled   : {total_crawled} articles")
+    print(f"Total New       : {total_new} articles")
     print("═" * 60)
-    print("🎯 MARKETTIMES CRAWLING COMPLETED!")
+    print("MARKETTIMES CRAWLING COMPLETED!")
     print("═" * 60)
 
 if __name__ == "__main__":

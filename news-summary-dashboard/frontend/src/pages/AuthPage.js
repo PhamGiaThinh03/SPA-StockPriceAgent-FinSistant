@@ -19,12 +19,12 @@ import {
 } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 
-// URL ảnh nền, bạn có thể thay bằng ảnh của mình
+// Background image URL, you can replace it with your own image
 const BACKGROUND_IMAGE_URL =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp1fZckhB23SHAuxU_g7yw4Rzhs_pig9CJ9YdR5wVsYYoJlmZ2";
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(false); // Mặc định là trang đăng ký
+    const [isLogin, setIsLogin] = useState(false); // Default is registration page
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -35,45 +35,45 @@ const AuthPage = () => {
         e.preventDefault();
         setLoading(true);
 
-    let error;
-    if (isLogin) {
-      // Logic Đăng nhập
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-        error = signInError;
-    } else {
-      // Logic Đăng ký
-        const { error: signUpError } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-        if (!signUpError) {
+        let error;
+        if (isLogin) {
+            // Login logic
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            error = signInError;
+        } else {
+            // Registration logic
+            const { error: signUpError } = await supabase.auth.signUp({
+                email,
+                password,
+            });
+            if (!signUpError) {
+                toast({
+                    title: "Registration successful!",
+                    description: "Please check your email to confirm your account.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+                setIsLogin(true); // Automatically switch to login form
+            }
+            error = signUpError;
+        }
+
+        if (error) {
             toast({
-                title: "Đăng ký thành công!",
-                description: "Vui lòng kiểm tra email để xác nhận tài khoản.",
-                status: "success",
+                title: "An error occurred",
+                description: error.message,
+                status: "error",
                 duration: 5000,
                 isClosable: true,
             });
-            setIsLogin(true); // Tự động chuyển sang form đăng nhập
+        } else if (isLogin) {
+            navigate("/"); // Redirect to homepage after successful login
         }
-        error = signUpError;
-    }
-
-    if (error) {
-        toast({
-            title: "Đã xảy ra lỗi",
-            description: error.message,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-        });
-    } else if (isLogin) {
-        navigate("/"); // Chuyển hướng về trang chủ sau khi đăng nhập thành công
-    }
-    setLoading(false);
+        setLoading(false);
     };
 
     const handleGoogleSignIn = async () => {
@@ -92,7 +92,7 @@ const AuthPage = () => {
 
     return (
         <Flex minH="100vh" w="100%">
-        {/* Cột trái - Ảnh nền */}
+        {/* Left column - Background image */}
         <Box
             flex={1}
             bgImage={`url(${BACKGROUND_IMAGE_URL})`}
@@ -101,7 +101,7 @@ const AuthPage = () => {
             display={{ base: "none", md: "block" }}
         />
 
-        {/* Cột phải - Form xác thực */}
+        {/* Right column - Authentication form */}
         <Flex
             flex={1}
             align="center"
@@ -112,7 +112,7 @@ const AuthPage = () => {
             <Stack spacing={8} w="full" maxW="md">
             <Stack align={"center"}>
                 <HStack>
-                {/* Logo icon với icon_logo.png */}
+                {/* Logo icon with icon_logo.png */}
                 <Image 
                     src={logoImage} 
                     alt="FINsistant Logo" 
@@ -161,7 +161,7 @@ const AuthPage = () => {
                     />
                     </FormControl>
                     <FormControl id="password" mt={4} isRequired>
-                    <FormLabel>Mật khẩu</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <Input
                         type="password"
                         value={password}
@@ -187,7 +187,7 @@ const AuthPage = () => {
                     leftIcon={<FcGoogle />}
                     onClick={handleGoogleSignIn}
                 >
-                    <Text>Tiếp tục với Google</Text>
+                    <Text>Continue with Google</Text>
                 </Button>
 
                 <Text align="center" mt={4}>

@@ -26,7 +26,7 @@ class SupabaseHandler:
 
 from models.summarizer import NewsSummarizer
 
-# Import Config bằng cách explicit để tránh conflict
+# Explicit import of Config to avoid conflicts
 current_dir = os.path.dirname(os.path.abspath(__file__))
 config_file = os.path.join(current_dir, 'config.py')
 spec = importlib.util.spec_from_file_location("summarization_config", config_file)
@@ -45,12 +45,12 @@ class SummarizationPipeline:
     
     def __init__(self, use_map_reduce=True):
         self.db = SupabaseHandler()
-        self.summarizer = None  # Lazy loading để tiết kiệm memory
+        self.summarizer = None  # Lazy loading to save memory
         self.use_map_reduce = use_map_reduce
         self.start_time = None
         self.processed_count = 0
         self.error_count = 0
-        self.long_text_count = 0  # Track số lượng văn bản dài cần Map-Reduce
+        self.long_text_count = 0  # Track number of long texts requiring Map-Reduce
         
         logger.info("Enhanced Summarization Pipeline with Map-Reduce initialized")
         logger.info(f"Map-Reduce enabled: {self.use_map_reduce}")
@@ -59,7 +59,7 @@ class SummarizationPipeline:
         self.log_table_stats()
     
     def _load_model(self, use_map_reduce=None):
-        """Lazy load model với Map-Reduce option"""
+        """Lazy load model with Map-Reduce option"""
         if self.summarizer is None:
             logger.info("Loading AI model...")
             map_reduce_enabled = use_map_reduce if use_map_reduce is not None else self.use_map_reduce
@@ -70,10 +70,10 @@ class SummarizationPipeline:
             config_info = self.summarizer.get_configuration_info()
             logger.info(f"Map-Reduce enabled: {config_info['map_reduce_enabled']}")
             if config_info['map_reduce_enabled']:
-                logger.info("📊 Map-Reduce configuration loaded successfully")
+                logger.info("Map-Reduce configuration loaded successfully")
     
     def log_table_stats(self):
-        """Log statistics for all news tables với priority analysis"""
+        """Log statistics for all news tables with priority analysis"""
         logger.info("DATABASE STATISTICS")
         logger.info("=" * 50)
         
@@ -81,7 +81,7 @@ class SummarizationPipeline:
         total_articles = 0
         total_unsummarized = 0
         
-        # Tính toán priority cho các bảng
+        # Calculate priority for tables
         table_priorities = []
         
         for table_name, table_stats in stats.items():
@@ -98,16 +98,16 @@ class SummarizationPipeline:
             total_articles += table_stats['total']
             total_unsummarized += table_stats['unsummarized']
         
-        # Sort theo priority (completion rate thấp nhất trước)
+        # Sort by priority (lowest completion rate first)
         table_priorities.sort(key=lambda x: x['completion_rate'])
         
-        # Log theo thứ tự priority
+        # Log in priority order
         for i, table_info in enumerate(table_priorities, 1):
             table_name = table_info['name']
             table_stats = table_info['stats']
             completion_rate = table_info['completion_rate']
             
-            # Updated estimate: 11 giây/bài (based on performance testing)
+            # Updated estimate: 11 seconds/article (based on performance testing)
             estimated_minutes = table_stats['unsummarized'] * 11 / 60
             
             status = "DONE" if table_stats['unsummarized'] == 0 else f"{table_stats['unsummarized']} pending"
@@ -149,7 +149,7 @@ class SummarizationPipeline:
                         long_texts += 1
             
             if long_texts > 0:
-                logger.info(f"📊 Found {long_texts}/{len(articles)} long texts requiring Map-Reduce")
+                logger.info(f"Found {long_texts}/{len(articles)} long texts requiring Map-Reduce")
                 self.long_text_count += long_texts
             
             contents = [article["content"] for article in articles]
@@ -217,7 +217,7 @@ class SummarizationPipeline:
         """Process articles from a specific table with enhanced progress tracking"""
         logger.info(f"Processing specific table: {table_name}")
         
-        # Load model trước khi bắt đầu
+        # Load model before starting
         self._load_model()
         
         # Get initial stats
@@ -245,14 +245,14 @@ class SummarizationPipeline:
             while True:
                 articles = self.db.fetch_unsummarized_articles(limit=batch_size, table_name=table_name)
                 if not articles:
-                    logger.info(f"✅ No more articles to process in {table_name}")
+                    logger.info(f"No more articles to process in {table_name}")
                     break
                 
                 batch_count += 1
                 batch_start = time.time()
                 
-                # Clear và informative batch logging
-                logger.info(f"\n� BATCH {batch_count} | Processing {len(articles)} articles...")
+                # Clear and informative batch logging
+                logger.info(f"\nBATCH {batch_count} | Processing {len(articles)} articles...")
                 
                 contents = [article["content"] for article in articles]
                 
@@ -291,7 +291,7 @@ class SummarizationPipeline:
                     logger.info("-" * 60)
                     
                     if Config.DEVICE == "cpu":
-                        time.sleep(1)  # Brief pause cho CPU
+                        time.sleep(1)  # Brief pause for CPU
                 
                 except Exception as e:
                     logger.error(f"BATCH {batch_count} ERROR: {str(e)}")
@@ -315,11 +315,11 @@ class SummarizationPipeline:
         return total_processed
 
     def process_all_tables_by_priority(self):
-        """Process all tables theo thứ tự priority với enhanced tracking"""
+        """Process all tables in priority order with enhanced tracking"""
         try:
-            logger.info("🎯 Starting priority-based processing pipeline...")
+            logger.info("Starting priority-based processing pipeline...")
             
-            # Get table statistics và tính priority
+            # Get table statistics and calculate priority
             stats = self.db.get_table_stats()
             table_priorities = []
             
@@ -336,38 +336,38 @@ class SummarizationPipeline:
                         'priority_score': priority_score
                     })
             
-            # Sort theo priority (completion rate thấp nhất trước - cần attention nhất)
+            # Sort by priority (lowest completion rate first - requires attention)
             table_priorities.sort(key=lambda x: x['completion_rate'])
             
             if not table_priorities:
-                logger.info("✅ All tables are already fully processed!")
+                logger.info("All tables are already fully processed!")
                 return
             
             total_articles_to_process = sum(t['unsummarized'] for t in table_priorities)
             total_eta_minutes = total_articles_to_process * 11 / 60  # Improved estimate
             
-            logger.info("�" * 20)
-            logger.info(f"📋 PRIORITY PROCESSING QUEUE: {len(table_priorities)} tables")
-            logger.info(f"📊 Total articles to process: {total_articles_to_process}")
-            logger.info(f"⏱️ Estimated total time: {total_eta_minutes:.1f} minutes")
-            logger.info("🔥" * 20)
+            logger.info("=" * 20)
+            logger.info(f"PRIORITY PROCESSING QUEUE: {len(table_priorities)} tables")
+            logger.info(f"Total articles to process: {total_articles_to_process}")
+            logger.info(f"Estimated total time: {total_eta_minutes:.1f} minutes")
+            logger.info("=" * 20)
             
             for i, table_info in enumerate(table_priorities, 1):
                 eta_minutes = table_info['unsummarized'] * 11 / 60
-                logger.info(f"{i}. 🎯 {table_info['name']}: {table_info['unsummarized']}/{table_info['total']} articles ({table_info['completion_rate']:.1f}% done) - ETA: {eta_minutes:.1f}min")
+                logger.info(f"{i}. {table_info['name']}: {table_info['unsummarized']}/{table_info['total']} articles ({table_info['completion_rate']:.1f}% done) - ETA: {eta_minutes:.1f}min")
             
-            logger.info("🔥" * 20)
+            logger.info("=" * 20)
             
-            # Process từng table theo priority
+            # Process each table by priority
             overall_start = time.time()
             total_processed_all = 0
             
             for i, table_info in enumerate(table_priorities, 1):
                 table_name = table_info['name']
                 
-                logger.info(f"\n🚀 TABLE {i}/{len(table_priorities)}: {table_name}")
-                logger.info(f"📊 Queue status: {table_info['unsummarized']} articles remaining")
-                logger.info("🔄 Starting processing...")
+                logger.info(f"\nTABLE {i}/{len(table_priorities)}: {table_name}")
+                logger.info(f"Queue status: {table_info['unsummarized']} articles remaining")
+                logger.info("Starting processing...")
                 
                 table_start = time.time()
                 processed = self.process_specific_table(table_name)
@@ -375,16 +375,16 @@ class SummarizationPipeline:
                 
                 total_processed_all += processed
                 
-                logger.info(f"✅ TABLE {i} COMPLETED: {table_name}")
-                logger.info(f"   📈 Processed: {processed} articles in {table_time/60:.1f} minutes")
+                logger.info(f"TABLE {i} COMPLETED: {table_name}")
+                logger.info(f"   Processed: {processed} articles in {table_time/60:.1f} minutes")
                 
                 # Overall progress
                 remaining_tables = len(table_priorities) - i
                 overall_progress = (i / len(table_priorities)) * 100
                 
                 if remaining_tables > 0:
-                    logger.info(f"🎯 OVERALL PROGRESS: {overall_progress:.1f}% | {remaining_tables} tables remaining")
-                    logger.info("🔄 Moving to next priority table...\n")
+                    logger.info(f"OVERALL PROGRESS: {overall_progress:.1f}% | {remaining_tables} tables remaining")
+                    logger.info("Moving to next priority table...")
             
             # Final pipeline summary
             total_time = time.time() - overall_start
@@ -400,11 +400,11 @@ class SummarizationPipeline:
         except Exception as e:
             logger.error(f"Error in priority processing: {str(e)}")
             raise
-    
+
     def _analyze_database_texts(self):
         """Analyze text lengths across all tables to show Map-Reduce benefits"""
         logger.info("=" * 60)
-        logger.info("📊 ANALYZING TEXT LENGTHS IN DATABASE")
+        logger.info("ANALYZING TEXT LENGTHS IN DATABASE")
         logger.info("=" * 60)
         
         self._load_model()
@@ -415,7 +415,7 @@ class SummarizationPipeline:
         total_tokens = 0
         
         for table_name in TABLE_NAMES:
-            logger.info(f"\n📋 Analyzing {table_name}...")
+            logger.info(f"\nAnalyzing {table_name}...")
             
             # Get sample of articles
             articles = self.db.fetch_unsummarized_articles(limit=100, table_name=table_name)
@@ -457,7 +457,7 @@ class SummarizationPipeline:
             long_pct_overall = (long_texts / total_texts * 100)
             
             logger.info("\n" + "=" * 60)
-            logger.info("📈 OVERALL ANALYSIS RESULTS:")
+            logger.info("OVERALL ANALYSIS RESULTS:")
             logger.info(f"   Total articles analyzed: {total_texts:,}")
             logger.info(f"   Average article length: {avg_chars_overall:.0f} chars, {avg_tokens_overall:.0f} tokens")
             logger.info(f"   Long articles (>{Config.MAX_INPUT_LENGTH} tokens): {long_texts:,} ({long_pct_overall:.1f}%)")
@@ -466,17 +466,18 @@ class SummarizationPipeline:
             logger.info("=" * 60)
             
             if long_texts > 0:
-                logger.info("🎯 RECOMMENDATION: Map-Reduce will significantly improve summary quality!")
+                logger.info("RECOMMENDATION: Map-Reduce will significantly improve summary quality!")
             else:
-                logger.info("ℹ️  INFO: Most articles fit in context, Map-Reduce provides minimal benefit")
+                logger.info("INFO: Most articles fit in context, Map-Reduce provides minimal benefit")
         else:
-            logger.info("⚠️  No articles found to analyze")
+            logger.info("No articles found to analyze")
+
 
 def main_summarization():
-    """Main function với Map-Reduce support và standardized pipeline options"""
+    """Main function with Map-Reduce support and standardized pipeline options"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='📰 Vietnamese News Summarization Pipeline with Map-Reduce')
+    parser = argparse.ArgumentParser(description='Vietnamese News Summarization Pipeline with Map-Reduce')
     parser.add_argument('--table', '-t', help='Process specific table only', 
                        choices=['General_News', 'FPT_News', 'GAS_News', 'IMP_News', 'VCB_News'])
     parser.add_argument('--stats', '-s', action='store_true', help='Show database statistics only')
@@ -499,15 +500,15 @@ def main_summarization():
             
         if args.table:
             # Process specific table
-            logger.info(f"🎯 Processing specific table: {args.table}")
+            logger.info(f"Processing specific table: {args.table}")
             pipeline.process_specific_table(args.table)
             
         else:
             # Default: Auto-run priority processing if there are pending articles
             print("\n" + "="*60)
-            print("📰 VIETNAMESE NEWS SUMMARIZATION PIPELINE")
+            print("VIETNAMESE NEWS SUMMARIZATION PIPELINE")
             print("="*60)
-            print("📊 Current Status:")
+            print("Current Status:")
             pipeline.log_table_stats()
             print("\n" + "-"*60)
             
@@ -516,25 +517,25 @@ def main_summarization():
             total_pending = sum(table_stats['unsummarized'] for table_stats in stats.values())
             
             if total_pending > 0:
-                print(f"� Found {total_pending} articles to process. Starting priority processing...")
-                print(f"🗺️  Map-Reduce Status: {'ENABLED' if use_map_reduce else 'DISABLED'}")
+                print(f"Found {total_pending} articles to process. Starting priority processing...")
+                print(f"Map-Reduce Status: {'ENABLED' if use_map_reduce else 'DISABLED'}")
                 print("="*60)
                 pipeline.process_all_tables_by_priority()
             else:
-                print(f"✅ All articles completed! No processing needed.")
-                print(f"�🗺️  Map-Reduce Status: {'ENABLED' if use_map_reduce else 'DISABLED'}")
+                print(f"All articles completed! No processing needed.")
+                print(f"Map-Reduce Status: {'ENABLED' if use_map_reduce else 'DISABLED'}")
                 print("="*60)
             
         # Final Map-Reduce summary
         if hasattr(pipeline, 'long_text_count') and pipeline.long_text_count > 0:
-            logger.info(f"\n📊 Map-Reduce Summary:")
+            logger.info(f"\nMap-Reduce Summary:")
             logger.info(f"   Long texts processed: {pipeline.long_text_count}")
             logger.info(f"   Map-Reduce benefit: Preserved {pipeline.long_text_count * 66:.0f}% more content")
             
     except KeyboardInterrupt:
-        logger.warning("⚠️ Process interrupted by user")
+        logger.warning("Process interrupted by user")
     except Exception as e:
-        logger.error(f"❌ Pipeline error: {str(e)}")
+        logger.error(f"Pipeline error: {str(e)}")
         raise
 
 if __name__ == "__main__":

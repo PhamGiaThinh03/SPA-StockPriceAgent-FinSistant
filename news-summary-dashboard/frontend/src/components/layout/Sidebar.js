@@ -28,7 +28,7 @@ const Sidebar = ({ onQuickFilterClick }) => {
   const normalTextColor = useColorModeValue("gray.700", "gray.200");
   const activeBgColor = useColorModeValue("blue.100", "blue.600");
 
-  // NavLink sẽ tự động áp dụng style này khi URL khớp
+  // NavLink will automatically apply this style when the URL matches
   const activeLinkStyle = {
     textDecoration: "none",
   };
@@ -186,7 +186,7 @@ const Sidebar = ({ onQuickFilterClick }) => {
         </ListItem>
       </List>
 
-      {/* --- Phần Help giữ nguyên --- */}
+      {/* --- Keep Help section as is --- */}
       <List px={4}>
         <ListItem>
           <HStack px={4} py={3} cursor="pointer" _hover={{ bg: "gray.50" }}>

@@ -25,17 +25,17 @@ function AppContent() {
 
   return (
     <Router>
-      {/* Dựa vào user để quyết định hiển thị giao diện nào */}
+      {/* Based on the user, decide which interface to display */}
       {!user ? (
-        // Nếu chưa đăng nhập, chỉ hiển thị trang Auth
+        // If not logged in, only show the Auth page
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
-          {/* Mọi đường dẫn khác đều chuyển về trang auth */}
+          {/* All other routes will redirect to the Auth page */}
           <Route path="*" element={<Navigate to="/auth" />} />
         </Routes>
       ) : (
-        // Nếu đã đăng nhập, hiển thị giao diện chính
+        // If logged in, show the main interface
         <Flex minH="100vh" bg="gray.50">
           <Sidebar />
           <Box flex="1" p={8}>
@@ -44,7 +44,7 @@ function AppContent() {
               <Route path="/analytics" element={<StockAnalysisPage />} />
               <Route path="/saved-articles" element={<SavedArticlesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
-              {/* Mọi đường dẫn không khớp sẽ chuyển về trang chủ */}
+              {/* Any unmatched routes will redirect to the home page */}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </Box>

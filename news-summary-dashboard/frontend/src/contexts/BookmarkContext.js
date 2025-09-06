@@ -83,7 +83,7 @@ const bookmarkReducer = (state, action) => {
         };
 
         case BOOKMARK_ACTIONS.SYNC_BOOKMARK_STATE:
-        // Sync với server response
+        // Sync with server response
         const { articleId: syncId, serverData } = action.payload;
         if (serverData) {
             return {
@@ -109,7 +109,7 @@ const bookmarkReducer = (state, action) => {
     const [state, dispatch] = useReducer(bookmarkReducer, initialState);
     const { session, user } = useAuth();
 
-    // Fetch bookmarks từ server (chỉ lần đầu)
+    // Fetch bookmarks from server (only on first load)
     const fetchBookmarks = useCallback(async () => {
         if (!session?.access_token || state.initialized) return;
 
@@ -123,15 +123,15 @@ const bookmarkReducer = (state, action) => {
         } catch (error) {
         dispatch({ 
             type: BOOKMARK_ACTIONS.SET_ERROR, 
-            payload: error.response?.data?.error || 'Không thể tải bookmarks' 
+            payload: error.response?.data?.error || 'Unable to load bookmarks' 
         });
         }
     }, [session?.access_token, state.initialized]);
 
-    // Toggle bookmark với Optimistic UI
+    // Toggle bookmark with Optimistic UI
     const toggleBookmark = useCallback(async (articleData, articleId) => {
         if (!session?.access_token) {
-        throw new Error('Chưa đăng nhập');
+        throw new Error('Not logged in');
         }
 
         const isCurrentlyBookmarked = state.bookmarkStates[articleId] || false;
@@ -171,7 +171,7 @@ const bookmarkReducer = (state, action) => {
             { headers: { Authorization: `Bearer ${session.access_token}` } }
         );
 
-        // Sync với server response
+        // Sync with server response
         dispatch({
             type: BOOKMARK_ACTIONS.SYNC_BOOKMARK_STATE,
             payload: { articleId, serverData: response.data }
@@ -203,20 +203,20 @@ const bookmarkReducer = (state, action) => {
             }
         }
         
-        throw new Error(error.response?.data?.error || 'Không thể thay đổi bookmark');
+        throw new Error(error.response?.data?.error || 'Unable to change bookmark');
         }
     }, [session?.access_token, user?.id, state.bookmarkStates, state.bookmarks]);
 
     // Remove bookmark (for saved articles page)
     const removeBookmark = useCallback(async (bookmarkId) => {
         if (!session?.access_token) {
-        throw new Error('Chưa đăng nhập');
+        throw new Error('Not logged in');
         }
 
         const bookmark = state.bookmarks.find(b => b.id === bookmarkId);
         const articleId = bookmark?.article_id;
 
-        // Debug log để kiểm tra articleId mapping
+        // Debug log to check articleId mapping
         console.log('RemoveBookmark Debug:', {
         bookmarkId,
         bookmark,
@@ -254,7 +254,7 @@ const bookmarkReducer = (state, action) => {
             payload: { articleId, bookmarkData: bookmark }
             });
         }
-        throw new Error(error.response?.data?.error || 'Không thể xóa bookmark');
+        throw new Error(error.response?.data?.error || 'Unable to remove bookmark');
         }
     }, [session?.access_token, state.bookmarks, state.bookmarkStates]);
 
@@ -274,14 +274,14 @@ const bookmarkReducer = (state, action) => {
         return result;
     }, [state.bookmarkStates]);
 
-    // Load bookmarks on mount nếu user đã đăng nhập
+    // Load bookmarks on mount if user is logged in
     useEffect(() => {
         if (user && !state.initialized) {
         fetchBookmarks();
         }
     }, [user, fetchBookmarks, state.initialized]);
 
-    // Sync bookmark states với bookmarks list whenever bookmarks change
+    // Sync bookmark states with bookmarks list whenever bookmarks change
     useEffect(() => {
         if (state.initialized) {
         const newBookmarkStates = {};
@@ -325,7 +325,7 @@ const bookmarkReducer = (state, action) => {
     );
     };
 
-    // Hook để sử dụng bookmark context
+    // Hook to use bookmark context
     export const useBookmarkContext = () => {
     const context = useContext(BookmarkContext);
     if (!context) {

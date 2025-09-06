@@ -15,7 +15,7 @@ class IndustryClassificationPipeline:
     def __init__(self):
         """Initialize the industry classification pipeline"""
         try:
-            logging.info("🏭 Initializing Industry Classification Pipeline...")
+            logging.info("Initializing Industry Classification Pipeline...")
             
             # Initialize industry classifier
             self.industry_classifier = PhoBERTClassifier(
@@ -30,10 +30,10 @@ class IndustryClassificationPipeline:
             if not self.db.health_check():
                 raise Exception("Database health check failed")
             
-            logging.info("✅ Industry Classification Pipeline initialized successfully")
+            logging.info("Industry Classification Pipeline initialized successfully")
             
         except Exception as e:
-            logging.critical(f"❌ Failed to initialize Industry Classification Pipeline: {str(e)}")
+            logging.critical(f"Failed to initialize Industry Classification Pipeline: {str(e)}")
             raise
 
     def process_batch(self, batch_size: int = 50, table_name: str = None) -> int:
@@ -52,7 +52,7 @@ class IndustryClassificationPipeline:
             articles = self.db.fetch_unprocessed_rows(limit=batch_size, table_name=table_name)
             
             if not articles:
-                logging.info("📭 No unprocessed articles found for industry classification")
+                logging.info("No unprocessed articles found for industry classification")
                 return 0
             
             processed_count = 0
@@ -66,7 +66,7 @@ class IndustryClassificationPipeline:
                     text_to_classify = summary
                     
                     if not text_to_classify or len(text_to_classify.strip()) < 10:
-                        logging.warning(f"⚠️ No ai_summary available for classification in article {article.get('id')}")
+                        logging.warning(f"No ai_summary available for classification in article {article.get('id')}")
                         continue
                     
                     # Classify industry
@@ -94,19 +94,19 @@ class IndustryClassificationPipeline:
                     
                     if success:
                         processed_count += 1
-                        logging.info(f"✅ Classified article {article['id']}: {industry} (confidence: {max_confidence:.3f})")
+                        logging.info(f"Classified article {article['id']}: {industry} (confidence: {max_confidence:.3f})")
                     else:
-                        logging.error(f"❌ Failed to update article {article['id']}")
+                        logging.error(f"Failed to update article {article['id']}")
                         
                 except Exception as e:
-                    logging.error(f"❌ Error processing article {article.get('id', 'unknown')}: {str(e)}")
+                    logging.error(f"Error processing article {article.get('id', 'unknown')}: {str(e)}")
                     continue
             
-            logging.info(f"📊 Successfully processed {processed_count}/{len(articles)} articles")
+            logging.info(f"Successfully processed {processed_count}/{len(articles)} articles")
             return processed_count
             
         except Exception as e:
-            logging.error(f"❌ Batch processing failed: {str(e)}")
+            logging.error(f"Batch processing failed: {str(e)}")
             return 0
 
     def process_specific_table(self, table_name: str, batch_size: int = 50) -> int:
@@ -120,7 +120,7 @@ class IndustryClassificationPipeline:
         Returns:
             int: Number of articles successfully processed
         """
-        logging.info(f"🎯 Processing specific table: {table_name}")
+        logging.info(f"Processing specific table: {table_name}")
         return self.process_batch(batch_size=batch_size, table_name=table_name)
 
     def process_all_tables(self, batch_size: int = 50) -> Dict[str, int]:
@@ -133,18 +133,18 @@ class IndustryClassificationPipeline:
         Returns:
             Dict[str, int]: Processing results for General_News
         """
-        logging.info("🌐 Processing General_News table for industry classification")
+        logging.info("Processing General_News table for industry classification")
         
         results = {}
         
         # Only process General_News table
         table_name = "General_News"
-        logging.info(f"📋 Processing table: {table_name}")
+        logging.info(f"Processing table: {table_name}")
         processed = self.process_specific_table(table_name, batch_size)
         results[table_name] = processed
         
         total_processed = sum(results.values())
-        logging.info(f"🎉 Total articles processed: {total_processed}")
+        logging.info(f"Total articles processed: {total_processed}")
         
         return results
 
@@ -158,7 +158,7 @@ class IndustryClassificationPipeline:
         Returns:
             Dict[str, int]: Total processing results
         """
-        logging.info("🔄 Processing ALL pending industry classifications in batches...")
+        logging.info("Processing ALL pending industry classifications in batches...")
         
         # Get initial count of pending articles
         stats = self.db.get_industry_stats()
@@ -166,25 +166,25 @@ class IndustryClassificationPipeline:
         total_pending = general_news_stats.get('pending', 0)
         
         if total_pending == 0:
-            logging.info("✅ No pending articles found for industry classification")
+            logging.info("No pending articles found for industry classification")
             return {'General_News': 0}
         
         total_batches = (total_pending + batch_size - 1) // batch_size  # Ceiling division
-        logging.info(f"📊 Found {total_pending} pending articles")
-        logging.info(f"🎯 Will process in {total_batches} batches of {batch_size} articles each")
+        logging.info(f"Found {total_pending} pending articles")
+        logging.info(f"Will process in {total_batches} batches of {batch_size} articles each")
         
         results = {'General_News': 0}
         batch_number = 1
         
         while True:
-            logging.info(f"\n🔄 Processing Batch {batch_number}/{total_batches}")
+            logging.info(f"\nProcessing Batch {batch_number}/{total_batches}")
             logging.info("-" * 50)
             
             # Process one batch
             processed = self.process_specific_table('General_News', batch_size)
             
             if processed == 0:
-                logging.info("✅ No more articles to process. All pending classifications completed!")
+                logging.info("No more articles to process. All pending classifications completed!")
                 break
             
             results['General_News'] += processed
@@ -192,18 +192,18 @@ class IndustryClassificationPipeline:
             
             # Brief pause between batches to avoid overwhelming the system
             if processed == batch_size:  # Full batch processed
-                logging.info(f"⏸️ Brief pause before next batch...")
+                logging.info(f"Brief pause before next batch...")
                 time.sleep(2)
             
             # Safety check to prevent infinite loops
             if batch_number > total_batches + 5:  # Allow some buffer
-                logging.warning("⚠️ Maximum batch limit reached. Stopping to prevent infinite loop.")
+                logging.warning("Maximum batch limit reached. Stopping to prevent infinite loop.")
                 break
         
         total_processed = results['General_News']
-        logging.info(f"\n🎉 BATCH PROCESSING COMPLETED!")
-        logging.info(f"📊 Total articles processed: {total_processed}")
-        logging.info(f"🎯 Batches completed: {batch_number - 1}")
+        logging.info(f"\nBATCH PROCESSING COMPLETED!")
+        logging.info(f"Total articles processed: {total_processed}")
+        logging.info(f"Batches completed: {batch_number - 1}")
         
         return results
 
@@ -216,31 +216,31 @@ class IndustryClassificationPipeline:
             interval: Seconds to wait between processing cycles
             table_name: Specific table to monitor (optional)
         """
-        logging.info(f"🔄 Starting continuous industry classification")
-        logging.info(f"📊 Configuration: batch_size={batch_size}, interval={interval}s")
+        logging.info(f"Starting continuous industry classification")
+        logging.info(f"Configuration: batch_size={batch_size}, interval={interval}s")
         
         if table_name:
-            logging.info(f"🎯 Monitoring specific table: {table_name}")
+            logging.info(f"Monitoring specific table: {table_name}")
         else:
-            logging.info("🌐 Monitoring all news tables")
+            logging.info("Monitoring all news tables")
         
         while True:
             try:
                 processed = self.process_batch(batch_size=batch_size, table_name=table_name)
                 
                 if processed == 0:
-                    logging.info(f"😴 No articles to process. Waiting {interval} seconds...")
+                    logging.info(f"No articles to process. Waiting {interval} seconds...")
                     time.sleep(interval)
                 else:
-                    logging.info(f"⏸️ Processed {processed} articles. Brief pause before next batch...")
+                    logging.info(f"Processed {processed} articles. Brief pause before next batch...")
                     time.sleep(5)  # Brief pause between successful batches
                     
             except KeyboardInterrupt:
-                logging.info("⚠️ Received keyboard interrupt. Shutting down...")
+                logging.info("Received keyboard interrupt. Shutting down...")
                 break
             except Exception as e:
-                logging.error(f"❌ Unexpected error in continuous processing: {str(e)}")
-                logging.info(f"🔄 Retrying in {interval} seconds...")
+                logging.error(f"Unexpected error in continuous processing: {str(e)}")
+                logging.info(f"Retrying in {interval} seconds...")
                 time.sleep(interval)
 
     def get_system_status(self) -> Dict[str, Any]:
@@ -276,16 +276,16 @@ class IndustryClassificationPipeline:
             }
             
         except Exception as e:
-            logging.error(f"❌ Error getting system status: {str(e)}")
+            logging.error(f"Error getting system status: {str(e)}")
             return {'status': 'error', 'error': str(e)}
 
     def close_connections(self):
         """Close database connections"""
         try:
             self.db.close_connections()
-            logging.info("🔒 Industry Classification Pipeline connections closed")
+            logging.info("Industry Classification Pipeline connections closed")
         except Exception as e:
-            logging.error(f"❌ Error closing connections: {str(e)}")
+            logging.error(f"Error closing connections: {str(e)}")
 
 # Legacy alias for backward compatibility
 ClassificationPipeline = IndustryClassificationPipeline

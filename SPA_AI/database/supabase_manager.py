@@ -27,7 +27,7 @@ class SupabaseManager:
             self.config.SUPABASE_KEY
         )
         
-        logger.info("✅ Supabase client initialized successfully")
+        logger.info("Supabase client initialized successfully")
     
     def get_client(self) -> Client:
         """Get Supabase client instance"""
@@ -53,7 +53,7 @@ class SupabaseManager:
         try:
             # Validate data
             if not validate_article_data(article_data):
-                # DEBUG: Xem vấn đề validation cụ thể
+                # DEBUG: See specific validation issues
                 issues = []
                 required_fields = ["title", "content", "link", "date"]
                 for field in required_fields:
@@ -67,7 +67,7 @@ class SupabaseManager:
             # Check for duplicates
             link = article_data.get("link", "")
             if link and self.article_exists(table_name, link):
-                logger.info(f"⏩ Article already exists: {article_data.get('title', '')[:50]}...")
+                logger.info(f"Article already exists: {article_data.get('title', '')[:50]}...")
                 return False
             
             # Create schema object
@@ -84,14 +84,14 @@ class SupabaseManager:
             ).execute()
             
             if result.data:
-                logger.info(f"✅ Inserted article: {article.title[:50]}...")
+                logger.info(f"Inserted article: {article.title[:50]}...")
                 return True
             else:
-                logger.error(f"❌ Failed to insert article: {article.title[:50]}...")
+                logger.error(f"Failed to insert article: {article.title[:50]}...")
                 return False
                 
         except Exception as e:
-            logger.error(f"❌ Database error inserting article: {e}")
+            logger.error(f"Database error inserting article: {e}")
             return False
     
     def article_exists(self, table_name: str, link: str) -> bool:
@@ -156,14 +156,14 @@ class SupabaseManager:
                 .execute()
             
             if response.data:
-                logger.info(f"✅ Updated summary for article {article_id} in {table_name}")
+                logger.info(f"Updated summary for article {article_id} in {table_name}")
                 return True
             else:
-                logger.warning(f"⚠️ No rows updated for article {article_id} in {table_name}")
+                logger.warning(f"No rows updated for article {article_id} in {table_name}")
                 return False
                 
         except Exception as e:
-            logger.error(f"❌ Error updating summary for article {article_id}: {e}")
+            logger.error(f"Error updating summary for article {article_id}: {e}")
             return False
     
     def update_article_industry(self, article_id: str, industry: str, table_name: str) -> bool:
@@ -175,14 +175,14 @@ class SupabaseManager:
                 .execute()
             
             if response.data:
-                logger.info(f"✅ Updated industry for article {article_id} in {table_name}: {industry}")
+                logger.info(f"Updated industry for article {article_id} in {table_name}: {industry}")
                 return True
             else:
-                logger.warning(f"⚠️ No rows updated for article {article_id} in {table_name}")
+                logger.warning(f"No rows updated for article {article_id} in {table_name}")
                 return False
                 
         except Exception as e:
-            logger.error(f"❌ Error updating industry for article {article_id}: {e}")
+            logger.error(f"Error updating industry for article {article_id}: {e}")
             return False
     
     def fetch_unclassified_articles(self, table_name: str = None, limit: int = 100) -> List[Dict]:
@@ -202,7 +202,7 @@ class SupabaseManager:
             tables_to_query = ['General_News'] if not table_name else [table_name] if table_name == 'General_News' else []
             
             if not tables_to_query:
-                logger.warning("⚠️ Industry classification only works on General_News table")
+                logger.warning("Industry classification only works on General_News table")
                 return []
             
             for table in tables_to_query:
@@ -255,14 +255,14 @@ class SupabaseManager:
             ).execute()
             
             if result.data:
-                logger.info(f"✅ Inserted stock data for {table_name} - {stock.date}")
+                logger.info(f"Inserted stock data for {table_name} - {stock.date}")
                 return True
             else:
-                logger.error(f"❌ Failed to insert stock data for {table_name}")
+                logger.error(f"Failed to insert stock data for {table_name}")
                 return False
                 
         except Exception as e:
-            logger.error(f"❌ Database error inserting stock data: {e}")
+            logger.error(f"Database error inserting stock data: {e}")
             return False
     
     # ============ STATISTICS ============
@@ -349,18 +349,18 @@ class SupabaseManager:
                     .select("id")\
                     .limit(1)\
                     .execute()
-                logger.info(f"✅ Connection test passed for {table}")
+                logger.info(f"Connection test passed for {table}")
             
-            logger.info("✅ All database connections working properly")
+            logger.info("All database connections working properly")
             return True
             
         except Exception as e:
-            logger.error(f"❌ Database connection test failed: {e}")
+            logger.error(f"Database connection test failed: {e}")
             return False
     
     def close_connection(self):
         """Close database connections (placeholder for compatibility)"""
-        logger.info("🔒 Supabase connections are managed automatically")
+        logger.info("Supabase connections are managed automatically")
     
     def close_connections(self):
         """Close database connections (alias for backward compatibility)"""

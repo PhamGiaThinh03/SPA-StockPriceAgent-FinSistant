@@ -24,23 +24,23 @@ const DEFAULT_DATE = "";
 const DEFAULT_SENTIMENT = "";
 
 const DashboardPage = () => {
-  // State cho các bộ lọc
+  // State for filters
   const [industry, setIndustry] = useState(DEFAULT_INDUSTRY);
   const [company, setCompany] = useState(DEFAULT_COMPANY);
   const [date, setDate] = useState(DEFAULT_DATE);
   const [sentiment, setSentiment] = useState(DEFAULT_SENTIMENT);
 
-  // Sử dụng custom hook thay vì logic trùng lặp
+  // Use custom hook instead of duplicate logic
   const { news: newsData, loading, error, pagination, fetchNews } = useDashboardNews();
   
-  // State cho pagination settings
+  // State for pagination settings
   const [itemsPerPage, setItemsPerPage] = useState(5);
   // =======================================================
-  // --- CÁC HÀM XỬ LÝ SỰ KIỆN MỚI ---
+  // --- NEW EVENT HANDLER FUNCTIONS ---
   const handleIndustryChange = (e) => {
     const newIndustry = e.target.value;
     setIndustry(newIndustry);
-    // Nếu người dùng chọn một ngành cụ thể, reset bộ lọc công ty
+    // If the user selects a specific industry, reset the company filter
     if (newIndustry) {
       setCompany(DEFAULT_COMPANY);
     }
@@ -49,18 +49,18 @@ const DashboardPage = () => {
   const handleCompanyChange = (e) => {
     const newCompany = e.target.value;
     setCompany(newCompany);
-    // Nếu người dùng chọn một công ty cụ thể, reset bộ lọc ngành
+    // If the user selects a specific company, reset the industry filter
     if (newCompany) {
       setIndustry(DEFAULT_INDUSTRY);
     }
   };
 
-  // Sử dụng hook thay vì logic trùng lặp
+  // Use hook instead of duplicate logic
   const handleApplyFilters = async () => {
     fetchNews({ industry, company, sentiment, date }, { page: 1, limit: itemsPerPage });
   };
 
-  // Tự động gọi API lần đầu khi trang được tải
+  // Automatically call API when the page first loads
   useEffect(() => {
     fetchNews({ industry: "", company: "", sentiment: "", date: "" }, { page: 1, limit: 5 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,11 +94,11 @@ const DashboardPage = () => {
   };
 
   const handleSentimentChange = (newSentiment) => {
-    // Nếu sentiment được click giống với sentiment hiện tại, hãy hủy nó
+    // If the clicked sentiment is the same as the current sentiment, cancel it
     if (sentiment === newSentiment) {
-      setSentiment(""); // Đặt lại thành rỗng để hủy filter
+      setSentiment(""); // Reset to empty to cancel the filter
     } else {
-      // Nếu không, đặt sentiment mới
+      // Otherwise, set the new sentiment
       setSentiment(newSentiment);
     }
   };
@@ -205,7 +205,7 @@ const DashboardPage = () => {
                   Ảnh hưởng
                 </FormLabel>
                 <ButtonGroup variant="outline" isAttached size="sm" h="40px">
-                  {/* --- SỬA LẠI onClick CHO CÁC NÚT --- */}
+                  {/* --- FIX onClick FOR BUTTONS --- */}
                   <Button
                     onClick={() => handleSentimentChange("Positive")}
                     isActive={sentiment === "Positive"}
@@ -238,10 +238,10 @@ const DashboardPage = () => {
               {/* -----------------Search-----------------
               <FormControl minW="220px" maxW="300px">
                 <FormLabel fontSize="sm" mb={1} color="transparent">
-                  Tìm kiếm
+                  Search
                 </FormLabel>
                 <Input
-                  placeholder="Tìm kiếm"
+                  placeholder="Search"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   bg="white"
@@ -296,7 +296,7 @@ const DashboardPage = () => {
               {/* Items per page selector */}
               <FormControl minW="120px" maxW="120px">
                 <FormLabel fontSize="lg" mb={1}>
-                  Số dòng
+                  Rows
                 </FormLabel>
                 <Select
                   value={itemsPerPage}
@@ -327,7 +327,7 @@ const DashboardPage = () => {
           />
         </Box>
 
-        {/* --- Cột phải (Biểu đồ) --- */}
+        {/* --- Right column (Charts) --- */}
         {/* <VStack spacing={6} flex={{ base: "none", lg: 1 }} w="full">
           <IndustryDistributionChart />
           <InfluenceTrendsChart />

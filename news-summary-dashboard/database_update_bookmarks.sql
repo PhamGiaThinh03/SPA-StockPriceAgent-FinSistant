@@ -1,12 +1,12 @@
 -- Bookmark Database Schema Update
--- Thêm column article_id và unique constraint để tránh duplicate bookmark
+-- Add article_id column and unique constraint to prevent duplicate bookmarks
 
--- 1. Thêm column article_id nếu chưa có
+-- 1. Add article_id column if it doesn't exist
 ALTER TABLE bookmarks 
 ADD COLUMN IF NOT EXISTS article_id TEXT;
 
--- 2. Update existing records với article_id 
--- Extract ID từ article_data JSON hoặc tạo hash
+-- 2. Update existing records with article_id 
+-- Extract ID from article_data JSON or create a hash
 UPDATE bookmarks 
 SET article_id = COALESCE(
     article_data->>'id',
@@ -15,17 +15,17 @@ SET article_id = COALESCE(
 )
 WHERE article_id IS NULL;
 
--- 3. Tạo unique constraint để tránh duplicate
--- Drop existing constraint nếu có
+-- 3. Create unique constraint to prevent duplicates
+-- Drop existing constraint if it exists
 ALTER TABLE bookmarks 
 DROP CONSTRAINT IF EXISTS unique_user_article;
 
--- Tạo unique constraint mới
+-- Create new unique constraint
 ALTER TABLE bookmarks 
 ADD CONSTRAINT unique_user_article 
 UNIQUE (user_id, article_id);
 
--- 4. Tạo index để optimize query performance
+-- 4. Create indexes to optimize query performance
 CREATE INDEX IF NOT EXISTS idx_bookmarks_user_article 
 ON bookmarks (user_id, article_id);
 
@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_bookmarks_user_created
 ON bookmarks (user_id, created_at DESC);
 
 -- 5. Verify schema
--- Check structure
+-- Check table structure
 \d bookmarks;
 
 -- Check for duplicates
@@ -43,10 +43,10 @@ GROUP BY user_id, article_id
 HAVING COUNT(*) > 1;
 
 -- Sample queries to test
--- Get bookmarks for user
+-- Get bookmarks for a user
 SELECT * FROM bookmarks WHERE user_id = 'test-user' ORDER BY created_at DESC;
 
--- Check if specific article is bookmarked
+-- Check if a specific article is bookmarked
 SELECT EXISTS(
     SELECT 1 FROM bookmarks 
     WHERE user_id = 'test-user' AND article_id = 'test-article'
