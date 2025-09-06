@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./docs/screenshots/logo.jpg" width="100" alt="Logo">
+  <img src="./docs/screenshots_portal/logo.jpg" width="100" alt="Logo">
   <h1>FinSistant: Building AI Agent for Summarizing Sector-wise Market News Impacting Stock Prices</h1>
 </div>
 
