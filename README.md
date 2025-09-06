@@ -270,11 +270,11 @@ python main.py --sentiment-only      # Only run sentiment analysis
 ### Screenshots
 | Dashboard  | Landing Page | News Detail |
 | :---: | :---: | :---: |
-| ![Dashboard](./docs/screenshots/dashboard.png) |![Landing Page](./docs/screenshots/landing.png) | ![News Detail](./docs/screenshots/detail.png) |
+| ![Dashboard](./docs/screenshots_portal/dashboard.png) |![Landing Page](./docs/screenshots_portal/landing.png) | ![News Detail](./docs/screenshots_portal/detail.png) |
 
 | Price Prediction |Bookmark | Personal notification |
 | :---: | :---: |:---: |
-| ![Price Prediction](./docs/screenshots/price_prediction.png) | ![Bookmark](./docs/screenshots/bookmark.png) |![Personal notification](./docs/screenshots/personal_notification.png) |
+| ![Price Prediction](./docs/screenshots_portal/price_prediction.png) | ![Bookmark](./docs/screenshots_portal/bookmark.png) |![Personal notification](./docs/screenshots_portal/personal_notification.png) |
 
 
 ---
