@@ -24,10 +24,6 @@ Contains news articles with features:
 - summary: Short summary of the article
 - sentiment_label: Sentiment (Positive, Negative, Neutral)
 
-## 💾 Dataset & Models
-Full datasets and trained models are available here: 
-[Google Drive Folder](https://drive.google.com/drive/folders/16ZrdzeprnF_FP-vom7iUfisB9nMcaJe3?usp=drive_link)
-
 ---
 
 ## 📁 Project Structure

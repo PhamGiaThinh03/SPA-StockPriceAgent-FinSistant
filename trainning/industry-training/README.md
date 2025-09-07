@@ -24,12 +24,6 @@ Contains news articles with features:
 - summary: Short summary of article
 - industry_label: Industry category (Finance, Technology, Energy, Healthcare, Other.)
 
-## 💾 Dataset & Models
-Full datasets and trained models are available here: 
-[Google Drive Folder](https://drive.google.com/drive/folders/16ZrdzeprnF_FP-vom7iUfisB9nMcaJe3?usp=drive_link)
-
----
-
 ## 📁 Project Structure
 ```text
 ├── PhoBERT_model/

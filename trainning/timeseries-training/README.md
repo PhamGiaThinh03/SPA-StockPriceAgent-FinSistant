@@ -28,9 +28,6 @@ The project uses FPT Corporation stock data with the following features:
 - **Negative**: Number of negative news
 - **Neutral**: Number of neutral news
 
-**📁 Full Dataset & Models**: [Google Drive Folder](https://drive.google.com/drive/folders/1-_fSdZFITqVDNYU10o1_mHQbDXCAsHkD?usp=drive_link)
-> Contains complete datasets, trained models (.keras files), training logs, and additional resources
-
 
 ## 🏗️ Project Structure
 

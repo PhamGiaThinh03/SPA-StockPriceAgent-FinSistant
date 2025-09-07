@@ -34,24 +34,12 @@ pip install -r requirements.txt
 pip install -r summarization/requirements.txt
 ```
 
-### 2. Download AI Models
-Download required models from: [Google Drive Link](https://drive.google.com/drive/folders/1Qzf2ZwtcBZEEmwzUaGV4gydIm-APgdT8?usp=drive_link)
-
-Extract to `model_AI/` folder with this structure:
-```
-model_AI/
-├── sentiment_model/
-├── summarization_model/
-├── timeseries_model/
-└── industry_model/
-```
-
-### 3. Test Connection
+### 2. Test Connection
 ```bash
 python database/test_connection.py
 ```
 
-### 4. Run System
+### 3. Run System
 ```bash
 # Full pipeline
 python main.py 
